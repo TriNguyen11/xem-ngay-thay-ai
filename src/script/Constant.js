@@ -52,6 +52,34 @@ export const TRUC_XUNG_HAI = {
   Tuất: ["Thìn", "Dậu"],
   Hợi: ["Tỵ", "Thân"],
 };
+export const GIO_THO_TU = {
+  Tý: "Sửu",
+  Sửu: "Ngọ",
+  Dần: "Ngọ",
+  Mão: "Tỵ",
+  Thìn: "Tỵ",
+  Tỵ: "Dần",
+  Ngọ: "Mùi",
+  Mùi: "Ngọ",
+  Thân: "Mão",
+  Dậu: "Tỵ",
+  Tuất: "Mùi",
+  Hợi: "Ngọ",
+};
+export const GIO_SAT_CHU = [
+  "Dần",
+  "Tỵ",
+  "Thân",
+  "Thìn",
+  "Dậu",
+  "Mão",
+  "Dần",
+  "Tỵ",
+  "Thân",
+  "Thìn",
+  "Dậu",
+  "Mão",
+];
 
 export const NGU_HANH_TUONG_SINH = {
   Kim: ["Thuỷ", "Thổ"],
@@ -298,6 +326,34 @@ export const CHI_NGAY = [
   "Tuất",
   "Hợi",
 ];
+export const GIO_DIA_CHI = [
+  "23-1",
+  "1-3",
+  "3-5",
+  "5-7",
+  "7-9",
+  "9-11",
+  "11-13",
+  "13-15",
+  "15-17",
+  "17-19",
+  "19-21",
+  "21-23",
+];
+export const CHI_HOANG_DAO = {
+  Tý: ["Tý", "Sửu", "Mão", "Ngọ", "Thân", "Dậu"],
+  Sửu: ["Dần", "Mão", "Tỵ", "Thân", "Tuất", "Hợi"],
+  Dần: ["Tý", "Sửu", "Thìn", "Tỵ", "Mùi", "Tuất"],
+  Mão: ["Tý", "Dần", "Mão", "Ngọ", "Mùi", "Dậu"],
+  Thìn: ["Dần", "Thìn", "Tỵ", "Thân", "Dậu", "Hợi"],
+  Tỵ: ["Sửu", "Thìn", "Tỵ", "Thân", "Dậu", "Hợi"],
+  Ngọ: ["Tý", "Sửu", "Mão", "Ngọ", "Thân", "Dậu"],
+  Mùi: ["Dần", "Mão", "Tỵ", "Thân", "Tuất", "Hợi"],
+  Thân: ["Tý", "Sửu", "Thìn", "Tỵ", "Mùi", "Tuất"],
+  Dậu: ["Tý", "Dần", "Mão", "Ngọ", "Mùi", "Dậu"],
+  Tuất: ["Dần", "Thìn", "Tỵ", "Thân", "Dậu", "Hợi"],
+  Hợi: ["Sửu", "Thìn", "Tỵ", "Thân", "Dậu", "Hợi"],
+};
 export const GIO_HOANG_DAO = {
   Thân: "Tý (23-1), Sửu (1-3), Thìn (7-9), Tỵ (9-11), Mùi (13-15), Tuất (19-21)",
   Dậu: "Tý (23-1), Dần (3-5), Mão (5-7), Ngọ (11-13), Mùi (13-15), Dậu (17-19)",
@@ -521,9 +577,9 @@ export const ObjectTruc = {
       "ngay-phau-thuat": "Ngày phẫu thuật",
     },
     KhongLam: {
+      "trong-cay": "Trồng cây",
       "khoi-cong": "Khởi công",
       "sua-chua": "Sửa chữa",
-      "trong-cay": "Trồng cây",
       "dong-tho": "Động thổ",
       "do-mong": "Đổ móng",
       "do-mai": "Đổ mái",
@@ -670,10 +726,10 @@ export const ObjectTruc = {
   },
   Thành: {
     CanLam: {
+      "trong-cay": "Trồng cây",
       "khoi-cong": "Khởi công",
       "sua-chua": "Sửa chữa",
       "pha-do": "Phá dỡ",
-      "trong-cay": "Trồng cây",
       "dong-tho": "Động thổ",
       "do-mong": "Đổ móng",
       "do-mai": "Đổ mái",
@@ -687,6 +743,8 @@ export const ObjectTruc = {
       "mo-cua-hang": "Mở cửa hàng",
       "chuyen-nha": "Chuyển nhà",
       "ban-nha": "Bán nhà",
+      "dap-dap": "Đắp đập",
+      "ngan-de": "Ngăn đập",
       "dao-gieng": "Đào giếng",
       "lap-gieng": "Lắp giếng",
       "xuat-hanh": "Xuất hành",

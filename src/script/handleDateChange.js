@@ -3,6 +3,7 @@ import {
   canVi,
   chiVi,
   DiaChi,
+  getCanHour0,
   getGioHoangDao,
   jdn,
   ThienCan,
@@ -19,7 +20,11 @@ import {
   CAN,
   CAN_NAM,
   CHI,
+  CHI_HOANG_DAO,
   CHI_NAM,
+  GIO_DIA_CHI,
+  GIO_SAT_CHU,
+  GIO_THO_TU,
   NGU_HANH_TUONG_KHAC,
   NGU_HANH_TUONG_SINH,
   TAM_TAI,
@@ -532,8 +537,10 @@ export const getCanChi = async (day, month, year) => {
   let thangCan =
     CAN[Math.floor((lunar.yearLunar * 12 + lunar.monthLunar + 3) % 10)];
   let thangChi = CHI[(lunar.monthLunar + 1) % 12];
+  let gioCan = getCanHour0(jdn(day, month, year));
   return {
     daySolar: day,
+    gioCan,
     monthSolar: month,
     yearSolar: year,
     dayLunar: lunar.dayLunar,
@@ -550,6 +557,41 @@ export const getCanChi = async (day, month, year) => {
   };
 };
 export const CheckTrucXungNgayThangNam = (Chi1, Chi2) => {
+  return TRUC_XUNG_HAI[Chi1][0] === Chi2;
+};
+export const CheckGioThoTu = (ngayChi, gioChi) => {
+  return GIO_THO_TU[ngayChi] === gioChi;
+};
+export const CheckGioSatChu = (monthLunar, gioChi) => {
+  return GIO_SAT_CHU[monthLunar - 1] === gioChi;
+};
+export const CheckTrucXungGio = (
+  toaChi,
+  ngayChi,
+  thangChi,
+  tuoiGiaChu,
+  monthLunar
+) => {
+  console.log(tuoiGiaChu, "tuoiGiaChu");
+  return CHI.filter((item) => {
+    if (
+      !CheckTrucXungNgayThangNam(item, toaChi) &&
+      !CheckTrucXungNgayThangNam(item, ngayChi) &&
+      !CheckTrucXungNgayThangNam(item, thangChi) &&
+      !CheckTrucXungNgayThangNam(item, tuoiGiaChu) &&
+      !CheckGioThoTu(ngayChi, item) &&
+      !CheckGioSatChu(monthLunar, item)
+    ) {
+      // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+
+      return item;
+    }
+  });
+};
+export const CheckHoangDao = (ngayChi) => {
+  return CHI_HOANG_DAO[ngayChi];
+};
+export const CheckHopHoa = (Chi1, Chi2) => {
   return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
 export const CheckTuongXungTuongHaiTuoi = (Chi1, Chi2) => {

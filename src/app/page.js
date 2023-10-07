@@ -8,6 +8,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -36,22 +37,40 @@ import {
   VANG_VONG,
 } from "@Root/script/Constant";
 import {
+  CheckHoangDao,
   CheckHoangOc,
   CheckKimLau,
   CheckNguHanhTuongSinh,
   CheckTamTai,
+  CheckTrucXungGio,
   CheckTrucXungNgayThangNam,
+  CheckTrucXungTuoi,
   CheckTuongXungTuongHaiTuoi,
   getCanChi,
 } from "@Root/script/handleDateChange";
 import TableShow from "./Table";
 const SERVICE_XAYDUNG = {
+  "trong-cay": "Trồng cây",
   "khoi-cong": "Khởi công",
   "sua-chua": "Sửa chữa",
   "pha-do": "Phá dỡ",
   "dong-tho": "Động thổ",
   "do-mong": "Đổ móng",
-  "khoi-cong": "Khởi công",
+  "do-mai": "Đổ mái",
+  "cat-noc": "Cất nóc",
+  "mo-cong": "Mở cổng",
+  "boi-hoan-long-mach": "Bồi hoàn long mạch",
+  "nhap-trach": "Nhập trạch",
+  "ta-dat": "Tạ đất",
+  "khanh-thanh": "Khánh thành",
+  "khai-truong": "Khai trương",
+  "mo-cua-hang": "Mở cửa hàng",
+  "chuyen-nha": "Chuyển nhà",
+  "ban-nha": "Bán nhà",
+  "dap-dap": "Đắp đập",
+  "ngan-de": "Ngăn đê",
+  "dao-gieng": "Đào giếng",
+  "lap-gieng": "Lắp giếng",
 };
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -59,8 +78,10 @@ export default function Home() {
   const [dateEnd, setDateEnd] = useState();
   const [valueText, setValueText] = useState("");
   const [valueAge, setValueAge] = useState(1);
+  const [valueAgeBorrow, setValueAgeBorrow] = useState(1);
   const [valueBuildHome, setValueBuildHome] = useState("");
   const [valueSelect, setValueSelect] = useState("");
+  const [isMuonTuoi, setIsMuonTuoi] = useState(false);
 
   const [step1, setDataStep1] = useState();
   const [step2, setDataStep2] = useState();
@@ -69,6 +90,19 @@ export default function Home() {
   const [step5, setDataStep5] = useState();
 
   const handleGetPerfectDate = async () => {
+    console.log(
+      {
+        dateStart,
+        dateEnd,
+        valueText,
+        valueAge,
+        valueAgeBorrow,
+        valueBuildHome,
+        valueSelect,
+        isMuonTuoi,
+      },
+      "adsas"
+    );
     setLoading(true);
     let dateArr = await enumerateDaysBetweenDates(
       `${moment(dateStart.$d).year()}-${
@@ -116,14 +150,22 @@ export default function Home() {
           CHI_NAM[moment().year() % 12],
           item.ngayChi
         ) &&
-        !CheckTrucXungNgayThangNam(CHI_NAM[valueAge % 12], item.ngayChi)
+        !CheckTrucXungNgayThangNam(
+          CHI_NAM[Number(moment().year() - valueAge) % 12],
+          item.ngayChi
+        )
       ) {
         arrPerfectDateStep2.push(item);
       }
     });
     setDataStep2(arrPerfectDateStep2);
     arrPerfectDateStep2.forEach((item, inex) => {
-      if (!CheckTuongXungTuongHaiTuoi(CHI_NAM[valueAge % 12], item.ngayChi)) {
+      if (
+        CheckTuongXungTuongHaiTuoi(
+          CHI_NAM[Number(moment().year() - valueAge) % 12],
+          item.ngayChi
+        ) === false
+      ) {
         arrPerfectDateStep3.push(item);
       }
     });
@@ -138,8 +180,27 @@ export default function Home() {
         arrPerfectDateStep4.push(item);
       }
     });
+    console.log("buoc4");
 
     setDataStep4(arrPerfectDateStep4);
+
+    // Chon gio
+    arrPerfectDateStep4.map((item, ind) => {
+      arrPerfectDateStep5.push({
+        ...item,
+        gio: CheckTrucXungGio(
+          valueText,
+          item.ngayChi,
+          item.thangChi,
+          CHI_NAM[Number(moment().year() - valueAge) % 12],
+          item.monthLunar
+        ),
+        gioHoangDao: CheckHoangDao(item.ngayChi),
+      });
+    });
+    console.log(arrPerfectDateStep5, "arrPerfectDateStep5");
+
+    setDataStep5(arrPerfectDateStep5);
     setLoading(false);
   };
   const handleGetPerfectDateDongTho = async () => {
@@ -197,6 +258,11 @@ export default function Home() {
     });
     setDataStep2(arrPerfectDateStep2);
     arrPerfectDateStep2.forEach((item, inex) => {
+      console.log(
+        CHI_NAM[valueAge % 12],
+        item.ngayChi,
+        "CHI_NAM[valueAge % 12], item.ngayChi)"
+      );
       if (!CheckTuongXungTuongHaiTuoi(CHI_NAM[valueAge % 12], item.ngayChi)) {
         arrPerfectDateStep3.push(item);
       }
@@ -217,14 +283,24 @@ export default function Home() {
         !CheckHoangOc(valueAge) &&
         !CheckTamTai(valueText, item.namChi)
       ) {
-        arrPerfectDateStep5.push(item);
+        if (!isMuonTuoi) {
+          arrPerfectDateStep5.push(item);
+        } else {
+          if (
+            !CheckTrucXungTuoi(
+              CHI_NAM[valueAge % 12],
+              CHI_NAM[valueAgeBorrow % 12]
+            )
+          ) {
+            arrPerfectDateStep5.push(item);
+          }
+        }
       }
     });
     setDataStep5(arrPerfectDateStep5);
     setLoading(false);
   };
 
-  // console.log(step1);
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -249,8 +325,12 @@ export default function Home() {
             onChange={(e) => {
               setValueSelect(e.target.value);
             }}>
-            {Object.keys(SERVICE_XAYDUNG).map((key) => {
-              return <MenuItem value={key}>{SERVICE_XAYDUNG[key]}</MenuItem>;
+            {Object.keys(SERVICE_XAYDUNG).map((key, inex) => {
+              return (
+                <MenuItem key={inex * 100 + Math.random(0, 100)} value={key}>
+                  {SERVICE_XAYDUNG[key]}
+                </MenuItem>
+              );
             })}
           </Select>
         </FormControl>
@@ -302,6 +382,34 @@ export default function Home() {
               setValueAge(e.target.value);
             }}
           />
+        </div>
+        <div>
+          <div
+            style={{ color: "black" }}
+            className="flex flex-row items-center ">
+            <div>Tuổi mượn</div>
+            <Switch
+              color="warning"
+              onChange={() => {
+                setIsMuonTuoi(!isMuonTuoi);
+              }}
+            />
+            <TextField
+              type={"number"}
+              id="standard-basic"
+              label="Tuổi"
+              placeholder="Nhập tuổi mượn"
+              variant="standard"
+              style={{
+                marginBottom: 10,
+                marginLeft: 20,
+                visibility: isMuonTuoi ? "visible" : "hidden",
+              }}
+              onChange={(e) => {
+                setValueAgeBorrow(e.target.value);
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-row justify-between w-[60%]">
@@ -373,6 +481,13 @@ export default function Home() {
           Sau bước 4 {"Kiểm tra Trực/Tú"}
         </div>
         <TableShow data={step4}></TableShow>
+      </div>
+      <div>
+        <div style={{ color: "black", marginTop: 30 }}>
+          Sau bước 5{" "}
+          {"Chọn giờ tránh xung với chi toạ, ngày, tháng, tuổi gia chủ "}
+        </div>
+        <TableShow data={step5}></TableShow>
       </div>
       {valueSelect === "dong-tho" && (
         <div>
