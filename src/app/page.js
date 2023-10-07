@@ -134,7 +134,7 @@ export default function Home() {
         Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect) ||
         Object.keys(ObjectTu[item.tu].CanLam).includes(valueSelect)
       ) {
-        console.log(item, "check item");
+        // console.log(item, "check item");
         arrPerfectDateStep4.push(item);
       }
     });
