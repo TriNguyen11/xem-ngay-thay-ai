@@ -38,32 +38,48 @@ export const CHI_NAM = [
   "Ngọ",
   "Mùi",
 ];
+export const CHI_NAM_SORTED = [
+  "Tý",
+  "Sửu",
+  "Dần",
+  "Mão",
+  "Thìn",
+  "Tỵ",
+  "Ngọ",
+  "Mùi",
+  "Thân",
+  "Dậu",
+  "Tuất",
+  "Hợi",
+];
 export const TRUC_XUNG_HAI = {
-  Tý: ["Ngọ", "Mùi"],
-  Sửu: ["Mùi", "Ngọ"],
-  Dần: ["Thân", "Tỵ"],
-  Mão: ["Dậu", "Thìn"],
-  Thìn: ["Tuất", "Mão"],
-  Tỵ: ["Hợi", "Dần"],
-  Ngọ: ["Tý", "Sửu"],
-  Mùi: ["Sửu", "Tý"],
-  Thân: ["Dần", "Hợi"],
-  Dậu: ["Mão", "Tuất"],
-  Tuất: ["Thìn", "Dậu"],
-  Hợi: ["Tỵ", "Thân"],
+  Tý: ["Ngọ", "Mùi", "Tý"],
+  Sửu: ["Mùi", "Ngọ", "Sửu"],
+  Dần: ["Thân", "Tỵ", "Dần"],
+  Mão: ["Dậu", "Thìn", "Mão"],
+  Thìn: ["Tuất", "Mão", "Thìn"],
+  Tỵ: ["Hợi", "Dần", "Tỵ"],
+  Ngọ: ["Tý", "Sửu", "Ngọ"],
+  Mùi: ["Sửu", "Tý", "Mùi"],
+  Thân: ["Dần", "Hợi", "Thân"],
+  Dậu: ["Mão", "Tuất", "Dậu"],
+  Tuất: ["Thìn", "Dậu", "Tuất"],
+  Hợi: ["Tỵ", "Thân", "Hợi"],
 };
 export const GIO_THO_TU = {
   Tý: "Sửu",
   Sửu: "Ngọ",
   Dần: "Ngọ",
-  Mão: "Tỵ",
+
+  Mão: "Mão",
+
   Thìn: "Tỵ",
-  Tỵ: "Dần",
-  Ngọ: "Mùi",
-  Mùi: "Ngọ",
-  Thân: "Mão",
-  Dậu: "Tỵ",
-  Tuất: "Mùi",
+  Tỵ: "Tỵ",
+  Ngọ: "Tỵ",
+  Mùi: "Mùi",
+  Thân: "Mùi",
+  Dậu: "Ngọ",
+  Tuất: "Ngọ",
   Hợi: "Ngọ",
 };
 export const GIO_SAT_CHU = [
@@ -82,13 +98,15 @@ export const GIO_SAT_CHU = [
 ];
 
 export const NGU_HANH_TUONG_SINH = {
-  Kim: ["Thuỷ", "Thổ"],
-  Mộc: ["Thuỷ", "Hoả"],
-  Thổ: ["Hoả", "Kim"],
-  Thuỷ: ["Kim", "Mộc"],
-  Hoả: ["Mộc", "Thổ"],
+  Kim: ["Thuỷ", "Kim", "Thổ"],
+  Mộc: ["Thuỷ", "Mộc", "Hoả"],
+  Thổ: ["Hoả", "Thổ", "Kim"],
+  Thuỷ: ["Kim", "Thuỷ", "Mộc"],
+  Hoả: ["Mộc", "Hoả", "Thổ"],
+  "": [""],
 };
 export const NGU_HANH = {
+  "": "",
   Tý: "Thuỷ",
   Sửu: "Thổ",
   Dần: "Mộc",
@@ -100,6 +118,8 @@ export const NGU_HANH = {
   Thân: "Kim",
   Dậu: "Kim",
   Tuất: "Thổ",
+  Mậu: "Thổ",
+  Kỷ: "Thổ",
   Hợi: "Thuỷ",
 
   Giáp: "Mộc",
@@ -1259,7 +1279,7 @@ export const ObjectTu = {
       "ta-mo": "Tạ mộ",
     },
   },
-  Vỹ: {
+  Vĩ: {
     CanLam: {
       "trong-cay": "Trồng cây",
       "khoi-cong": "Khởi công",

@@ -25,6 +25,7 @@ import {
   GIO_DIA_CHI,
   GIO_SAT_CHU,
   GIO_THO_TU,
+  NGU_HANH,
   NGU_HANH_TUONG_KHAC,
   NGU_HANH_TUONG_SINH,
   TAM_TAI,
@@ -538,9 +539,25 @@ export const getCanChi = async (day, month, year) => {
     CAN[Math.floor((lunar.yearLunar * 12 + lunar.monthLunar + 3) % 10)];
   let thangChi = CHI[(lunar.monthLunar + 1) % 12];
   let gioCan = getCanHour0(jdn(day, month, year));
+  let arrGioCan = [];
+  for (let i = 0; i < 12; i++) {
+    arrGioCan.push(
+      CAN_NAM[(CAN_NAM.indexOf(getCanHour0(jdn(day, month, year))) + i) % 10]
+    );
+  }
+  // console.log(arrGioCan, "varrGioCan");
+  let hanhNgay = NGU_HANH[CAN[canVi(ThienCan(lunar.daysTotalInLunar))]];
+
+  let hanhThang =
+    NGU_HANH[
+      CAN[Math.floor((lunar.yearLunar * 12 + lunar.monthLunar + 3) % 10)]
+    ];
   return {
     daySolar: day,
     gioCan,
+    arrGioCan,
+    hanhNgay,
+    hanhThang,
     monthSolar: month,
     yearSolar: year,
     dayLunar: lunar.dayLunar,
@@ -553,11 +570,25 @@ export const getCanChi = async (day, month, year) => {
     namCan,
     namChi,
     truc: TRUC12[iTruc[day - 1]],
-    tu: TINH28[iTinh[Number(day)]],
+    tu: TINH28[iTinh[Number(day) % 28]],
   };
 };
 export const CheckTrucXungNgayThangNam = (Chi1, Chi2) => {
-  return TRUC_XUNG_HAI[Chi1][0] === Chi2;
+  if (!CHI_NAM.includes(Chi1)) {
+    return false;
+  }
+  if (Chi1) return TRUC_XUNG_HAI[Chi1][0] === Chi2;
+};
+export const CheckTrucXungTyHoa = (Chi1, Chi2) => {
+  if (!CHI_NAM.includes(Chi1)) {
+    return false;
+  }
+  if (Chi1)
+    return (
+      TRUC_XUNG_HAI[Chi1][1] === Chi2 ||
+      TRUC_XUNG_HAI[Chi1][0] === Chi2 ||
+      TRUC_XUNG_HAI[Chi1][2] === Chi2
+    );
 };
 export const CheckGioThoTu = (ngayChi, gioChi) => {
   return GIO_THO_TU[ngayChi] === gioChi;
@@ -572,19 +603,24 @@ export const CheckTrucXungGio = (
   tuoiGiaChu,
   monthLunar
 ) => {
-  console.log(tuoiGiaChu, "tuoiGiaChu");
+  const arrGioHoangDao = CheckHoangDao(ngayChi);
+  // console.log(arrGioHoangDao, "arrGioHoangDao");
   return CHI.filter((item) => {
+    // console.log(arrGioHoangDao.includes(item), item, "check hoang dao");
     if (
-      !CheckTrucXungNgayThangNam(item, toaChi) &&
-      !CheckTrucXungNgayThangNam(item, ngayChi) &&
-      !CheckTrucXungNgayThangNam(item, thangChi) &&
-      !CheckTrucXungNgayThangNam(item, tuoiGiaChu) &&
-      !CheckGioThoTu(ngayChi, item) &&
-      !CheckGioSatChu(monthLunar, item)
+      CheckTrucXungNgayThangNam(item, toaChi) === false &&
+      CheckTrucXungNgayThangNam(item, ngayChi) === false &&
+      CheckTrucXungNgayThangNam(item, thangChi) === false &&
+      arrGioHoangDao.includes(item) === true &&
+      CheckGioThoTu(ngayChi, item) === false &&
+      CheckGioSatChu(monthLunar, item) === false
     ) {
-      // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+      if (CheckTrucXungTyHoa(item, tuoiGiaChu) === false) {
+        // console.log(item, tuoiGiaChu, "check itme voi tuoxi gia chu");
 
-      return item;
+        return item;
+      }
+      // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
     }
   });
 };
@@ -595,7 +631,12 @@ export const CheckHopHoa = (Chi1, Chi2) => {
   return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
 export const CheckTuongXungTuongHaiTuoi = (Chi1, Chi2) => {
-  return TRUC_XUNG_HAI[Chi1][1] === Chi2 || TRUC_XUNG_HAI[Chi1][0] === Chi2;
+  if (Chi1)
+    return (
+      TRUC_XUNG_HAI[Chi1][1] === Chi2 ||
+      TRUC_XUNG_HAI[Chi1][0] === Chi2 ||
+      TRUC_XUNG_HAI[Chi1][2] === Chi2
+    );
 };
 export const CheckTrucXungTuoi = (Chi1, Chi2) => {
   return TRUC_XUNG_HAI[Chi1][0] === Chi2;

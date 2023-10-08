@@ -573,7 +573,7 @@ export function getSunLongitude(dayNumber, timeZone) {
   return INT((SunLongitude(dayNumber - timeZone / 24) / Math.PI) * 12);
 }
 
-export function jdn(dd, mm, yy, hh, minutes) {
+export function jdn(dd, mm, yy, hh, minutes, seconds = 0) {
   var a = INT((14 - mm) / 12);
   var y = yy + 4800 - a;
   var m = mm + 12 * a - 3;
@@ -586,7 +586,7 @@ export function jdn(dd, mm, yy, hh, minutes) {
     INT(y / 400) -
     32045;
   if ((hh !== undefined, minutes !== undefined)) {
-    jd = jd + (hh - 12) / 24 + minutes / 1440;
+    jd = jd + (hh - 12) / 24 + minutes / 1440 + seconds / 86400;
   }
   return jd;
 }
