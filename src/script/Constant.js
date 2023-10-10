@@ -42,13 +42,13 @@ export const CHI_NAM_SORTED = [
   "Tý",
   "Sửu",
   "Dần",
-  "Mão",
+  "Mão", //
   "Thìn",
   "Tỵ",
   "Ngọ",
   "Mùi",
   "Thân",
-  "Dậu",
+  "Dậu", //
   "Tuất",
   "Hợi",
 ];
@@ -103,6 +103,14 @@ export const NGU_HANH_TUONG_SINH = {
   Thổ: ["Hoả", "Thổ", "Kim"],
   Thuỷ: ["Kim", "Thuỷ", "Mộc"],
   Hoả: ["Mộc", "Hoả", "Thổ"],
+  "": [""],
+};
+export const NGU_HANH_TUONG_KHAC = {
+  Kim: "Mộc",
+  Mộc: "Thổ",
+  Thổ: "Thuỷ",
+  Thuỷ: "Hoả",
+  Hoả: "Kim",
   "": [""],
 };
 export const NGU_HANH = {
@@ -168,6 +176,52 @@ export const TAM_TAI = {
   Tỵ: ["Tý", "Sửu", "Hợi"],
   Dậu: ["Tý", "Sửu", "Hợi"],
   Sửu: ["Tý", "Sửu", "Hợi"],
+};
+export const COMBINE_THIEN_CAN = [
+  ["Giáp", "Kỷ", "Thổ"],
+  ["Ất", "Canh", "Kim"],
+  ["Bính", "Tân", "Thuỷ"],
+  ["Đinh", "Nhâm", "Mộc"],
+  ["Mậu", "Quý", "Hoả"],
+];
+export const THIEN_TAI_DIA_HOA = {
+  Tý: [1, 5, 9],
+  Ngọ: [3, 7, 11],
+  Mão: [2, 6, 10],
+  Dậu: [4, 8, 12],
+};
+export const DAI_BAI = {
+  Giáp: { 3: "Mậu Tuất", 7: "Quý Hợi", 10: "Bính Thân", 11: "Đinh Hợi" },
+  Kỷ: { 3: "Mậu Tuất", 7: "Quý Hợi", 10: "Bính Thân", 11: "Đinh Hợi" },
+
+  Ất: { 4: "Nhâm Thân", 9: "Ất Tỵ" },
+  Canh: { 4: "Nhâm Thân", 9: "Ất Tỵ" },
+
+  Bính: { 3: "Tân Tỵ", 9: "Canh Thìn" },
+  Tân: { 3: "Tân Tỵ", 9: "Canh Thìn" },
+
+  Mậu: { 6: "Kỷ Sửu" },
+  Quý: { 6: "Kỷ Sửu" },
+};
+export const DUONG_CONG = [
+  [13],
+  [11],
+  [9],
+  [7],
+  [5],
+  [3],
+  [8, 29],
+  [27],
+  [25],
+  [23],
+  [21],
+  [19],
+];
+export const HOANG_VU_TU_QUY = {
+  Xuân: "Thân",
+  Hạ: "Dần",
+  Thu: "Thìn",
+  Đông: "Tỵ",
 };
 export const THO_TU = [
   "Tuất",
@@ -474,32 +528,32 @@ export const THANG_AM_VN = [
   "Mười một",
   "Mười hai",
 ];
-export const TIETKHI = {
-  0: "Xuân phân",
-  15: "Thanh minh",
-  30: "Cốc vũ",
-  45: "Lập hạ",
-  60: "Tiểu mãn",
-  75: "Mang chủng",
-  90: "Hạ chí",
-  105: "Tiểu thử",
-  120: "Đại thử",
-  135: "Lập thu",
-  150: "Xử thử",
-  165: "Bạch lộ",
-  180: "Thu phân",
-  195: "Hàn lộ",
-  210: "Sương giáng",
-  225: "Lập đông",
-  240: "Tiểu tuyết",
-  255: "Đại tuyết",
-  270: "Đông chí",
-  285: "Tiểu hàn",
-  300: "Đại hàn",
-  315: "Lập xuân",
-  330: "Vũ thủy",
-  345: "Kinh trập",
-};
+export const TIETKHI = [
+  "Xuân phân", //0:
+  "Thanh minh", //15:
+  "Cốc vũ", //30:
+  "Lập hạ", //45:
+  "Tiểu mãn", //60:
+  "Mang chủng", //75:
+  "Hạ chí", //90:
+  "Tiểu thử", //105:
+  "Đại thử", //120:
+  "Lập thu", //135:
+  "Xử thử", //150:
+  "Bạch lộ", //165:
+  "Thu phân", //180:
+  "Hàn lộ", //195:
+  "Sương giáng", //210:
+  "Lập đông", //225:
+  "Tiểu tuyết", //240:
+  "Đại tuyết", //255:
+  "Đông chí", //270:
+  "Tiểu hàn", //285:
+  "Đại hàn", //300:
+  "Lập xuân", //315:
+  "Vũ thủy", //330:
+  "Kinh trập", //345:
+];
 export const ObjectTruc = {
   Kiến: {
     CanLam: {

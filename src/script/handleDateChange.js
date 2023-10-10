@@ -22,6 +22,9 @@ import {
   CHI,
   CHI_HOANG_DAO,
   CHI_NAM,
+  COMBINE_THIEN_CAN,
+  DAI_BAI,
+  DUONG_CONG,
   GIO_DIA_CHI,
   GIO_SAT_CHU,
   GIO_THO_TU,
@@ -29,6 +32,7 @@ import {
   NGU_HANH_TUONG_KHAC,
   NGU_HANH_TUONG_SINH,
   TAM_TAI,
+  THIEN_TAI_DIA_HOA,
   TRUC_XUNG_HAI,
   TUAN,
 } from "./Constant";
@@ -644,6 +648,9 @@ export const CheckTrucXungTuoi = (Chi1, Chi2) => {
 export const CheckNguHanhTuongSinh = (NguHanh1, NguHanh2) => {
   return NGU_HANH_TUONG_SINH[NguHanh1].includes(NguHanh2);
 };
+export const CheckNguHanhTuongKhac = (NguHanh1, NguHanh2) => {
+  return NGU_HANH_TUONG_KHAC[NguHanh1] === NguHanh2;
+};
 export const CheckNgayBachKy = (Chi1, Chi2) => {
   return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
@@ -659,9 +666,13 @@ export const CheckKimLau = (NamLamNha, NamSinhGiaChu) => {
     "",
     "Kim Lâu Súc",
   ];
-  const KimLau = [NamLamNha - NamSinhGiaChu + 1] % 9;
-  //check length de xac dinh co Kiem Lau hay khong
-  return arrKimLau[KimLau];
+  const KimLau = (NamLamNha - NamSinhGiaChu + 1) % 9;
+  if (KimLau >= 0) {
+    //check length de xac dinh co Kiem Lau hay khong
+    return arrKimLau[KimLau];
+  } else {
+    return "";
+  }
 };
 export const CheckHoangOc = (age) => {
   // - Nhất Cát: Làm nhà tuổi này thì mọi việc đều tốt, gia đạo êm ấm, sự nghiệp hanh thông.
@@ -670,7 +681,7 @@ export const CheckHoangOc = (age) => {
   // - Tứ Tấn tài: Làm nhà tuổi này thì phúc lộc vẹn toàn.
   // - Ngũ Thọ tử: Làm nhà tuổi này thì rất xấu nhẹ thì đau ốm nặng thì sẽ lâm vào cảnh sinh ly tử biệt.
   // - Lục Hoang ốc: Làm nhà tuổi này thì gia đạo không yên, dù có cố gắng cũng khó mà thành đạt được.
-  arrHoangOc = [
+  const arrHoangOc = [
     "",
     "",
     "phạm hạn Hoang Ốc",
@@ -684,6 +695,50 @@ export const CheckTamTai = (ChiTuoi, ChiNam) => {
   return TAM_TAI[ChiTuoi].includes(ChiNam);
 };
 
+export const CheckDaiBai = (CanNam, mLunar, CanChiNgay, item) => {
+  // console.log(CanNam, "CanNam", mLunar, "mLunar", CanChiNgay);
+
+  return DAI_BAI[CanNam]
+    ? Object.keys(DAI_BAI[CanNam]).includes(mLunar.toString())
+      ? DAI_BAI[CanNam][mLunar] === CanChiNgay
+      : false
+    : false;
+};
+export const CheckThienTaiDiaHoa = (ChiNgay, mLunar) => {
+  return THIEN_TAI_DIA_HOA[ChiNgay]
+    ? THIEN_TAI_DIA_HOA[ChiNgay].includes(mLunar)
+    : false;
+};
+export const GetHoangVuTuQuy = (NumberTietKhi) => {
+  // return TAM_TAI[ChiTuoi].includes(ChiNam);
+  if (NumberTietKhi >= 3 && NumberTietKhi < 9) {
+    return "Hạ";
+  }
+  if (NumberTietKhi >= 9 && NumberTietKhi < 15) {
+    return "Thu";
+  }
+  if (NumberTietKhi >= 15 && NumberTietKhi < 21) {
+    return "Đông";
+  }
+
+  return "Xuân";
+};
+
+export const CheckDuongCong = (mLunar, dLunar) => {
+  return DUONG_CONG[mLunar - 1].includes(dLunar);
+};
+export const CheckKhongPhong = (ChiTuoi, ChiNam) => {
+  return TAM_TAI[ChiTuoi].includes(ChiNam);
+};
+export const CombineThienCan = (Can1, Can2) => {
+  let Combine = "";
+  COMBINE_THIEN_CAN.map((item) => {
+    if (item.includes(Can1) && item.includes(Can2) && Can1 !== Can2) {
+      Combine = item[2];
+    }
+  });
+  return Combine;
+};
 export const getDateByTietKhi = (tiet_khi) => {
   var T, T2, dr, M, L0, DL, lambda, theta, omega;
   T = (jdn - 2451545.0) / 36525; // Time in Julian centuries from 2000-01-01 12:00:00 GMT
