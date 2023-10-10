@@ -692,6 +692,7 @@ export const CheckHoangOc = (age) => {
   return arrHoangOc[(((age % 10) + Math.floor(age / 10)) % 6) - 1];
 };
 export const CheckTamTai = (ChiTuoi, ChiNam) => {
+  console.log(ChiTuoi, ChiNam, "ChiNam");
   return TAM_TAI[ChiTuoi].includes(ChiNam);
 };
 
