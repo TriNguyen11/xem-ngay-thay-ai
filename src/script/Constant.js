@@ -106,11 +106,11 @@ export const NGU_HANH_TUONG_SINH = {
   "": [""],
 };
 export const NGU_HANH_TUONG_KHAC = {
-  Kim: "Mộc",
-  Mộc: "Thổ",
-  Thổ: "Thuỷ",
-  Thuỷ: "Hoả",
-  Hoả: "Kim",
+  Kim: ["Mộc", "Hoả"],
+  Mộc: ["Thổ", "Kim"],
+  Thổ: ["Thuỷ", "Mộc"],
+  Thuỷ: ["Hoả", "Thổ"],
+  Hoả: ["Kim", "Thuỷ"],
   "": [""],
 };
 export const NGU_HANH = {

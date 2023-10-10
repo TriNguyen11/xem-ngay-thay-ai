@@ -649,7 +649,9 @@ export const CheckNguHanhTuongSinh = (NguHanh1, NguHanh2) => {
   return NGU_HANH_TUONG_SINH[NguHanh1].includes(NguHanh2);
 };
 export const CheckNguHanhTuongKhac = (NguHanh1, NguHanh2) => {
-  return NGU_HANH_TUONG_KHAC[NguHanh1] === NguHanh2;
+  // console.log(NguHanh1, NguHanh2, "nh 1, nh2");
+  // console.log(NGU_HANH_TUONG_KHAC[NguHanh1], "check condition");
+  return NGU_HANH_TUONG_KHAC[NguHanh1].includes(NguHanh2);
 };
 export const CheckNgayBachKy = (Chi1, Chi2) => {
   return TRUC_XUNG_HAI[Chi1][0] === Chi2;

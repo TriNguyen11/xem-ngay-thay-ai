@@ -157,6 +157,12 @@ export default function Home() {
     KimLau: "",
     HoangOc: "",
   });
+  // console.log(CombineThienCan("Mậu", "Quý"));
+  // console.log(
+  //   valueText,
+  //   NGU_HANH[valueText],
+  //   CheckNguHanhTuongKhac(NGU_HANH[valueText], CombineThienCan("Mậu", "Quý"))
+  // );
   const [valueBuildHome, setValueBuildHome] = useState("");
   const [valueSelect, setValueSelect] = useState("");
   const [isMuonTuoi, setIsMuonTuoi] = useState(false);
@@ -205,7 +211,6 @@ export default function Home() {
         tuoiGiaChu--;
       }
     }
-    console.log(tuoiGiaChu, "tuoiGiaChu");
     // Xac dinh can Chi gia chu
     setInfoGiaChu({
       ...infoGiaChu,
@@ -322,6 +327,7 @@ export default function Home() {
     });
     setDataStep5(arrPerfectDateStep5);
 
+    console.log(arrPerfectDateStep5.length, "length arr 5");
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
     setDataStep7(arrPerfectDateStep7);
@@ -976,7 +982,8 @@ export default function Home() {
   };
   const handleHopHoaNgayGio = async (arr, toa) => {
     let ArrHopHoa = [];
-    arr?.map((item, ind) => {
+
+    arr?.forEach((item, ind) => {
       let combineThienCanNgayGio = "";
       item.gio.map((itemGio) => {
         combineThienCanNgayGio = CombineThienCan(
@@ -998,15 +1005,15 @@ export default function Home() {
               combineThienCanNgayGio
             )
           ) {
-            ArrHopHoa.push(item);
+            ArrHopHoa.push(itemGio);
           }
         } else {
-          ArrHopHoa.push(item);
+          ArrHopHoa.push(itemGio);
         }
       });
+      item.gio = ArrHopHoa;
     });
-    console.log(ArrHopHoa, "check a ");
-    return ArrHopHoa;
+    return arr;
   };
   const handleHopHoaNgayThangWithoutToa = async (arr, toa) => {
     let ArrHopHoa = [];
@@ -1033,7 +1040,6 @@ export default function Home() {
       }
     });
     // return 1;
-    console.log(ArrHopHoa, "ArrHopHoa");
     return ArrHopHoa;
   };
   const handleHopHoaNgayGioWithoutToa = async (arr, toa) => {
@@ -1063,7 +1069,6 @@ export default function Home() {
         }
       });
     });
-    console.log(ArrHopHoa, "check a ");
     return ArrHopHoa;
   };
   return (
@@ -1432,7 +1437,7 @@ export default function Home() {
           Sau bước 1 {"(Tránh ngày, tháng xung toạ)"}
           {step1 && `(${step1?.length})`}
         </div>
-        <TableShow data={step1} infoGiaChu={infoGiaChu}></TableShow>
+        {/* <TableShow data={step1} infoGiaChu={infoGiaChu}></TableShow> */}
       </div>
 
       <div>
