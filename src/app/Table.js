@@ -1,18 +1,16 @@
 import {
-  Paper,
-  TableCell,
-  TableContainer,
-  TableHead,
-  Table,
-  TableRow,
-  TableBody,
   Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import {
-  CAN_NAM,
   CHI,
   CHI_NAM,
   CHI_NAM_SORTED,
+  COLOR_TEXT_NGU_HANH,
   GIO_DIA_CHI,
   NGUYET_KY,
   NGUYET_PHA,
@@ -25,16 +23,7 @@ import {
 } from "@Root/script/Constant";
 import { CheckTrucXungNgayThangNam } from "@Root/script/handleDateChange";
 import moment from "moment";
-import React from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
-
-const ColorText = {
-  Hoả: "red",
-  Mộc: "green",
-  Kim: "#f2ca02",
-  Thuỷ: "blue",
-  Thổ: "brown",
-};
 
 const TableShow = ({ data, infoGiaChu }) => {
   return (
@@ -179,7 +168,8 @@ const TableShow = ({ data, infoGiaChu }) => {
                       }}>
                       {date.gioCan} Tý
                     </TableCell>
-                    <TableCell style={{ color: ColorText[date.hanhNgay] }}>
+                    <TableCell
+                      style={{ color: COLOR_TEXT_NGU_HANH[date.hanhNgay] }}>
                       {date.ngayCan} {date.ngayChi} ({date.hanhNgay})
                     </TableCell>
                     <TableCell
@@ -208,7 +198,7 @@ const TableShow = ({ data, infoGiaChu }) => {
                                 style={{
                                   marginRight: 5,
                                   color:
-                                    ColorText[
+                                    COLOR_TEXT_NGU_HANH[
                                       NGU_HANH[
                                         date.arrGioCan[
                                           CHI_NAM_SORTED.indexOf(item)
@@ -292,7 +282,7 @@ const TableShow = ({ data, infoGiaChu }) => {
                                       style={{
                                         marginRight: 5,
                                         color:
-                                          ColorText[
+                                          COLOR_TEXT_NGU_HANH[
                                             NGU_HANH[
                                               date.arrGioCan[
                                                 CHI_NAM_SORTED.indexOf(itemGio)
@@ -338,7 +328,7 @@ const TableShow = ({ data, infoGiaChu }) => {
                                       style={{
                                         marginRight: 5,
                                         color:
-                                          ColorText[
+                                          COLOR_TEXT_NGU_HANH[
                                             NGU_HANH[
                                               date.arrGioCan[
                                                 CHI_NAM_SORTED.indexOf(itemGio)

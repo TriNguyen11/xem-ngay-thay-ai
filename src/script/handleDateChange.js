@@ -702,14 +702,6 @@ export const CheckHoangOc = (age) => {
   //   "phạm hạn Hoang Ốc",
   //   "phạm hạn Hoang Ốc",
   // ];
-  const arrHoangOc = [
-    "Nhất Cát",
-    "Nhị Nghi",
-    "Tam Địa sát",
-    "Tứ Tấn tài",
-    "Ngũ Thọ tử",
-    "Lục Hoang ốc",
-  ];
   console.log(age, (age % 10) + Math.floor(age / 10), " tong tuoi gia chu");
   return HOANG_OC[((age % 10) + Math.floor(age / 10) - 1) % 6];
 };

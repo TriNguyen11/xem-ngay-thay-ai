@@ -16,10 +16,11 @@ import { getSunLongitude, jdn } from "@Root/script/AmLich";
 import {
   CAN_NAM,
   CHI_NAM,
-  CHI_NAM_SORTED,
+  COLOR_TEXT_NGU_HANH,
   HOANG_OC,
   HOANG_VU_TU_QUY,
   KHONG_PHONG,
+  MONTHS,
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
@@ -28,8 +29,10 @@ import {
   ObjectTu,
   SAT_CHU_AM,
   SAT_CHU_DUONG,
+  SERVICE_XAYDUNG,
   TAM_NUONG,
   THO_TU,
+  TOA_NHA,
   VANG_VONG,
 } from "@Root/script/Constant";
 import {
@@ -54,76 +57,7 @@ import dayjs from "dayjs";
 import moment from "moment";
 import { useState } from "react";
 import TableShow from "./Table";
-const SERVICE_XAYDUNG = {
-  "trong-cay": "Trồng cây",
-  "khoi-cong": "Khởi công",
-  "sua-chua": "Sửa chữa",
-  "pha-do": "Phá dỡ",
-  "dong-tho": "Động thổ",
-  "do-mong": "Đổ móng",
-  "do-mai": "Đổ mái",
-  "cat-noc": "Cất nóc",
-  "mo-cong": "Mở cổng",
-  "boi-hoan-long-mach": "Bồi hoàn long mạch",
-  "nhap-trach": "Nhập trạch",
-  "ta-dat": "Tạ đất",
-  "khanh-thanh": "Khánh thành",
-  "khai-truong": "Khai trương",
-  "mo-cua-hang": "Mở cửa hàng",
-  "chuyen-nha": "Chuyển nhà",
-  "ban-nha": "Bán nhà",
-  "dap-dap": "Đắp đập",
-  "ngan-de": "Ngăn đê",
-  "dao-gieng": "Đào giếng",
-  "lap-gieng": "Lắp giếng",
-};
-const MONTHS = [
-  "Tháng 1",
-  "Tháng 2",
-  "Tháng 3",
-  "Tháng 4",
-  "Tháng 5",
-  "Tháng 6",
-  "Tháng 7",
-  "Tháng 8",
-  "Tháng 9",
-  "Tháng 10",
-  "Tháng 11",
-  "Tháng 12",
-];
-const TOA_NHA = [
-  "Tý",
-  "Sửu",
-  "Dần",
-  "Mão",
-  "Thìn",
-  "Tỵ",
-  "Ngọ",
-  "Mùi",
-  "Thân",
-  "Dậu",
-  "Tuất",
-  "Hợi",
-  "Giáp",
-  "Ất",
-  "Bính",
-  "Đinh",
-  "Canh",
-  "Tân",
-  "Nhâm",
-  "Quý",
-  "Cấn",
-  "Tốn",
-  "Khôn",
-  "Càn",
-];
-const ColorText = {
-  Hoả: "red",
-  Mộc: "green",
-  Kim: "#f2ca02",
-  Thuỷ: "blue",
-  Thổ: "brown",
-};
+
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [dateStart, setDateStart] = useState();
@@ -161,13 +95,6 @@ export default function Home() {
     HoangOc: [],
     descriptionHoangOc: [],
   });
-  // console.log(CombineThienCan("Mậu", "Quý"));
-  // console.log(
-  //   valueText,
-  //   NGU_HANH[valueText],
-  //   CheckNguHanhTuongKhac(NGU_HANH[valueText], CombineThienCan("Mậu", "Quý"))
-  // );
-  const [valueBuildHome, setValueBuildHome] = useState("");
   const [valueSelect, setValueSelect] = useState("");
   const [isMuonTuoi, setIsMuonTuoi] = useState(false);
 
@@ -179,7 +106,7 @@ export default function Home() {
   const [step6, setDataStep6] = useState();
   const [step7, setDataStep7] = useState();
   const [step8, setDataStep8] = useState();
-  const [step9, setDataStep9] = useState();
+
   const handleGetPerfectDate = async () => {
     console.log(
       {
@@ -188,7 +115,6 @@ export default function Home() {
         valueText,
         valueAge,
         valueAgeBorrow,
-        valueBuildHome,
         valueSelect,
         isMuonTuoi,
       },
@@ -347,7 +273,6 @@ export default function Home() {
         valueText,
         valueAgeBorrow,
         valueAge,
-        valueBuildHome,
         valueSelect,
         isMuonTuoi,
       },
@@ -392,8 +317,6 @@ export default function Home() {
         dateEnd.$d
       ).date()}`
     );
-    let arrPerfectDate = [];
-    let dateArrDongTho = [];
     let arrPerfectDateStep1 = [];
     let arrPerfectDateStep2 = [];
     let arrPerfectDateStep3 = [];
@@ -583,7 +506,6 @@ export default function Home() {
         valueText,
         valueAgeBorrow,
         valueAge,
-        valueBuildHome,
         valueSelect,
         isMuonTuoi,
       },
@@ -662,8 +584,7 @@ export default function Home() {
         dateEnd.$d
       ).date()}`
     );
-    let arrPerfectDate = [];
-    let dateArrDongTho = [];
+
     let arrPerfectDateStep1 = [];
     let arrPerfectDateStep2 = [];
     let arrPerfectDateStep3 = [];
@@ -671,7 +592,7 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; //hop hoa
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
-    let arrPerfectDateStep8 = []; // bonus dong-tho nhap-trach let KimLau = CheckKimLau(valueBuildHome, tuoiMuon);
+    let arrPerfectDateStep8 = []; // bonus dong-tho nhap-trach
     let KimLau = [];
     let HoangOc = [];
     let TamTai = [];
@@ -898,7 +819,6 @@ export default function Home() {
   };
   const handleHopHoaNgayGio = async (arr, toa) => {
     // let ArrHopHoa = [];
-
     // arr?.forEach((item, ind) => {
     //   let combineThienCanNgayGio = "";
     //   item.gio.map((itemGio) => {
@@ -950,7 +870,6 @@ export default function Home() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            // value={age}
             label=" Chọn việc cần xem"
             onChange={(e) => {
               setValueSelect(e.target.value);
@@ -976,7 +895,6 @@ export default function Home() {
               style={{
                 marginBottom: 10,
                 marginLeft: 20,
-                // visibility:  "visible" ,
               }}
               onChange={(e) => {
                 setInfoGiaChu({ ...infoGiaChu, name: e.target.value });
@@ -989,7 +907,6 @@ export default function Home() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                // value={age}
                 label="Toạ nhà"
                 onChange={(e) => {
                   setValueText(TOA_NHA[e.target.value]);
@@ -1019,7 +936,6 @@ export default function Home() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                // value={age}
                 label="Tháng"
                 onChange={(e) => {
                   setValueAge({ ...valueAge, month: e.target.value });
@@ -1096,7 +1012,6 @@ export default function Home() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  // value={age}
                   label="Tháng"
                   onChange={(e) => {
                     setValueAgeBorrow({
@@ -1284,7 +1199,7 @@ export default function Home() {
             <div
               className="text-black mb-2 font-bold text-lg"
               style={{
-                color: ColorText[NGU_HANH[valueText]],
+                color: COLOR_TEXT_NGU_HANH[NGU_HANH[valueText]],
               }}>
               Toạ nhà: {valueText} ({NGU_HANH[valueText]})
             </div>
@@ -1300,7 +1215,7 @@ export default function Home() {
           Sau bước 1 {"(Tránh ngày, tháng xung toạ)"}
           {step1 && `(${step1?.length})`}
         </div>
-        {/* <TableShow data={step1} infoGiaChu={infoGiaChu}></TableShow> */}
+        <TableShow data={step1} infoGiaChu={infoGiaChu}></TableShow>
       </div>
 
       <div>
@@ -1308,13 +1223,13 @@ export default function Home() {
           Sau bước 2 {"(Tránh bách kỵ)"}
           {step2 && `(${step2?.length})`}
         </div>
-        {/* <TableShow data={step2} infoGiaChu={infoGiaChu}></TableShow> */}
+        <TableShow data={step2} infoGiaChu={infoGiaChu}></TableShow>
       </div>
       <div>
         <div style={{ color: "black", marginTop: 30 }}>
           Kiểm tra thêm hợp hoá ngày/tháng {step6 && `(${step6?.length})`}
         </div>
-        {/* <TableShow data={step6} infoGiaChu={infoGiaChu}></TableShow> */}
+        <TableShow data={step6} infoGiaChu={infoGiaChu}></TableShow>
       </div>
       {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") && (
         <div>
@@ -1330,14 +1245,14 @@ export default function Home() {
           Sau bước 3 {"(Tránh tương xung tương hại với tuổi gia chủ)"}{" "}
           {step3 && `(${step3?.length})`}
         </div>
-        {/* <TableShow data={step3} infoGiaChu={infoGiaChu}></TableShow> */}
+        <TableShow data={step3} infoGiaChu={infoGiaChu}></TableShow>
       </div>
       <div>
         <div style={{ color: "black", marginTop: 30 }}>
           Sau bước 4 {"Kiểm tra Trực/Tú"}
           {step4 && `(${step4?.length})`}
         </div>
-        {/* <TableShow data={step4} infoGiaChu={infoGiaChu}></TableShow> */}
+        <TableShow data={step4} infoGiaChu={infoGiaChu}></TableShow>
       </div>
       <div>
         <div style={{ color: "black", marginTop: 30 }}>
