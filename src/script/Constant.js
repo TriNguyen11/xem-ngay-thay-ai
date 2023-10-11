@@ -113,6 +113,14 @@ export const NGU_HANH_TUONG_KHAC = {
   Hoả: ["Kim", "Thuỷ"],
   "": [""],
 };
+export const NGU_HANH_TUONG_KHAC_KHAU_QUYET = {
+  Kim: "Mộc",
+  Mộc: "Thổ",
+  Thổ: "Thuỷ",
+  Thuỷ: "Hoả",
+  Hoả: "Kim",
+  "": "",
+};
 export const NGU_HANH = {
   "": "",
   Tý: "Thuỷ",
@@ -217,11 +225,25 @@ export const DUONG_CONG = [
   [21],
   [19],
 ];
+export const HOANG_OC = [
+  "Nhất Cát",
+  "Nhị Nghi",
+  "Tam Địa sát",
+  "Tứ Tấn tài",
+  "Ngũ Thọ tử",
+  "Lục Hoang ốc",
+];
 export const HOANG_VU_TU_QUY = {
   Xuân: "Thân",
   Hạ: "Dần",
   Thu: "Thìn",
   Đông: "Tỵ",
+};
+export const KHONG_PHONG = {
+  Xuân: ["Thìn", "Tỵ", "Tý"],
+  Hạ: ["Tuất", "Hợi", "Mùi"],
+  Thu: ["Mão", "Dần", "Ngọ"],
+  Đông: ["Thân", "Dậu", "Sửu"],
 };
 export const THO_TU = [
   "Tuất",

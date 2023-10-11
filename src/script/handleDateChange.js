@@ -28,8 +28,10 @@ import {
   GIO_DIA_CHI,
   GIO_SAT_CHU,
   GIO_THO_TU,
+  HOANG_OC,
   NGU_HANH,
   NGU_HANH_TUONG_KHAC,
+  NGU_HANH_TUONG_KHAC_KHAU_QUYET,
   NGU_HANH_TUONG_SINH,
   TAM_TAI,
   THIEN_TAI_DIA_HOA,
@@ -653,6 +655,15 @@ export const CheckNguHanhTuongKhac = (NguHanh1, NguHanh2) => {
   // console.log(NGU_HANH_TUONG_KHAC[NguHanh1], "check condition");
   return NGU_HANH_TUONG_KHAC[NguHanh1].includes(NguHanh2);
 };
+export const CheckNguHanhTuongKhacKhauQuyet = (NguHanh1, NguHanh2) => {
+  console.log(NguHanh1, NguHanh2, "nh 1, nh2");
+  console.log(
+    NGU_HANH_TUONG_KHAC_KHAU_QUYET[NguHanh1] === NguHanh2,
+    "nh 1, nh2"
+  );
+  // console.log(NGU_HANH_TUONG_KHAC[NguHanh1], "check condition");
+  return NGU_HANH_TUONG_KHAC_KHAU_QUYET[NguHanh1] === NguHanh2;
+};
 export const CheckNgayBachKy = (Chi1, Chi2) => {
   return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
@@ -683,18 +694,27 @@ export const CheckHoangOc = (age) => {
   // - Tứ Tấn tài: Làm nhà tuổi này thì phúc lộc vẹn toàn.
   // - Ngũ Thọ tử: Làm nhà tuổi này thì rất xấu nhẹ thì đau ốm nặng thì sẽ lâm vào cảnh sinh ly tử biệt.
   // - Lục Hoang ốc: Làm nhà tuổi này thì gia đạo không yên, dù có cố gắng cũng khó mà thành đạt được.
+  // const arrHoangOc = [
+  //   "",
+  //   "",
+  //   "phạm hạn Hoang Ốc",
+  //   "",
+  //   "phạm hạn Hoang Ốc",
+  //   "phạm hạn Hoang Ốc",
+  // ];
   const arrHoangOc = [
-    "",
-    "",
-    "phạm hạn Hoang Ốc",
-    "",
-    "phạm hạn Hoang Ốc",
-    "phạm hạn Hoang Ốc",
+    "Nhất Cát",
+    "Nhị Nghi",
+    "Tam Địa sát",
+    "Tứ Tấn tài",
+    "Ngũ Thọ tử",
+    "Lục Hoang ốc",
   ];
-  return arrHoangOc[(((age % 10) + Math.floor(age / 10)) % 6) - 1];
+  console.log(age, (age % 10) + Math.floor(age / 10), " tong tuoi gia chu");
+  return HOANG_OC[((age % 10) + Math.floor(age / 10) - 1) % 6];
 };
 export const CheckTamTai = (ChiTuoi, ChiNam) => {
-  console.log(ChiTuoi, ChiNam, "ChiNam");
+  // console.log(ChiTuoi, ChiNam, "ChiNam");
   return TAM_TAI[ChiTuoi].includes(ChiNam);
 };
 
