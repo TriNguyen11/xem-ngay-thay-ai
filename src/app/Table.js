@@ -6,6 +6,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { monthDays } from "@Root/script/AmLich";
 import {
   CHI,
   CHI_NAM,
@@ -37,8 +38,8 @@ const TableShow = ({ data, infoGiaChu }) => {
             tableLayout: "fixed",
           }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
+            <TableHead className="">
+              <TableRow style={{}}>
                 <TableCell
                   style={{
                     textAlign: "center",
@@ -109,6 +110,11 @@ const TableShow = ({ data, infoGiaChu }) => {
                 let backky = "";
                 if (date.dayLunar === 1) backky = "Mùng 1";
                 if (date.dayLunar === 15) backky = "Rằm";
+                if (
+                  monthDays(date.yearLunar, date.monthLunar) === date.dayLunar
+                )
+                  backky = "Cuối tháng ";
+
                 if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
                 if (TAM_NUONG.includes(date.dayLunar)) backky = "Tam Nương";
                 if (THO_TU[date.monthLunar - 1] === date.ngayChi)

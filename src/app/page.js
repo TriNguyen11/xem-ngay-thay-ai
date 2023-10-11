@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import { getSunLongitude, jdn } from "@Root/script/AmLich";
+import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
   CHI_NAM,
@@ -191,6 +191,7 @@ export default function Home() {
       if (
         item.dayLunar !== 1 &&
         item.dayLunar !== 15 &&
+        monthDays(item.yearLunar, item.monthLunar) !== item.dayLunar &&
         !NGUYET_KY.includes(item.dayLunar) &&
         !TAM_NUONG.includes(item.dayLunar) &&
         THO_TU[item.monthLunar - 1] !== item.ngayChi &&
@@ -851,6 +852,7 @@ export default function Home() {
     // });
     return arr;
   };
+
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1211,25 +1213,33 @@ export default function Home() {
             </div>
           </>
         )}
-        <div style={{ color: "black" }}>
+      </div>
+      <div className="">
+        <div style={{ color: "black", marginTop: 30 }}>
           Sau bước 1 {"(Tránh ngày, tháng xung toạ)"}
           {step1 && `(${step1?.length})`}
         </div>
-        <TableShow data={step1} infoGiaChu={infoGiaChu}></TableShow>
+        <div className="max-h-[500px] overflow-scroll">
+          <TableShow data={step1} infoGiaChu={infoGiaChu}></TableShow>
+        </div>
       </div>
-
       <div>
         <div style={{ color: "black", marginTop: 30 }}>
           Sau bước 2 {"(Tránh bách kỵ)"}
           {step2 && `(${step2?.length})`}
         </div>
-        <TableShow data={step2} infoGiaChu={infoGiaChu}></TableShow>
+        <div className="max-h-[500px] overflow-scroll">
+          <TableShow data={step2} infoGiaChu={infoGiaChu}></TableShow>
+        </div>
       </div>
       <div>
         <div style={{ color: "black", marginTop: 30 }}>
           Kiểm tra thêm hợp hoá ngày/tháng {step6 && `(${step6?.length})`}
         </div>
-        <TableShow data={step6} infoGiaChu={infoGiaChu}></TableShow>
+
+        <div className="max-h-[500px] overflow-scroll">
+          <TableShow data={step6} infoGiaChu={infoGiaChu}></TableShow>
+        </div>
       </div>
       {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") && (
         <div>
@@ -1237,7 +1247,10 @@ export default function Home() {
             Kiểm tra những ngày không nên {SERVICE_XAYDUNG[valueSelect]}{" "}
             {step8 && `(${step8?.length})`}
           </div>
-          <TableShow data={step8} infoGiaChu={infoGiaChu}></TableShow>
+
+          <div className="max-h-[500px] overflow-scroll">
+            <TableShow data={step8} infoGiaChu={infoGiaChu}></TableShow>
+          </div>
         </div>
       )}
       <div>
@@ -1245,27 +1258,39 @@ export default function Home() {
           Sau bước 3 {"(Tránh tương xung tương hại với tuổi gia chủ)"}{" "}
           {step3 && `(${step3?.length})`}
         </div>
-        <TableShow data={step3} infoGiaChu={infoGiaChu}></TableShow>
+
+        <div className="max-h-[500px] overflow-scroll">
+          <TableShow data={step3} infoGiaChu={infoGiaChu}></TableShow>
+        </div>
       </div>
       <div>
         <div style={{ color: "black", marginTop: 30 }}>
           Sau bước 4 {"Kiểm tra Trực/Tú"}
           {step4 && `(${step4?.length})`}
         </div>
-        <TableShow data={step4} infoGiaChu={infoGiaChu}></TableShow>
+
+        <div className="max-h-[500px] overflow-scroll">
+          <TableShow data={step4} infoGiaChu={infoGiaChu}></TableShow>
+        </div>
       </div>
       <div>
         <div style={{ color: "black", marginTop: 30 }}>
           Sau bước 5{" "}
           {"Chọn giờ tránh xung với chi toạ, ngày, tháng, tuổi gia chủ "}
         </div>
-        <TableShow data={step5} infoGiaChu={infoGiaChu}></TableShow>
+
+        <div className="max-h-[500px] overflow-scroll">
+          <TableShow data={step5} infoGiaChu={infoGiaChu}></TableShow>
+        </div>
       </div>
       <div>
         <div style={{ color: "black", marginTop: 30 }}>
           Kiểm tra thêm hợp hoá ngày/giờ {step7 && `(${step7?.length})`}
         </div>
-        <TableShow data={step7} infoGiaChu={infoGiaChu}></TableShow>
+
+        <div className="max-h-[500px] overflow-scroll">
+          <TableShow data={step7} infoGiaChu={infoGiaChu}></TableShow>
+        </div>
       </div>
       {valueSelect === "dong-tho" && (
         <div>
@@ -1273,7 +1298,10 @@ export default function Home() {
             Sau bước 5 khi chọn việc động thổ{" "}
             {"(Tránh Kim Lâu, Hoang Ốc, Tam Tai"}
           </div>
-          <TableShow data={step5}></TableShow>
+
+          <div className="max-h-[500px] overflow-scroll">
+            <TableShow data={step5}></TableShow>
+          </div>
         </div>
       )}
 
