@@ -175,11 +175,12 @@ export default function Home() {
         CheckNguHanhTuongSinh(
           NGU_HANH[valueText],
           NGU_HANH[dateArr[index].ngayCan]
-        ) &&
-        CheckNguHanhTuongSinh(
-          NGU_HANH[valueText],
-          NGU_HANH[dateArr[index].thangCan]
         )
+        // &&
+        // CheckNguHanhTuongSinh(
+        //   NGU_HANH[valueText],
+        //   NGU_HANH[dateArr[index].thangCan]
+        // )
       ) {
         arrPerfectDateStep1.push(item);
       }
