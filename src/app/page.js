@@ -245,9 +245,12 @@ export default function Home() {
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
       if (
-        !Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        !Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        //   !! || 1 trong 2 pham deu` bi
+        //
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
       ) {
+      } else {
         arrPerfectDateStep4.push(item);
       }
     });
@@ -270,7 +273,7 @@ export default function Home() {
     });
     setDataStep5(arrPerfectDateStep5);
 
-    console.log(arrPerfectDateStep5.length, "length arr 5");
+    // console.log(arrPerfectDateStep5, "length arr 5");
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
     setDataStep7(arrPerfectDateStep7);
@@ -484,10 +487,12 @@ export default function Home() {
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
       if (
-        !Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        !Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        //   !! || 1 trong 2 pham deu` bi
+        //
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
       ) {
-        // console.log(valueSelect);
+      } else {
         arrPerfectDateStep4.push(item);
       }
     });
@@ -755,10 +760,12 @@ export default function Home() {
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
       if (
-        !Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        !Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        //   !! || 1 trong 2 pham deu` bi
+        //
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
       ) {
-        // console.log(valueSelect);
+      } else {
         arrPerfectDateStep4.push(item);
       }
     });
@@ -822,7 +829,7 @@ export default function Home() {
       }
     });
     // return 1;
-    console.log(ArrHopHoa, "ArrHopHoa");
+    // console.log(ArrHopHoa, "ArrHopHoa");
     return ArrHopHoa;
   };
   const handleHopHoaNgayGio = async (arr, toa) => {
@@ -1234,7 +1241,10 @@ export default function Home() {
           {step1 && `(${step1?.length})`}
         </div>
         <div className="max-h-[500px] overflow-scroll">
-          <TableShow data={step1} infoGiaChu={infoGiaChu}></TableShow>
+          <TableShow
+            data={step1}
+            infoGiaChu={infoGiaChu}
+            valueSelect={valueSelect}></TableShow>
         </div>
       </div>
       <div>
@@ -1243,7 +1253,10 @@ export default function Home() {
           {step2 && `(${step2?.length})`}
         </div>
         <div className="max-h-[500px] overflow-scroll">
-          <TableShow data={step2} infoGiaChu={infoGiaChu}></TableShow>
+          <TableShow
+            valueSelect={valueSelect}
+            data={step2}
+            infoGiaChu={infoGiaChu}></TableShow>
         </div>
       </div>
       <div>
@@ -1252,7 +1265,10 @@ export default function Home() {
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
-          <TableShow data={step6} infoGiaChu={infoGiaChu}></TableShow>
+          <TableShow
+            valueSelect={valueSelect}
+            data={step6}
+            infoGiaChu={infoGiaChu}></TableShow>
         </div>
       </div>
       {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") && (
@@ -1263,7 +1279,10 @@ export default function Home() {
           </div>
 
           <div className="max-h-[500px] overflow-scroll">
-            <TableShow data={step8} infoGiaChu={infoGiaChu}></TableShow>
+            <TableShow
+              valueSelect={valueSelect}
+              data={step8}
+              infoGiaChu={infoGiaChu}></TableShow>
           </div>
         </div>
       )}
@@ -1274,7 +1293,10 @@ export default function Home() {
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
-          <TableShow data={step3} infoGiaChu={infoGiaChu}></TableShow>
+          <TableShow
+            valueSelect={valueSelect}
+            data={step3}
+            infoGiaChu={infoGiaChu}></TableShow>
         </div>
       </div>
       <div>
@@ -1284,7 +1306,10 @@ export default function Home() {
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
-          <TableShow data={step4} infoGiaChu={infoGiaChu}></TableShow>
+          <TableShow
+            valueSelect={valueSelect}
+            data={step4}
+            infoGiaChu={infoGiaChu}></TableShow>
         </div>
       </div>
       <div>
@@ -1294,7 +1319,10 @@ export default function Home() {
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
-          <TableShow data={step5} infoGiaChu={infoGiaChu}></TableShow>
+          <TableShow
+            valueSelect={valueSelect}
+            data={step5}
+            infoGiaChu={infoGiaChu}></TableShow>
         </div>
       </div>
       <div>
@@ -1303,7 +1331,10 @@ export default function Home() {
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
-          <TableShow data={step7} infoGiaChu={infoGiaChu}></TableShow>
+          <TableShow
+            valueSelect={valueSelect}
+            data={step7}
+            infoGiaChu={infoGiaChu}></TableShow>
         </div>
       </div>
       {valueSelect === "dong-tho" && (
@@ -1314,7 +1345,7 @@ export default function Home() {
           </div>
 
           <div className="max-h-[500px] overflow-scroll">
-            <TableShow data={step5}></TableShow>
+            <TableShow valueSelect={valueSelect} data={step5}></TableShow>
           </div>
         </div>
       )}

@@ -591,9 +591,8 @@ export const CheckTrucXungTyHoa = (Chi1, Chi2) => {
   }
   if (Chi1)
     return (
-      TRUC_XUNG_HAI[Chi1][1] === Chi2 ||
-      TRUC_XUNG_HAI[Chi1][0] === Chi2 ||
-      TRUC_XUNG_HAI[Chi1][2] === Chi2
+      TRUC_XUNG_HAI[Chi1][1] === Chi2 || TRUC_XUNG_HAI[Chi1][0] === Chi2
+      // ||TRUC_XUNG_HAI[Chi1][2] === Chi2
     );
 };
 export const CheckGioThoTu = (ngayChi, gioChi) => {
@@ -610,7 +609,6 @@ export const CheckTrucXungGio = (
   monthLunar
 ) => {
   const arrGioHoangDao = CheckHoangDao(ngayChi);
-  // console.log(arrGioHoangDao, "arrGioHoangDao");
   return CHI.filter((item) => {
     // console.log(arrGioHoangDao.includes(item), item, "check hoang dao");
     if (
@@ -622,8 +620,6 @@ export const CheckTrucXungGio = (
       CheckGioSatChu(monthLunar, item) === false
     ) {
       if (CheckTrucXungTyHoa(item, tuoiGiaChu) === false) {
-        // console.log(item, tuoiGiaChu, "check itme voi tuoxi gia chu");
-
         return item;
       }
       // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
@@ -660,11 +656,11 @@ export const CheckNguHanhTuongKhac = (NguHanh1, NguHanh2) => {
   return NGU_HANH_TUONG_KHAC[NguHanh1].includes(NguHanh2);
 };
 export const CheckNguHanhTuongKhacKhauQuyet = (NguHanh1, NguHanh2) => {
-  console.log(NguHanh1, NguHanh2, "nh 1, nh2");
-  console.log(
-    NGU_HANH_TUONG_KHAC_KHAU_QUYET[NguHanh1] === NguHanh2,
-    "nh 1, nh2"
-  );
+  // console.log(NguHanh1, NguHanh2, "nh 1, nh2");
+  // console.log(
+  //   NGU_HANH_TUONG_KHAC_KHAU_QUYET[NguHanh1] === NguHanh2,
+  //   "nh 1, nh2"
+  // );
   // console.log(NGU_HANH_TUONG_KHAC[NguHanh1], "check condition");
   return NGU_HANH_TUONG_KHAC_KHAU_QUYET[NguHanh1] === NguHanh2;
 };

@@ -16,6 +16,8 @@ import {
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
+  ObjectTruc,
+  ObjectTu,
   SAT_CHU_AM,
   SAT_CHU_DUONG,
   TAM_NUONG,
@@ -26,7 +28,7 @@ import { CheckTrucXungNgayThangNam } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
-const TableShow = ({ data, infoGiaChu }) => {
+const TableShow = ({ data, infoGiaChu, valueSelect }) => {
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -94,14 +96,14 @@ const TableShow = ({ data, infoGiaChu }) => {
                     textAlign: "center",
                     minWidth: 500,
                   }}>
-                  Giờ Hoàng Đạo
+                  Giờ Hợp
                 </TableCell>
                 <TableCell
                   style={{
                     textAlign: "center",
                     minWidth: 500,
                   }}>
-                  Giờ Hợp
+                  Giờ Hoàng Đạo
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -142,6 +144,7 @@ const TableShow = ({ data, infoGiaChu }) => {
                 ) {
                   backky = "Đại Hao";
                 }
+
                 return (
                   <TableRow
                     style={{
@@ -187,86 +190,32 @@ const TableShow = ({ data, infoGiaChu }) => {
                     <TableCell
                       style={{
                         textAlign: "center",
+                        flexDirection: "row",
+                        alignItems: "center",
                       }}>
-                      {date.truc} / {date.tu}
-                    </TableCell>
-                    <TableCell
-                      style={{
-                        fontSize: 12,
-                        textAlign: "center",
-                      }}>
-                      <span className="flex flex-row text-center" style={{}}>
-                        {date?.gioHoangDao &&
-                          date.gioHoangDao?.map((item, index) => {
-                            return (
-                              <span
-                                key={Math.random()}
-                                style={{
-                                  marginRight: 5,
-                                  color:
-                                    COLOR_TEXT_NGU_HANH[
-                                      NGU_HANH[
-                                        date.arrGioCan[
-                                          CHI_NAM_SORTED.indexOf(item)
-                                        ]
-                                      ]
-                                    ],
-                                }}>
-                                {date.arrGioCan[CHI_NAM_SORTED.indexOf(item)] +
-                                  " " +
-                                  item +
-                                  " (" +
-                                  GIO_DIA_CHI[CHI.indexOf(item)] +
-                                  ") " +
-                                  "(" +
-                                  NGU_HANH[
-                                    date.arrGioCan[CHI_NAM_SORTED.indexOf(item)]
-                                  ] +
-                                  ")"}
-                              </span>
-                            );
-                          })}
+                      <span
+                        style={{
+                          color: Object.keys(
+                            ObjectTruc[date.truc].KhongLam
+                          ).includes(valueSelect)
+                            ? "red"
+                            : "green",
+                        }}>
+                        {date.truc} /{" "}
                       </span>
-                      {date?.gio && (
-                        <div className="flex flex-row  mt-2">
-                          <div style={{ marginRight: 10 }}>
-                            Mặt trời mọc:{" "}
-                            <span className="font-bold text-base">
-                              {moment(
-                                getSunriseDateTimeUtc(
-                                  new Date(
-                                    Number(date.yearSolar),
-                                    Number(date.monthSolar) - 1,
-                                    Number(date.daySolar)
-                                  ),
-                                  21.030653,
-                                  105.84713
-                                )
-                              ).format("hh:mm:ss")}
-                            </span>
-                          </div>
-                          <div>
-                            Mặt trời lặn:{" "}
-                            <span className="font-bold text-base">
-                              {moment(
-                                getSunsetDateTimeUtc(
-                                  new Date(
-                                    Number(date.yearSolar),
-                                    Number(date.monthSolar) - 1,
-                                    Number(date.daySolar)
-                                  ),
-                                  21.030653,
-                                  105.84713
-                                )
-                              )
-                                .clone()
-                                .add(1, "millisecond")
-                                .format("HH:mm:ss")}{" "}
-                            </span>
-                          </div>
-                        </div>
-                      )}
+
+                      <span
+                        style={{
+                          color: Object.keys(
+                            ObjectTu[date.tu].KhongLam
+                          ).includes(valueSelect)
+                            ? "red"
+                            : "green",
+                        }}>
+                        {date.tu}
+                      </span>
                     </TableCell>
+
                     <TableCell
                       clas
                       style={{
@@ -364,6 +313,83 @@ const TableShow = ({ data, infoGiaChu }) => {
                           </div>
                         )}
                       </span>
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        fontSize: 12,
+                        textAlign: "center",
+                      }}>
+                      <span className="flex flex-row text-center" style={{}}>
+                        {date?.gioHoangDao &&
+                          date.gioHoangDao?.map((item, index) => {
+                            return (
+                              <span
+                                key={Math.random()}
+                                style={{
+                                  marginRight: 5,
+                                  color:
+                                    COLOR_TEXT_NGU_HANH[
+                                      NGU_HANH[
+                                        date.arrGioCan[
+                                          CHI_NAM_SORTED.indexOf(item)
+                                        ]
+                                      ]
+                                    ],
+                                }}>
+                                {date.arrGioCan[CHI_NAM_SORTED.indexOf(item)] +
+                                  " " +
+                                  item +
+                                  " (" +
+                                  GIO_DIA_CHI[CHI.indexOf(item)] +
+                                  ") " +
+                                  "(" +
+                                  NGU_HANH[
+                                    date.arrGioCan[CHI_NAM_SORTED.indexOf(item)]
+                                  ] +
+                                  ")"}
+                              </span>
+                            );
+                          })}
+                      </span>
+                      {date?.gio && (
+                        <div className="flex flex-row  mt-2">
+                          <div style={{ marginRight: 10 }}>
+                            Mặt trời mọc:{" "}
+                            <span className="font-bold text-base">
+                              {moment(
+                                getSunriseDateTimeUtc(
+                                  new Date(
+                                    Number(date.yearSolar),
+                                    Number(date.monthSolar) - 1,
+                                    Number(date.daySolar)
+                                  ),
+                                  21.030653,
+                                  105.84713
+                                )
+                              ).format("hh:mm:ss")}
+                            </span>
+                          </div>
+                          <div>
+                            Mặt trời lặn:{" "}
+                            <span className="font-bold text-base">
+                              {moment(
+                                getSunsetDateTimeUtc(
+                                  new Date(
+                                    Number(date.yearSolar),
+                                    Number(date.monthSolar) - 1,
+                                    Number(date.daySolar)
+                                  ),
+                                  21.030653,
+                                  105.84713
+                                )
+                              )
+                                .clone()
+                                .add(1, "millisecond")
+                                .format("HH:mm:ss")}{" "}
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
