@@ -131,6 +131,7 @@ export default function Home() {
     let tuoiChiGiaChu = CHI_NAM[valueAge.year % 12];
     let tuoiCanGiaChu = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
+
     if (Number(valueAge.month) <= 2) {
       const sunlong = getSunLongitude(
         jdn(
@@ -143,7 +144,7 @@ export default function Home() {
         ),
         7
       );
-      if (sunlong <= 20 || sunlong >= 17) {
+      if (sunlong <= 20 && sunlong >= 17) {
         tuoiChiGiaChu = CHI_NAM[(valueAge.year - 1) % 12];
         tuoiCanGiaChu = CAN_NAM[(valueAge.year - 1) % 10];
         tuoiGiaChu--;
@@ -306,7 +307,7 @@ export default function Home() {
         ),
         7
       );
-      if (sunlong <= 20 || sunlong >= 17) {
+      if (sunlong <= 20 && sunlong >= 17) {
         tuoiChiGiaChu = CHI_NAM[(valueAge.year - 1) % 12];
         tuoiCanGiaChu = CAN_NAM[(valueAge.year - 1) % 10];
         tuoiGiaChu--;
@@ -549,7 +550,7 @@ export default function Home() {
         ),
         7
       );
-      if (sunlong <= 20 || sunlong >= 17) {
+      if (sunlong <= 20 && sunlong >= 17) {
         tuoiChiGiaChu = CHI_NAM[(valueAge.year - 1) % 12];
         tuoiCanGiaChu = CAN_NAM[(valueAge.year - 1) % 10];
         tuoiGiaChu--;
