@@ -12,6 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
+import Notify from "@Root/components/Notify";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
@@ -49,17 +50,24 @@ import {
   CheckTrucXungGio,
   CheckTrucXungNgayThangNam,
   CheckTuongXungTuongHaiTuoi,
+  CheckTuongXungTuongHaiTuoiMonth,
   CombineThienCan,
   getCanChi,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import dayjs from "dayjs";
 import moment from "moment";
-import { useState } from "react";
+import React, { useState } from "react";
 import TableShow from "./Table";
 
 export default function Home() {
+  const refNotify = React.useRef();
   const [loading, setLoading] = useState(false);
+  const [infoNotify, setInfoNotify] = useState({
+    open: false,
+    description: "",
+    type: "danger",
+  });
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
   const [valueText, setValueText] = useState("");
@@ -223,8 +231,10 @@ export default function Home() {
       if (
         CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi) ===
           false &&
-        CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.thangChi) ===
-          false
+        CheckTuongXungTuongHaiTuoiMonth(
+          CHI_NAM[tuoiGiaChu % 12],
+          item.thangChi
+        ) === false
       ) {
         arrPerfectDateStep3.push(item);
       }
@@ -367,11 +377,12 @@ export default function Home() {
         CheckNguHanhTuongSinh(
           NGU_HANH[valueText],
           NGU_HANH[dateArr[index].ngayCan]
-        ) &&
-        CheckNguHanhTuongSinh(
-          NGU_HANH[valueText],
-          NGU_HANH[dateArr[index].thangCan]
         )
+        //  &&
+        // CheckNguHanhTuongSinh(
+        //   NGU_HANH[valueText],
+        //   NGU_HANH[dateArr[index].thangCan]
+        // )
       ) {
         arrPerfectDateStep1.push(item);
       }
@@ -385,6 +396,7 @@ export default function Home() {
         item.dayLunar !== 15 &&
         !NGUYET_KY.includes(item.dayLunar) &&
         !TAM_NUONG.includes(item.dayLunar) &&
+        monthDays(item.yearLunar, item.monthLunar) !== item.dayLunar &&
         THO_TU[item.monthLunar - 1] !== item.ngayChi &&
         SAT_CHU_AM[item.monthLunar - 1] !== item.ngayChi &&
         SAT_CHU_DUONG[item.monthLunar - 1] !== item.ngayChi &&
@@ -444,7 +456,9 @@ export default function Home() {
                 7
               )
             )
-          ].includes(item.ngayChi)
+          ].includes(item.ngayChi) &&
+          CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.namChi) ===
+            false
         )
           arrPerfectDateStep8.push(item);
       }
@@ -456,8 +470,10 @@ export default function Home() {
       if (
         CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi) ===
           false &&
-        CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.thangChi) ===
-          false
+        CheckTuongXungTuongHaiTuoiMonth(
+          CHI_NAM[tuoiGiaChu % 12],
+          item.thangChi
+        ) === false
       ) {
         arrPerfectDateStep3.push(item);
       }
@@ -632,14 +648,16 @@ export default function Home() {
       if (
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
         !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
+        monthDays(item.yearLunar, item.monthLunar) !== item.dayLunar &&
         CheckNguHanhTuongSinh(
           NGU_HANH[valueText],
           NGU_HANH[dateArr[index].ngayCan]
-        ) &&
-        CheckNguHanhTuongSinh(
-          NGU_HANH[valueText],
-          NGU_HANH[dateArr[index].thangCan]
         )
+        //  &&
+        // CheckNguHanhTuongSinh(
+        //   NGU_HANH[valueText],
+        //   NGU_HANH[dateArr[index].thangCan]
+        // )
       ) {
         arrPerfectDateStep1.push(item);
       }
@@ -675,23 +693,6 @@ export default function Home() {
 
     //xet them dong-tho nhap-trach
     arrPerfectDateStep6.map((item, ind) => {
-      console.log(
-        Number(item.daySolar),
-        Number(item.monthSolar),
-        Number(item.yearSolar)
-      );
-      console.log(
-        GetHoangVuTuQuy(
-          getSunLongitude(
-            jdn(
-              Number(item.daySolar),
-              Number(item.monthSolar),
-              Number(item.yearSolar)
-            ),
-            7
-          )
-        )
-      );
       if (
         !CheckThienTaiDiaHoa(item.ngayChi, item.monthLunar) &&
         !CheckDaiBai(
@@ -703,6 +704,8 @@ export default function Home() {
       ) {
         if (valueSelect === "nhap-trach") arrPerfectDateStep8.push(item);
         else if (
+          CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiMuon % 12], item.namChi) ===
+            false &&
           HOANG_VU_TU_QUY[
             GetHoangVuTuQuy(
               getSunLongitude(
@@ -738,8 +741,10 @@ export default function Home() {
       if (
         CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiMuon % 12], item.ngayChi) ===
           false &&
-        CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiMuon % 12], item.thangChi) ===
-          false
+        CheckTuongXungTuongHaiTuoiMonth(
+          CHI_NAM[tuoiMuon % 12],
+          item.thangChi
+        ) === false
       ) {
         arrPerfectDateStep3.push(item);
       }
@@ -853,7 +858,6 @@ export default function Home() {
     // });
     return arr;
   };
-
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1091,6 +1095,14 @@ export default function Home() {
       <div className="flex flex-row justify-center mt-3">
         <Button
           onClick={() => {
+            // if (valueSelect.length === 0) {
+            //   console.log(refNotify, "refNotify");
+            //   setInfoNotify({
+            //     type: "danger",
+            //     description: "Vui lòng chọn việc cần xem để tiếp tục!",
+            //   });
+            //   return refNotify.current.handleClick();
+            // }
             if (valueSelect === "dong-tho") {
               if (isMuonTuoi) return handleGetPerfectDateDongThoBorrow();
               return handleGetPerfectDateDongTho();
@@ -1307,6 +1319,11 @@ export default function Home() {
       )}
 
       <div style={{ height: 200 }}></div>
+      <Notify
+        description={infoNotify.description}
+        type={infoNotify.type}
+        ref={refNotify}
+      />
     </div>
   );
 }
