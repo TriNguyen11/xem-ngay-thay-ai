@@ -23,12 +23,16 @@ import {
   CHI_HOANG_DAO,
   CHI_NAM,
   COMBINE_THIEN_CAN,
+  CO_NHAT_TUAN_PHONG,
   DAI_BAI,
   DUONG_CONG,
   GIO_DIA_CHI,
   GIO_SAT_CHU,
   GIO_THO_TU,
   HOANG_OC,
+  HONG_XA_KY_NHAT,
+  NGAY_SAT,
+  NGHENH_HON_KY_NHAT,
   NGU_HANH,
   NGU_HANH_TUONG_KHAC,
   NGU_HANH_TUONG_KHAC_KHAU_QUYET,
@@ -627,6 +631,44 @@ export const CheckTrucXungGio = (
     }
   });
 };
+export const CheckTrucXungGioCuoiHoi = (
+  toaChi,
+  ngayChi,
+  thangChi,
+  monthLunar,
+  chiNam,
+  chiNu,
+  valueSelect
+) => {
+  const arrGioHoangDao = CheckHoangDao(ngayChi);
+  return CHI.filter((item) => {
+    // console.log(arrGioHoangDao.includes(item), item, "check hoang dao");
+    if (
+      arrGioHoangDao.includes(item) === true &&
+      CheckGioThoTu(ngayChi, item) === false &&
+      CheckGioSatChu(monthLunar, item) === false &&
+      CheckTrucXungTyHoa(item, chiNam) === false &&
+      CheckTrucXungTyHoa(item, chiNu) === false
+    ) {
+      if (
+        valueSelect === "ngay-cuoi" ||
+        valueSelect === "ngay-an-hoi" ||
+        valueSelect === "ngay-dam-ngo" ||
+        valueSelect === "ngay-lai-mat"
+      ) {
+        if (
+          CheckTrucXungNgayThangNam(item, toaChi) === false &&
+          CheckTrucXungNgayThangNam(item, ngayChi) === false &&
+          CheckTrucXungNgayThangNam(item, thangChi) === false
+        )
+          return item;
+      } else {
+        return item;
+      }
+    }
+    // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+  });
+};
 export const CheckTrucXungGioKhongToa = (
   ngayChi,
   thangChi,
@@ -649,6 +691,22 @@ export const CheckTrucXungGioKhongToa = (
     }
   });
 };
+export const CheckNgaySat = (ngayChi, chiNguoi) => {
+  // console.log(ngayChi, NGAY_SAT[ngayChi], "asds");
+  if (ngayChi && NGAY_SAT[ngayChi] !== undefined)
+    return NGAY_SAT[ngayChi].includes(chiNguoi);
+  return false;
+};
+export const CheckHongXaKyNhat = (monthLunar, chiNgay) => {
+  if (chiNgay) return HONG_XA_KY_NHAT[monthLunar - 1] === chiNgay;
+};
+export const CheckNghenhHonKyNhat = (ngayCanChi) => {
+  if (ngayCanChi) return NGHENH_HON_KY_NHAT.includes(ngayCanChi);
+};
+export const CheckCoNhatTuanPhong = (monthLunar, chiNgay) => {
+  if (chiNgay) return CO_NHAT_TUAN_PHONG[monthLunar - 1] === chiNgay;
+};
+
 export const CheckHoangDao = (ngayChi) => {
   return CHI_HOANG_DAO[ngayChi];
 };
@@ -684,7 +742,7 @@ export const CheckNguHanhTuongSinh = (NguHanh1, NguHanh2) => {
 export const CheckNguHanhTuongKhac = (NguHanh1, NguHanh2) => {
   // console.log(NguHanh1, NguHanh2, "nh 1, nh2");
   // console.log(NGU_HANH_TUONG_KHAC[NguHanh1], "check condition");
-  return NGU_HANH_TUONG_KHAC[NguHanh1].includes(NguHanh2);
+  if (NguHanh1) return NGU_HANH_TUONG_KHAC[NguHanh1].includes(NguHanh2);
 };
 export const CheckNguHanhTuongKhacKhauQuyet = (NguHanh1, NguHanh2) => {
   // console.log(NguHanh1, NguHanh2, "nh 1, nh2");

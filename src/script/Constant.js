@@ -605,7 +605,7 @@ export const ObjectTruc = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
     },
     KhongLam: {
       "dong-tho": "Động thổ",
@@ -740,9 +740,9 @@ export const ObjectTruc = {
       "ngay-mai-moi": "Ngày mai mối",
       "ngay-dam-ngo": "Ngày dạm ngõ",
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
-      "ngay-lai-mat": "Lại mặt",
+      "ngay-lai-mat": "Ngày lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -820,7 +820,7 @@ export const ObjectTruc = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -896,7 +896,7 @@ export const ObjectTruc = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -988,7 +988,7 @@ export const ObjectTruc = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1073,7 +1073,7 @@ export const ObjectTruc = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1173,7 +1173,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1199,7 +1199,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
       "kham-niem": "Khâm niệm",
       "nhap-quan": "Nhập quan",
       "di-quan": "Di quan",
@@ -1275,7 +1275,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1355,7 +1355,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1433,7 +1433,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1464,7 +1464,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
     },
     KhongLam: {},
   },
@@ -1480,7 +1480,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "kham-niem": "Khâm niệm",
       "nhap-quan": "Nhập quan",
@@ -1503,7 +1503,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
     },
   },
   Nữ: {
@@ -1516,7 +1516,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
     },
   },
   Hư: {
@@ -1582,7 +1582,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1625,7 +1625,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
       "nhap-quan": "Nhập quan",
       "di-quan": "Di quan",
       "ha-huyet": "Hạ huyệt",
@@ -1701,7 +1701,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1808,7 +1808,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1902,7 +1902,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -1981,7 +1981,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -2059,7 +2059,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -2139,7 +2139,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -2199,7 +2199,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
     },
   },
   Liễu: {
@@ -2265,7 +2265,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -2291,7 +2291,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
     },
   },
   Trương: {
@@ -2318,7 +2318,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
     },
     KhongLam: {
       "khoi-cong": "Khởi công",
@@ -2388,7 +2388,7 @@ export const ObjectTu = {
       "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
       "ngay-lai-mat": "Lại mặt",
       "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
-      "ngay-cuoi": "Ngày cưới",
+      "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 
       "tinh-trung-tang": "Tính trùng tang",
       "kham-niem": "Khâm niệm",
@@ -2468,6 +2468,14 @@ export const SERVICE_CONGVIECDAISU = {
   "cung-xe-moi": "Cúng xe mới",
   "to-chuc-cac-su-kien": "Tổ chức các sự kiện",
 };
+export const SERVICE_CUOIHOI = {
+  "ngay-mai-moi": "Ngày mai mối",
+  "ngay-dam-ngo": "Ngày dạm ngõ",
+  "ngay-an-hoi": "Ngày ăn hỏi (đính hôn)",
+  "ngay-lai-mat": "Ngày lại mặt",
+  "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
+  "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
+};
 export const MONTHS = [
   "Tháng 1",
   "Tháng 2",
@@ -2507,4 +2515,122 @@ export const TOA_NHA = [
   "Tốn",
   "Khôn",
   "Càn",
+];
+export const KIM_LAU_NU = [
+  12, 15, 17, 19, 21, 24, 26, 28, 30, 33, 35, 37, 39, 42, 44, 46, 48, 51, 53,
+  55, 57, 60, 62, 64, 66, 69, 71, 73, 75,
+];
+// Phu chủ - Kỵ với chồng.
+export const PHU_CHU = {
+  Sửu: [1, 7],
+  Mùi: [1, 7],
+  Thìn: [2, 8],
+  Tuất: [2, 8],
+  Mão: [3, 9],
+  Dậu: [3, 9],
+  Tý: [4, 10],
+  Ngọ: [4, 10],
+  Dần: [6, 12],
+  Thân: [6, 12],
+};
+// Thê chủ: Kỵ với bản thân.
+export const THE_CHU = {
+  Dần: [1, 7],
+  Thân: [1, 7],
+  Mão: [2, 8],
+  Dậu: [2, 8],
+  Thìn: [3, 9],
+  Tuất: [3, 9],
+  Tý: [5, 11],
+  Ngọ: [5, 11],
+  Sửu: [6, 12],
+  Mùi: [6, 12],
+};
+export const DAI_LOI = {
+  Mão: [1, 7],
+  Dậu: [1, 7],
+  Dần: [2, 8],
+  Thân: [2, 8],
+  Thìn: [4, 10],
+  Tuất: [4, 10],
+  Sửu: [5, 11],
+  Mùi: [5, 11],
+  Tý: [6, 12],
+  Ngọ: [6, 12],
+};
+export const TIEU_LOI = {
+  Tý: [1, 7],
+  Ngọ: [1, 7],
+  Dần: [3, 9],
+  Thân: [3, 9],
+  Sửu: [4, 10],
+  Mùi: [4, 10],
+  Thìn: [5, 11],
+  Tuất: [5, 11],
+  Mão: [6, 12],
+  Dậu: [6, 12],
+};
+// Công cô: Kỵ với cha mẹ bên chồng.
+export const CONG_CO = {
+  Tý: [2, 8],
+  Ngọ: [2, 8],
+  Sửu: [3, 9],
+  Mùi: [3, 9],
+  Dần: [4, 10],
+  Thân: [4, 10],
+  Mão: [5, 11],
+  Dậu: [5, 11],
+  Thìn: [6, 12],
+  Tuất: [6, 12],
+};
+// Nhạc thân: Kỵ với cha mẹ bên vợ.
+export const NHAC_THAN = {
+  Thìn: [1, 7],
+  Tuất: [1, 7],
+  Sửu: [2, 8],
+  Mùi: [2, 8],
+  Tý: [3, 9],
+  Ngọ: [3, 9],
+  Mão: [4, 10],
+  Dậu: [4, 10],
+  Dần: [5, 11],
+  Thân: [5, 11],
+};
+// Hồng xa kỵ nhật: (Ảnh hưởng tới người nữ)
+export const HONG_XA_KY_NHAT = [
+  "Tỵ",
+  "Dậu",
+  "Sửu",
+  "Tỵ",
+  "Dậu",
+  "Sửu",
+  "Tỵ",
+  "Dậu",
+  "Sửu",
+  "Tỵ",
+  "Dậu",
+  "Sửu",
+];
+// Nghênh hôn kỵ nhật - (Dễ xích mích, khó có con):
+export const NGHENH_HON_KY_NHAT = ["Ất Tỵ", "Tân Hợi", "Mậu Thân", "Giáp Dần"];
+export const NGAY_SAT = {
+  Mùi: ["Thân", "Tý", "Thìn"],
+  Sửu: ["Dần", "Ngọ", "Tuất"],
+  Thìn: ["Tỵ", "Dậu", "Sửu"],
+  Tuất: ["Hợi", "Mão", "Mùi"],
+};
+// cô nhật tuần phòng – Dễ phải nuôi con một mình
+export const CO_NHAT_TUAN_PHONG = [
+  "Thìn",
+  "Sửu",
+  "Tuất",
+  "Mùi",
+  "Mão",
+  "Tỵ",
+  "Dậu",
+  "Ngọ",
+  "Dần",
+  "Hợi",
+  "Thân",
+  "Tỵ",
 ];

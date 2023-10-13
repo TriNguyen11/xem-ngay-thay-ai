@@ -410,7 +410,7 @@ export default function Home() {
         VANG_VONG[item.monthLunar - 1] !== item.ngayChi &&
         NGUYET_PHA[item.monthLunar - 1] !== item.ngayChi &&
         !CheckTrucXungNgayThangNam(
-          CHI_NAM[moment().year() % 12],
+          CHI_NAM[Number(item.yearLunar) % 12],
           item.ngayChi
         ) &&
         !CheckTrucXungNgayThangNam(
