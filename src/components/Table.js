@@ -144,7 +144,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                   backky = "Nguyệt Phá";
                 if (
                   CheckTrucXungNgayThangNam(
-                    CHI_NAM[moment().year() % 12],
+                    CHI_NAM[Number(item.yearLunar) % 12],
                     date.ngayChi
                   )
                 )

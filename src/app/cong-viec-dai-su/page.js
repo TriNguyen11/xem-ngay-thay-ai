@@ -155,7 +155,7 @@ export default function Home() {
         NGUYET_PHA[item.monthLunar - 1] !== item.ngayChi &&
         //Tue Pha
         !CheckTrucXungNgayThangNam(
-          CHI_NAM[moment().year() % 12],
+          CHI_NAM[Number(item.yearLunar) % 12],
           item.ngayChi
         ) &&
         //Dai Hao
