@@ -327,7 +327,7 @@ export default function Home() {
           fontSize: 20,
           marginBottom: 20,
         }}>
-        Xem ngày Xây dựng
+        Xem ngày Thờ cúng
       </div>
       <div>
         <FormControl fullWidth style={{ marginBottom: 20 }}>
