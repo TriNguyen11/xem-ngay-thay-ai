@@ -168,6 +168,22 @@ export const TAM_HOP = {
   Tuất: ["Ngọ", "Dần"],
   Hợi: ["Mão", "Mùi"],
 };
+export const NHI_HOP = {
+  Tý: ["Sửu"],
+  Sửu: ["Tý"],
+  Dần: ["Hợi"],
+  Mão: ["Tuất"],
+
+  Thìn: ["Dậu"],
+  Tỵ: ["Thân"],
+  Ngọ: ["Mùi"],
+  Mùi: ["Ngọ"],
+
+  Thân: ["Tỵ"],
+  Dậu: ["Dậu"],
+  Tuất: ["Tuất"],
+  Hợi: ["Dần"],
+};
 export const TAM_TAI = {
   Tý: ["Mão", "Dần", "Thìn"],
   Thân: ["Mão", "Dần", "Thìn"],

@@ -33,6 +33,7 @@ import {
   NGU_HANH_TUONG_KHAC,
   NGU_HANH_TUONG_KHAC_KHAU_QUYET,
   NGU_HANH_TUONG_SINH,
+  TAM_HOP,
   TAM_TAI,
   THIEN_TAI_DIA_HOA,
   TRUC_XUNG_HAI,
@@ -696,6 +697,12 @@ export const CheckNguHanhTuongKhacKhauQuyet = (NguHanh1, NguHanh2) => {
 };
 export const CheckNgayBachKy = (Chi1, Chi2) => {
   return TRUC_XUNG_HAI[Chi1][0] === Chi2;
+};
+export const CheckTamHop = (Chi1, Chi2) => {
+  return TAM_HOP[Chi1].includes(Chi2);
+};
+export const CheckNhiHop = (Chi1, Chi2) => {
+  return TAM_HOP[Chi1].includes(Chi2);
 };
 export const CheckKimLau = (NamLamNha, NamSinhGiaChu) => {
   const arrKimLau = [

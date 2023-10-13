@@ -25,6 +25,8 @@ import {
   VANG_VONG,
 } from "@Root/script/Constant";
 import {
+  CheckNhiHop,
+  CheckTamHop,
   CheckTamTai,
   CheckTrucXungNgayThangNam,
 } from "@Root/script/handleDateChange";
@@ -32,6 +34,7 @@ import moment from "moment";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
 const TableShow = ({ data, infoGiaChu, valueSelect }) => {
+  console.log(infoGiaChu, "infoGiaChu");
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -269,7 +272,20 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                                             CHI_NAM_SORTED.indexOf(itemGio)
                                           ]
                                         ] +
-                                        "), "}
+                                        ")" +
+                                        (CheckTamHop(
+                                          CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                          itemGio
+                                        )
+                                          ? "(Tam Hợp), "
+                                          : CheckNhiHop(
+                                              CHI_NAM[
+                                                infoGiaChu?.tuoiGiaChu % 12
+                                              ],
+                                              itemGio
+                                            )
+                                          ? "(Nhị Hợp), "
+                                          : "")}
                                     </span>
                                   );
                               })}
@@ -315,7 +331,20 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                                             CHI_NAM_SORTED.indexOf(itemGio)
                                           ]
                                         ] +
-                                        "), "}
+                                        ") " +
+                                        (CheckTamHop(
+                                          CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                          itemGio
+                                        )
+                                          ? "(Tam Hợp), "
+                                          : CheckNhiHop(
+                                              CHI_NAM[
+                                                infoGiaChu?.tuoiGiaChu % 12
+                                              ],
+                                              itemGio
+                                            )
+                                          ? "(Nhị Hợp), "
+                                          : "")}
                                     </span>
                                   );
                               })}
