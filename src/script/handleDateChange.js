@@ -696,13 +696,13 @@ export const CheckNguHanhTuongKhacKhauQuyet = (NguHanh1, NguHanh2) => {
   return NGU_HANH_TUONG_KHAC_KHAU_QUYET[NguHanh1] === NguHanh2;
 };
 export const CheckNgayBachKy = (Chi1, Chi2) => {
-  return TRUC_XUNG_HAI[Chi1][0] === Chi2;
+  if (Chi1) return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
 export const CheckTamHop = (Chi1, Chi2) => {
-  return TAM_HOP[Chi1].includes(Chi2);
+  if (Chi1) return TAM_HOP[Chi1].includes(Chi2);
 };
 export const CheckNhiHop = (Chi1, Chi2) => {
-  return TAM_HOP[Chi1].includes(Chi2);
+  if (Chi1) return TAM_HOP[Chi1].includes(Chi2);
 };
 export const CheckKimLau = (NamLamNha, NamSinhGiaChu) => {
   const arrKimLau = [
@@ -739,11 +739,9 @@ export const CheckHoangOc = (age) => {
   //   "phạm hạn Hoang Ốc",
   //   "phạm hạn Hoang Ốc",
   // ];
-  console.log(age, (age % 10) + Math.floor(age / 10), " tong tuoi gia chu");
   return HOANG_OC[((age % 10) + Math.floor(age / 10) - 1) % 6];
 };
 export const CheckTamTai = (ChiTuoi, ChiNam) => {
-  console.log(ChiTuoi, ChiNam, "ChiNam");
   return TAM_TAI[ChiTuoi].includes(ChiNam);
 };
 

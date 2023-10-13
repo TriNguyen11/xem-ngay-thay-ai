@@ -528,11 +528,6 @@ export default function Home() {
       </div>
 
       <div style={{ height: 200 }}></div>
-      <Notify
-        description={infoNotify.description}
-        type={infoNotify.type}
-        ref={refNotify}
-      />
     </div>
   );
 }

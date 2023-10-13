@@ -34,7 +34,7 @@ import moment from "moment";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
 const TableShow = ({ data, infoGiaChu, valueSelect }) => {
-  console.log(infoGiaChu, "infoGiaChu");
+  // console.log(infoGiaChu, "infoGiaChu");
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
