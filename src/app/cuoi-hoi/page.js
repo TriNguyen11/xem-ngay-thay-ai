@@ -804,10 +804,10 @@ export default function Home() {
             {step1 && `(${step1?.length})`}
           </div>
           <div className="max-h-[500px] overflow-scroll">
-            {/* <TableWedding
+            <TableWedding
               data={step1}
               infoGiaChu={infoGiaChu}
-              valueSelect={valueSelect}></TableWedding> */}
+              valueSelect={valueSelect}></TableWedding>
           </div>
         </div>
       )}
