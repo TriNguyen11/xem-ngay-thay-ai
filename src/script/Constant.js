@@ -1017,8 +1017,8 @@ export const ObjectTruc = {
       "dao-gieng": "Đào giếng",
 
       "kien-tung": "Kiện tụng",
-      "xuat-hanh": "Xuất hành",
 
+      "xuat-hanh": "Xuất hành",
       "mua-ban-lon":
         "Mua bán lớn (Hợp đồng: Mua xe, bàn giao xe, mua nhà, mua đất,…)",
       "ngay-nham-chuc": "Ngày nhậm chức",
@@ -2419,6 +2419,38 @@ export const SERVICE_XAYDUNG = {
   "ngan-de": "Ngăn đê",
   "dao-gieng": "Đào giếng",
   "lap-gieng": "Lắp giếng",
+};
+export const SERVICE_THOCUNG = {
+  "chuyen-vi-tri-ban-tho": "Chuyển vị trí bàn thờ",
+  "boc-bat-huong": "Bốc bát hương",
+  "tu-tao-lai-ban-tho-": "Tu tạo lại bàn thờ",
+  "dang-them-vat-pham": "Dâng thêm vât phẩm",
+  "them-bat-huong": "Thêm bát hương cho bàn thờ",
+  "thay-ban-tho": "Thay bàn thờ mới",
+  "giai-xa-ban-tho": "Giải xá bàn thờ",
+  "ngay-cung-le-dau-nam-cuoi-nam": "Ngày cúng lễ đầu năm, cuối năm",
+  "le-cau":
+    "Lễ cầu an, cầu siêu, cầu phúc, cầu tài, cầu lộc, cầu tự, cầu duyên,…",
+};
+export const SERVICE_SUCKHOE = {
+  "ngay-kham-benh": "Ngày khám bệnh",
+  "ngay-phau-thuat": "Ngày phẫu thuật",
+};
+export const SERVICE_CONGVIECDAISU = {
+  "xuat-hanh": "Xuất hành",
+  "mua-ban-lon":
+    "Mua bán lớn (Hợp đồng: Mua xe, bàn giao xe, mua nhà, mua đất,…)",
+  "ngay-nham-chuc": "Ngày nhậm chức",
+  "ngay-nhan-cong-viec-moi": "Ngày nhận công việc mới",
+  "ngay-thay-doi-cong-viec": "Ngày thay đổi công việc",
+  "ngay-xuat-hang": "Ngày xuất hàng",
+  "ngay-xuat-hang": "Ngày xuất hàng",
+  "ngay-ra-mat-san-pham": "Ngày ra mắt sản phẩm/dự án sáng tạo",
+  "ngay-thuc-hien-du-an":
+    "Ngày thực hiện dự án mới (thói quen mới/kế hoạch mới)",
+  "giao-dich": "Giao dịch, ký kết hợp đồng, đặt cọc",
+  "cung-xe-moi": "Cúng xe mới",
+  "to-chuc-cac-su-kien": "Tổ chức các sự kiện",
 };
 export const MONTHS = [
   "Tháng 1",

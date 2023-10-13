@@ -24,7 +24,10 @@ import {
   THO_TU,
   VANG_VONG,
 } from "@Root/script/Constant";
-import { CheckTrucXungNgayThangNam } from "@Root/script/handleDateChange";
+import {
+  CheckTamTai,
+  CheckTrucXungNgayThangNam,
+} from "@Root/script/handleDateChange";
 import moment from "moment";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
@@ -116,7 +119,14 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                   monthDays(date.yearLunar, date.monthLunar) === date.dayLunar
                 )
                   backky = "Cuối tháng ";
-
+                if (
+                  infoGiaChu?.tuoiGiaChu &&
+                  CheckTamTai(
+                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                    date.ngayChi
+                  )
+                )
+                  backky = "Tam Tai Ngày";
                 if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
                 if (TAM_NUONG.includes(date.dayLunar)) backky = "Tam Nương";
                 if (THO_TU[date.monthLunar - 1] === date.ngayChi)
@@ -259,7 +269,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                                             CHI_NAM_SORTED.indexOf(itemGio)
                                           ]
                                         ] +
-                                        ")"}
+                                        "), "}
                                     </span>
                                   );
                               })}
@@ -305,7 +315,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                                             CHI_NAM_SORTED.indexOf(itemGio)
                                           ]
                                         ] +
-                                        ")"}
+                                        "), "}
                                     </span>
                                   );
                               })}
