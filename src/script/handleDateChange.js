@@ -591,7 +591,7 @@ export const CheckTrucXungTyHoa = (Chi1, Chi2) => {
   }
   if (Chi1)
     return (
-      TRUC_XUNG_HAI[Chi1][1] === Chi2 || TRUC_XUNG_HAI[Chi1][0] === Chi2
+      TRUC_XUNG_HAI[Chi1][2] === Chi2 || TRUC_XUNG_HAI[Chi1][0] === Chi2
       // ||TRUC_XUNG_HAI[Chi1][2] === Chi2
     );
 };
