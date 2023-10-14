@@ -23,23 +23,31 @@ import {
   CHI_HOANG_DAO,
   CHI_NAM,
   COMBINE_THIEN_CAN,
+  CONG_CO,
   CO_NHAT_TUAN_PHONG,
   DAI_BAI,
+  DAI_LOI,
   DUONG_CONG,
   GIO_DIA_CHI,
   GIO_SAT_CHU,
   GIO_THO_TU,
   HOANG_OC,
   HONG_XA_KY_NHAT,
+  KIM_LAU_NU,
   NGAY_SAT,
   NGHENH_HON_KY_NHAT,
   NGU_HANH,
   NGU_HANH_TUONG_KHAC,
   NGU_HANH_TUONG_KHAC_KHAU_QUYET,
   NGU_HANH_TUONG_SINH,
+  NHAC_THAN,
+  PHU_CHU,
   TAM_HOP,
   TAM_TAI,
+  THAI_TUE_NAM_TRUC_XUNG_HINH,
+  THE_CHU,
   THIEN_TAI_DIA_HOA,
+  TIEU_LOI,
   TRUC_XUNG_HAI,
   TUAN,
 } from "./Constant";
@@ -697,14 +705,39 @@ export const CheckNgaySat = (ngayChi, chiNguoi) => {
     return NGAY_SAT[ngayChi].includes(chiNguoi);
   return false;
 };
+
 export const CheckHongXaKyNhat = (monthLunar, chiNgay) => {
   if (chiNgay) return HONG_XA_KY_NHAT[monthLunar - 1] === chiNgay;
+};
+export const CheckKimLauNu = (age) => {
+  if (age) return KIM_LAU_NU.includes(age);
+};
+export const CheckThaiTueTrucXungHinh = (chiYear, chiTuoi) => {
+  if (chiYear) return THAI_TUE_NAM_TRUC_XUNG_HINH[chiYear].includes(chiTuoi);
 };
 export const CheckNghenhHonKyNhat = (ngayCanChi) => {
   if (ngayCanChi) return NGHENH_HON_KY_NHAT.includes(ngayCanChi);
 };
 export const CheckCoNhatTuanPhong = (monthLunar, chiNgay) => {
   if (chiNgay) return CO_NHAT_TUAN_PHONG[monthLunar - 1] === chiNgay;
+};
+export const CheckTheChu = (chiTuoi, monthLunar) => {
+  if (chiTuoi) return THE_CHU[chiTuoi].includes(monthLunar);
+};
+export const CheckPhuChu = (chiTuoi, monthLunar) => {
+  if (chiTuoi) return PHU_CHU[chiTuoi].includes(monthLunar);
+};
+export const CheckDaiLoi = (chiTuoi, monthLunar) => {
+  if (chiTuoi) return DAI_LOI[chiTuoi].includes(monthLunar);
+};
+export const CheckTieuLoi = (chiTuoi, monthLunar) => {
+  if (chiTuoi) return TIEU_LOI[chiTuoi].includes(monthLunar);
+};
+export const CheckCongCo = (chiTuoi, monthLunar) => {
+  if (chiTuoi) return CONG_CO[chiTuoi].includes(monthLunar);
+};
+export const CheckNhacThan = (chiTuoi, monthLunar) => {
+  if (chiTuoi) return NHAC_THAN[chiTuoi].includes(monthLunar);
 };
 
 export const CheckHoangDao = (ngayChi) => {

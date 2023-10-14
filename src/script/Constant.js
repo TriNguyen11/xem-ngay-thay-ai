@@ -2520,6 +2520,20 @@ export const KIM_LAU_NU = [
   12, 15, 17, 19, 21, 24, 26, 28, 30, 33, 35, 37, 39, 42, 44, 46, 48, 51, 53,
   55, 57, 60, 62, 64, 66, 69, 71, 73, 75,
 ];
+export const THAI_TUE_NAM_TRUC_XUNG_HINH = {
+  Tý: ["Tý", "Ngọ", "Mão"],
+  Sửu: ["Sửu", "Mùi", "Tuất"],
+  Dần: ["Tý", "Thân", "Tỵ"],
+  Mão: ["Mão", "Dậu", "Tý"],
+  Thìn: ["Thìn", "Tuất"],
+  Tỵ: ["Tỵ", "Hợi", "Dần", "Thân"],
+  Ngọ: ["Ngọ", "Tý"],
+  Mùi: ["Mùi", "Sửu", "Tuất"],
+  Thân: ["Thân", "Dần", "Tỵ"],
+  Dậu: ["Dậu", "Mão"],
+  Tuất: ["Tuất", "Thìn", "Sửu", "Mùi"],
+  Hợi: ["Hợi", "Tỵ"],
+};
 // Phu chủ - Kỵ với chồng.
 export const PHU_CHU = {
   Sửu: [1, 7],

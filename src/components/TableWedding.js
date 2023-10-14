@@ -27,16 +27,22 @@ import {
   VANG_VONG,
 } from "@Root/script/Constant";
 import {
+  CheckCongCo,
   CheckCoNhatTuanPhong,
   CheckDaiBai,
+  CheckDaiLoi,
   CheckDuongCong,
   CheckHongXaKyNhat,
   CheckNgaySat,
   CheckNghenhHonKyNhat,
+  CheckNhacThan,
   CheckNhiHop,
+  CheckPhuChu,
   CheckTamHop,
   CheckTamTai,
+  CheckTheChu,
   CheckThienTaiDiaHoa,
+  CheckTieuLoi,
   CheckTrucXungNgayThangNam,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
@@ -139,6 +145,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                 //   )
                 // )
                 //   backky = "Tam Tai Ngày";
+
                 if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
                 if (TAM_NUONG.includes(date.dayLunar)) backky = "Tam Nương";
                 if (THO_TU[date.monthLunar - 1] === date.ngayChi)
@@ -200,7 +207,91 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                   backky = "Cô nhật tuần phòng";
                 if (CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar))
                   backky = "Thiên tai địa hoạ";
+                if (
+                  !CheckTheChu(
+                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Thê chủ nam";
+                if (
+                  !CheckPhuChu(
+                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Phu chủ nam";
+                if (
+                  !CheckDaiLoi(
+                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Đại lợi nam";
+                if (
+                  !CheckTieuLoi(
+                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Tiểu lợi nam";
+                if (
+                  !CheckCongCo(
+                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Công cô nam";
+                if (
+                  !CheckNhacThan(
+                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Nhạc thân nam";
 
+                if (
+                  !CheckTheChu(
+                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Thê chủ nữ";
+                if (
+                  !CheckPhuChu(
+                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Phu chủ nữ";
+                if (
+                  !CheckDaiLoi(
+                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Đại lợi nữ";
+                if (
+                  !CheckTieuLoi(
+                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Tiểu lợi nữ";
+                if (
+                  !CheckCongCo(
+                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Công cô nữ";
+                if (
+                  !CheckNhacThan(
+                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Nhạc thân nữ";
                 if (
                   CheckDaiBai(
                     date.namCan,
