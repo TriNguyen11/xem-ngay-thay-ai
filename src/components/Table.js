@@ -37,10 +37,10 @@ import {
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
+import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
 const TableShow = ({ data, infoGiaChu, valueSelect }) => {
-  console.log(infoGiaChu, "infoGiaChu");
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -493,4 +493,4 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
     </Box>
   );
 };
-export default TableShow;
+export default memo(TableShow);

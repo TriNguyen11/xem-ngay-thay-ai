@@ -66,6 +66,20 @@ export const TRUC_XUNG_HAI = {
   Tuất: ["Thìn", "Dậu", "Tuất"],
   Hợi: ["Tỵ", "Thân", "Hợi"],
 };
+export const DIA_CHI_HINH = {
+  Tý: ["Mão"],
+  Sửu: ["Mùi", "Tuất"],
+  Dần: ["Thân", "Tỵ"],
+  Mão: ["Tý"],
+  Thìn: [],
+  Tỵ: ["Dần", "Thân"],
+  Ngọ: [],
+  Mùi: ["Sửu", "Tuất"],
+  Thân: ["Dần", "Tỵ"],
+  Dậu: [],
+  Tuất: ["Sửu", "Mùi"],
+  Hợi: [],
+};
 export const GIO_THO_TU = {
   Tý: "Sửu",
   Sửu: "Ngọ",
@@ -2520,20 +2534,7 @@ export const KIM_LAU_NU = [
   12, 15, 17, 19, 21, 24, 26, 28, 30, 33, 35, 37, 39, 42, 44, 46, 48, 51, 53,
   55, 57, 60, 62, 64, 66, 69, 71, 73, 75,
 ];
-export const THAI_TUE_NAM_TRUC_XUNG_HINH = {
-  Tý: ["Tý", "Ngọ", "Mão"],
-  Sửu: ["Sửu", "Mùi", "Tuất"],
-  Dần: ["Tý", "Thân", "Tỵ"],
-  Mão: ["Mão", "Dậu", "Tý"],
-  Thìn: ["Thìn", "Tuất"],
-  Tỵ: ["Tỵ", "Hợi", "Dần", "Thân"],
-  Ngọ: ["Ngọ", "Tý"],
-  Mùi: ["Mùi", "Sửu", "Tuất"],
-  Thân: ["Thân", "Dần", "Tỵ"],
-  Dậu: ["Dậu", "Mão"],
-  Tuất: ["Tuất", "Thìn", "Sửu", "Mùi"],
-  Hợi: ["Hợi", "Tỵ"],
-};
+
 // Phu chủ - Kỵ với chồng.
 export const PHU_CHU = {
   Sửu: [1, 7],

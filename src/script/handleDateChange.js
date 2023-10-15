@@ -27,6 +27,7 @@ import {
   CO_NHAT_TUAN_PHONG,
   DAI_BAI,
   DAI_LOI,
+  DIA_CHI_HINH,
   DUONG_CONG,
   GIO_DIA_CHI,
   GIO_SAT_CHU,
@@ -44,7 +45,6 @@ import {
   PHU_CHU,
   TAM_HOP,
   TAM_TAI,
-  THAI_TUE_NAM_TRUC_XUNG_HINH,
   THE_CHU,
   THIEN_TAI_DIA_HOA,
   TIEU_LOI,
@@ -712,8 +712,9 @@ export const CheckHongXaKyNhat = (monthLunar, chiNgay) => {
 export const CheckKimLauNu = (age) => {
   if (age) return KIM_LAU_NU.includes(age);
 };
-export const CheckThaiTueTrucXungHinh = (chiYear, chiTuoi) => {
-  if (chiYear) return THAI_TUE_NAM_TRUC_XUNG_HINH[chiYear].includes(chiTuoi);
+
+export const CheckThaiTueHinh = (chiYear, chiTuoi) => {
+  if (chiYear) return DIA_CHI_HINH[chiYear].includes(chiTuoi);
 };
 export const CheckNghenhHonKyNhat = (ngayCanChi) => {
   if (ngayCanChi) return NGHENH_HON_KY_NHAT.includes(ngayCanChi);
@@ -770,6 +771,7 @@ export const CheckTrucXungTuoi = (Chi1, Chi2) => {
   return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
 export const CheckNguHanhTuongSinh = (NguHanh1, NguHanh2) => {
+  if (NguHanh1 === "") return true;
   return NGU_HANH_TUONG_SINH[NguHanh1].includes(NguHanh2);
 };
 export const CheckNguHanhTuongKhac = (NguHanh1, NguHanh2) => {
@@ -808,6 +810,7 @@ export const CheckKimLau = (NamLamNha, NamSinhGiaChu) => {
     "Kim Lâu Súc",
   ];
   const KimLau = (NamLamNha - NamSinhGiaChu + 1) % 9;
+
   if (KimLau >= 0) {
     //check length de xac dinh co Kiem Lau hay khong
     return arrKimLau[KimLau];

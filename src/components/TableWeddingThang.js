@@ -29,6 +29,7 @@ import {
   CheckTrucXungTyHoa,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
+import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
 const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
@@ -129,87 +130,45 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                   )
                 )
                   backky = "Xung, Trùng tuổi Nữ";
-                if (
-                  CheckTheChu(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Thê chủ nam";
-                if (
-                  CheckPhuChu(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Phu chủ nam";
-                if (
-                  CheckDaiLoi(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Đại lợi nam";
-                if (
-                  CheckTieuLoi(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Tiểu lợi nam";
-                if (
-                  CheckCongCo(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Công cô nam";
-                if (
-                  CheckNhacThan(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Nhạc thân nam";
 
                 if (
                   CheckTheChu(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
                     date.monthLunar
                   )
                 )
                   backky = "Thê chủ nữ";
                 if (
                   CheckPhuChu(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
                     date.monthLunar
                   )
                 )
                   backky = "Phu chủ nữ";
                 if (
                   CheckDaiLoi(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
                     date.monthLunar
                   )
                 )
                   backky = "Đại lợi nữ";
                 if (
                   CheckTieuLoi(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
                     date.monthLunar
                   )
                 )
                   backky = "Tiểu lợi nữ";
                 if (
                   CheckCongCo(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
                     date.monthLunar
                   )
                 )
                   backky = "Công cô nữ";
                 if (
                   CheckNhacThan(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
                     date.monthLunar
                   )
                 )
@@ -525,4 +484,4 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
     </Box>
   );
 };
-export default TableWeddingThang;
+export default memo(TableWeddingThang);

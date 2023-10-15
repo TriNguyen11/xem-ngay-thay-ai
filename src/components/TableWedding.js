@@ -35,6 +35,7 @@ import {
   CheckHongXaKyNhat,
   CheckNgaySat,
   CheckNghenhHonKyNhat,
+  CheckNguHanhTuongSinh,
   CheckNhacThan,
   CheckNhiHop,
   CheckPhuChu,
@@ -44,12 +45,15 @@ import {
   CheckThienTaiDiaHoa,
   CheckTieuLoi,
   CheckTrucXungNgayThangNam,
+  CheckTrucXungTyHoa,
+  CheckTuongXungTuongHaiTuoiMonth,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
+import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
-const TableShow = ({ data, infoGiaChu, valueSelect }) => {
+const TableShow = ({ data, infoGiaChu, valueSelect, toaNha }) => {
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -131,21 +135,25 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
             <TableBody>
               {data?.map((date, index) => {
                 let backky = "";
+
                 if (date.dayLunar === 1) backky = "Mùng 1";
                 if (date.dayLunar === 15) backky = "Rằm";
                 if (
                   monthDays(date.yearLunar, date.monthLunar) === date.dayLunar
                 )
                   backky = "Cuối tháng ";
-                // if (
-                //   infoGiaChu &&
-                //   CheckTamTai(
-                //     CHI_NAM[infoGiaChu % 12],
-                //     date.ngayChi
-                //   )
-                // )
-                //   backky = "Tam Tai Ngày";
+                if (
+                  CheckTamTai(
+                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                    date.ngayChi
+                  )
+                )
+                  backky = "Tam Tai Ngày nam";
 
+                if (
+                  CheckTamTai(CHI_NAM[infoGiaChu?.namSinhNu % 12], date.ngayChi)
+                )
+                  backky = "Tam Tai Ngày nữ";
                 if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
                 if (TAM_NUONG.includes(date.dayLunar)) backky = "Tam Nương";
                 if (THO_TU[date.monthLunar - 1] === date.ngayChi)
@@ -165,6 +173,8 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                   )
                 )
                   backky = "Tuế Phá";
+
+                // Dai hao
                 if (
                   CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(infoGiaChu?.namSinhNam) % 12],
@@ -181,7 +191,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                 ) {
                   backky = "Đại Hao Nữ";
                 }
-
+                // ngay sat
                 if (
                   CheckNgaySat(
                     date.ngayChi,
@@ -197,101 +207,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                   )
                 )
                   backky = "Ngày Sát Nam";
-
-                if (CheckHongXaKyNhat(date.monthLunar, date.ngayChi))
-                  backky = "Hồng xá kỵ nhật";
-                if (CheckNghenhHonKyNhat(date.ngayCan + " " + date.ngayChi))
-                  backky = "Nghênh hôn kỵ nhật";
-
-                if (CheckCoNhatTuanPhong(date.monthLunar, date.ngayChi))
-                  backky = "Cô nhật tuần phòng";
-                if (CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar))
-                  backky = "Thiên tai địa hoạ";
-                if (
-                  !CheckTheChu(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Thê chủ nam";
-                if (
-                  !CheckPhuChu(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Phu chủ nam";
-                if (
-                  !CheckDaiLoi(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Đại lợi nam";
-                if (
-                  !CheckTieuLoi(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Tiểu lợi nam";
-                if (
-                  !CheckCongCo(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Công cô nam";
-                if (
-                  !CheckNhacThan(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Nhạc thân nam";
-
-                if (
-                  !CheckTheChu(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Thê chủ nữ";
-                if (
-                  !CheckPhuChu(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Phu chủ nữ";
-                if (
-                  !CheckDaiLoi(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Đại lợi nữ";
-                if (
-                  !CheckTieuLoi(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Tiểu lợi nữ";
-                if (
-                  !CheckCongCo(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Công cô nữ";
-                if (
-                  !CheckNhacThan(
-                    CHI_NAM[infoGiaChu?.nuSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Nhạc thân nữ";
+                // dai bai
                 if (
                   CheckDaiBai(
                     date.namCan,
@@ -300,10 +216,10 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                   )
                 )
                   backky = "Đại bại";
-
+                // duong cong
                 if (CheckDuongCong(date.monthLunar, date.dayLunar))
                   backky = "Dương Công";
-
+                // hoang vu tu quy
                 if (
                   HOANG_VU_TU_QUY[
                     GetHoangVuTuQuy(
@@ -319,7 +235,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                   ] === date.ngayChi
                 )
                   backky = "Hoang vu tứ quý";
-
+                // khong phong
                 if (
                   KHONG_PHONG[
                     GetHoangVuTuQuy(
@@ -335,7 +251,42 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                   ].includes(date.ngayChi)
                 )
                   backky = "Không phòng";
+                // xung,trung,hai tuoi nam
 
+                if (
+                  CheckTuongXungTuongHaiTuoiMonth(
+                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                    date.ngayChi
+                  )
+                )
+                  backky = "Xung, trùng, hại tuổi nam";
+
+                // xung,trung,hai tuoi nu
+
+                if (
+                  CheckTuongXungTuongHaiTuoiMonth(
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
+                    date.ngayChi
+                  )
+                )
+                  backky = "Xung, trùng, hại tuổi nữ";
+                if (CheckHongXaKyNhat(date.monthLunar, date.ngayChi))
+                  backky = "Hồng Xá kỵ nhật";
+                if (CheckNghenhHonKyNhat(date.ngayCan + " " + date.ngayChi))
+                  backky = "Nghênh hôn kỵ nhật";
+                if (CheckCoNhatTuanPhong(date.monthLunar, date.ngayChi))
+                  backky = "Cô nhật tuần phong";
+                //Thien tai dia hoa
+                if (CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar))
+                  backky = "Thiên tai địa hoạ";
+                if (
+                  toaNha &&
+                  !CheckNguHanhTuongSinh(
+                    NGU_HANH[toaNha],
+                    NGU_HANH[date.ngayCan]
+                  )
+                )
+                  backky = "Ngũ hành tương khắc";
                 return (
                   <TableRow
                     style={{
@@ -646,4 +597,4 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
     </Box>
   );
 };
-export default TableShow;
+export default memo(TableShow);

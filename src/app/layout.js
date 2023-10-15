@@ -3,6 +3,7 @@ import "./globals.css";
 import Favicon from "../../public/favicon/favicon.ico";
 import { LocalizationProvide } from "@Root/app/LocalProviderApp";
 import Head from "next/head";
+import ResponsiveAppBar from "@Root/components/ResponsiveNav";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -18,6 +19,9 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
       <body className={inter.className}>
+        <div className=" fixed w-full z-10">
+          <ResponsiveAppBar />
+        </div>
         <LocalizationProvide children={children}></LocalizationProvide>
       </body>
     </html>
