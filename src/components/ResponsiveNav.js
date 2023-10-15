@@ -62,7 +62,7 @@ function ResponsiveAppBar() {
     <AppBar position="static" className="bg-slate-400">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <img
+          {/* <img
             src="/favicon.png"
             width={50}
             height={50}
@@ -86,7 +86,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}>
             Thầy AI
-          </Typography>
+          </Typography> */}
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -144,9 +144,8 @@ function ResponsiveAppBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page, index) => (
-              <Link href={page.href} className="mx-2">
+              <Link key={index} href={page.href} className="mx-2">
                 <Button
-                  key={index}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}>
                   {page.title}
