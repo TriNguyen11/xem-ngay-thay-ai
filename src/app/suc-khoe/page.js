@@ -488,8 +488,7 @@ export default function Home() {
         <div
           className="font-bold text-[20px]"
           style={{ color: "black", marginTop: 30 }}>
-          Sau bước 3 {"(Tránh tương xung tương hại với tuổi gia chủ)"}{" "}
-          {step3 && `(${step3?.length})`}
+          Sau bước 3 {"(So với tuổi gia chủ)"} {step3 && `(${step3?.length})`}
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
@@ -518,8 +517,7 @@ export default function Home() {
         <div
           className="font-bold text-[20px]"
           style={{ color: "black", marginTop: 30 }}>
-          Sau bước 5{" "}
-          {"Chọn giờ tránh xung với chi toạ, ngày, tháng, tuổi gia chủ "}
+          Sau bước 5 {"Chọn giờ"}
         </div>
 
         <div className="max-h-[500px] overflow-scroll">

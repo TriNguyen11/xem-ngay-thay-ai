@@ -941,7 +941,7 @@ export default function Home() {
           {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
             ? "5"
             : "4"}{" "}
-          {"Chọn giờ tránh xung với chi toạ, ngày, tháng, tuổi gia chủ "}
+          {"Chọn giờ"}
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
