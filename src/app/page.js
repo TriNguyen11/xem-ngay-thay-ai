@@ -249,11 +249,19 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        // Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)
+        // &&
         // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
-        Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
-        arrPerfectDateStep4.push(item);
+      } else {
+        if (
+          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
+          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        ) {
+        } else {
+          arrPerfectDateStep4.push(item);
+        }
       }
     });
 
@@ -394,7 +402,6 @@ export default function Home() {
       }
     });
     setDataStep1(arrPerfectDateStep1);
-
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
       if (
@@ -492,11 +499,19 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        // Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)
+        // &&
         // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
-        Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
-        arrPerfectDateStep4.push(item);
+      } else {
+        if (
+          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
+          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        ) {
+        } else {
+          arrPerfectDateStep4.push(item);
+        }
       }
     });
 
@@ -768,13 +783,19 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        // Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)
+        // &&
         // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
-        Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
-        arrPerfectDateStep4.push(item);
       } else {
-        // arrPerfectDateStep4.push(item);
+        if (
+          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
+          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        ) {
+        } else {
+          arrPerfectDateStep4.push(item);
+        }
       }
     });
 
@@ -981,11 +1002,19 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)
+        // &&
+        // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
       } else {
-        arrPerfectDateStep4.push(item);
+        if (
+          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
+          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        ) {
+        } else {
+          arrPerfectDateStep4.push(item);
+        }
       }
     });
 
@@ -1461,8 +1490,7 @@ export default function Home() {
           {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
             ? "3"
             : "2"}{" "}
-          {"(Tránh tương xung tương hại với tuổi gia chủ)"}{" "}
-          {step3 && `(${step3?.length})`}
+          {"(So với tuổi gia chủ)"} {step3 && `(${step3?.length})`}
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
@@ -1499,7 +1527,7 @@ export default function Home() {
           {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
             ? "5"
             : "4"}{" "}
-          {"Chọn giờ tránh xung với chi toạ, ngày, tháng, tuổi gia chủ "}
+          {"Chọn giờ"}
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
