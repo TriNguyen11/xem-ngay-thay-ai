@@ -496,6 +496,7 @@ export default function Home() {
 
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
+      console.log("123123");
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
