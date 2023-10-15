@@ -492,10 +492,10 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
-      } else {
         arrPerfectDateStep4.push(item);
       }
     });

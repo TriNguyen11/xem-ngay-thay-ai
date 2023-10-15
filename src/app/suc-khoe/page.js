@@ -191,8 +191,8 @@ export default function Home() {
         // Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
         // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
       ) {
-      } else {
         arrPerfectDateStep4.push(item);
+      } else {
       }
     });
 

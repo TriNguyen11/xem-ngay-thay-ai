@@ -249,11 +249,12 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
-      } else {
         arrPerfectDateStep4.push(item);
+      } else {
       }
     });
 
@@ -394,7 +395,6 @@ export default function Home() {
       }
     });
     setDataStep1(arrPerfectDateStep1);
-
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
       if (
@@ -496,7 +496,6 @@ export default function Home() {
         // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
         Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
-      } else {
         arrPerfectDateStep4.push(item);
       }
     });
@@ -769,11 +768,12 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
-      } else {
         arrPerfectDateStep4.push(item);
+      } else {
       }
     });
 
@@ -980,10 +980,10 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
-      } else {
         arrPerfectDateStep4.push(item);
       }
     });
