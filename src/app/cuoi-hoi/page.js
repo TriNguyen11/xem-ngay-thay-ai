@@ -212,62 +212,83 @@ export default function Home() {
     let toaNha = valueText.namToa || valueText.nuToa || "";
     // Xac dinh ngay/thang xung toa nxha
     // if (toaNha?.length !== 0)
-    await dateArr.map((item, index) => {
-      if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
-      if (
-        // !CheckTrucXungNgayThangNam(toaNha, item.ngayChi) &&
-        // !CheckTrucXungNgayThangNam(toaNha, item.thangChi) &&
-        // CheckNguHanhTuongSinh(
-        //   NGU_HANH[toaNha],
-        //   NGU_HANH[dateArr[index].ngayCan]
-        // ) &&
-        // CheckNguHanhTuongSinh(
-        //   NGU_HANH[toaNha],
-        //   NGU_HANH[dateArr[index].thangCan]
-        // )
-        CheckKimLau(item.yearLunar, namSinhNu).length === 0 &&
-        !CheckTrucXungNgayThangNam(
-          CHI_NAM[Number(item.yearLunar) % 12],
-          CHI_NAM[Number(namSinhNu) % 12]
-        ) &&
-        CHI_NAM[Number(item.yearLunar) % 12] !==
-          CHI_NAM[Number(namSinhNu) % 12] &&
-        !CheckThaiTueHinh(
-          CHI_NAM[Number(item.yearLunar) % 12],
-          CHI_NAM[Number(namSinhNu) % 12]
-        ) &&
-        //Nam
-        !CheckTrucXungNgayThangNam(
-          CHI_NAM[Number(item.yearLunar) % 12],
-          CHI_NAM[Number(namSinhNam) % 12]
-        ) &&
-        CHI_NAM[Number(item.yearLunar) % 12] !==
-          CHI_NAM[Number(namSinhNam) % 12] &&
-        !CheckThaiTueHinh(
-          CHI_NAM[Number(item.yearLunar) % 12],
-          CHI_NAM[Number(namSinhNam) % 12]
-        )
-      ) {
-        arrPerfectDateStep1.push(item);
-      }
-    });
+    if (
+      valueSelect !== "ngay-mai-moi" &&
+      valueSelect !== "ngay-dang-ki-ket-hon"
+    ) {
+      await dateArr.map((item, index) => {
+        if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
+        if (
+          // !CheckTrucXungNgayThangNam(toaNha, item.ngayChi) &&
+          // !CheckTrucXungNgayThangNam(toaNha, item.thangChi) &&
+          // CheckNguHanhTuongSinh(
+          //   NGU_HANH[toaNha],
+          //   NGU_HANH[dateArr[index].ngayCan]
+          // ) &&
+          // CheckNguHanhTuongSinh(
+          //   NGU_HANH[toaNha],
+          //   NGU_HANH[dateArr[index].thangCan]
+          // )
+          CheckKimLau(item.yearLunar, namSinhNu).length === 0 &&
+          !CheckTrucXungNgayThangNam(
+            CHI_NAM[Number(item.yearLunar) % 12],
+            CHI_NAM[Number(namSinhNu) % 12]
+          ) &&
+          CHI_NAM[Number(item.yearLunar) % 12] !==
+            CHI_NAM[Number(namSinhNu) % 12] &&
+          !CheckThaiTueHinh(
+            CHI_NAM[Number(item.yearLunar) % 12],
+            CHI_NAM[Number(namSinhNu) % 12]
+          ) &&
+          //Nam
+          !CheckTrucXungNgayThangNam(
+            CHI_NAM[Number(item.yearLunar) % 12],
+            CHI_NAM[Number(namSinhNam) % 12]
+          ) &&
+          CHI_NAM[Number(item.yearLunar) % 12] !==
+            CHI_NAM[Number(namSinhNam) % 12] &&
+          !CheckThaiTueHinh(
+            CHI_NAM[Number(item.yearLunar) % 12],
+            CHI_NAM[Number(namSinhNam) % 12]
+          )
+        ) {
+          arrPerfectDateStep1.push(item);
+        }
+      });
+    } else {
+      dateArr.map((item, index) => {
+        if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
+      });
+      arrPerfectDateStep1 = dateArr;
+    }
     setLunarYearArr(lunarYear);
 
     setDataStep1(arrPerfectDateStep1);
     // Xet Thang
-    arrPerfectDateStep1.map((item, index) => {
-      if (
-        !CheckTrucXungTyHoa(CHI_NAM[Number(namSinhNam) % 12], item.thangChi) &&
-        !CheckTrucXungTyHoa(CHI_NAM[Number(namSinhNu) % 12], item.thangChi) &&
-        //Nu
-        !CheckTheChu(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
-        !CheckPhuChu(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
-        !CheckCongCo(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
-        !CheckNhacThan(CHI_NAM[namSinhNu % 12], item.monthLunar)
-      ) {
-        arrPerfectDateStep2.push(item);
-      }
-    });
+    if (
+      valueSelect !== "ngay-mai-moi" &&
+      valueSelect !== "ngay-dang-ki-ket-hon"
+    ) {
+      arrPerfectDateStep1.map((item, index) => {
+        if (
+          !item.isLeap &&
+          !CheckTrucXungTyHoa(
+            CHI_NAM[Number(namSinhNam) % 12],
+            item.thangChi
+          ) &&
+          !CheckTrucXungTyHoa(CHI_NAM[Number(namSinhNu) % 12], item.thangChi) &&
+          //Nu
+          !CheckTheChu(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
+          !CheckPhuChu(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
+          !CheckCongCo(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
+          !CheckNhacThan(CHI_NAM[namSinhNu % 12], item.monthLunar)
+        ) {
+          arrPerfectDateStep2.push(item);
+        }
+      });
+    } else {
+      arrPerfectDateStep2 = arrPerfectDateStep1;
+    }
     setDataStep2(arrPerfectDateStep2);
     // Xet ngay
 

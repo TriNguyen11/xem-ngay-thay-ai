@@ -173,7 +173,7 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                   )
                 )
                   backky = "Nhạc thân nữ";
-
+                if (date.isLeap) backky = "Tháng Nhuận";
                 return (
                   <TableRow
                     style={{

@@ -577,6 +577,7 @@ export const getCanChi = async (day, month, year) => {
     arrGioCan,
     hanhNgay,
     hanhThang,
+    isLeap: lunar.isLeap,
     monthSolar: month,
     yearSolar: year,
     dayLunar: lunar.dayLunar,
@@ -588,6 +589,7 @@ export const getCanChi = async (day, month, year) => {
     thangChi,
     namCan,
     namChi,
+
     truc: TRUC12[iTruc[day - 1]],
     tu: TINH28[iTinh[Number(day) % 28]],
   };
