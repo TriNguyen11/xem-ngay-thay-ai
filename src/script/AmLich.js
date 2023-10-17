@@ -145,6 +145,7 @@ export const LunarDate = (day, month, year) => {
     monthLunar: month,
     yearLunar: year,
     daysTotalInLunar: dd,
+    totalMonth: mm,
     daySolar: daySolar,
     monthSolar: monthSolar,
     yearSolar: yearSolar,
@@ -421,7 +422,14 @@ export function TietKhi(y, n) {
   );
   return offDate.getUTCDate();
 }
-
+const surplusArr = [0, 3, 6, 9, 11, 14, 17];
+export function isLeapYearLunar(year) {
+  let surplus = year % 19;
+  return surplusArr.includes(surplus);
+  // is it leap year ? returns a boolean
+  // ie, if the year divides by 4, but not by 100 except when it divides by
+  // 400, it is leap year
+}
 // year là năm Dương Lịch
 export function isLeapYear(year) {
   return 0 == year % 4 && (0 != year % 100 || 0 == year % 400);

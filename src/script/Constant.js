@@ -552,6 +552,16 @@ export const CHI = [
   "Tuất",
   "Hợi",
 ];
+export const CHI_GIO_TANG_SU = [
+  "Tý",
+  "Sửu",
+  "Mão",
+  "Thìn",
+  "Ngọ",
+  "Mùi",
+  "Dậu",
+  "Tuất",
+];
 export const TUAN = [
   "Chủ Nhật",
   "Thứ Hai",
@@ -770,6 +780,7 @@ export const ObjectTruc = {
       "ha-tieu": "Hạ tiểu",
       "dung-bia": "Dựng bia",
       "ta-mo": "Tạ mộ",
+      "ta-dat": "Tạ mộ",
     },
   },
   Nguy: {
@@ -2490,6 +2501,23 @@ export const SERVICE_CUOIHOI = {
   "ngay-dang-ki-ket-hon": "Ngày đăng kí kết hôn",
   "ngay-cuoi": "Ngày cưới (xin dâu, đón dâu)",
 };
+export const SERVICE_TANGSU = {
+  "tinh-trung-tang": "Tính trùng tang",
+  "kham-niem": "Khâm niệm",
+  "nhap-quan": "Nhập quan",
+  "di-quan": "Di quan",
+  "ha-huyet": "Hạ huyệt",
+};
+export const SERVICE_SANGCAT = {
+  "dong-tho-xay-ho": "Động thổ xây hố",
+  "dao-mo-cu-mo-lap-van": "Đào mộ cũ - Mở lắp ván",
+  "kham-liem": "Khâm liệm",
+  "ha-tieu": "Hạ tiểu",
+  "dung-bia": "Dựng bia",
+  "ta-mo": "Tạ mộ",
+  "ta-dat": "Tạ mộ",
+};
+
 export const MONTHS = [
   "Tháng 1",
   "Tháng 2",
@@ -2504,6 +2532,7 @@ export const MONTHS = [
   "Tháng 11",
   "Tháng 12",
 ];
+
 export const TOA_NHA = [
   "Tý",
   "Sửu",
@@ -2648,4 +2677,139 @@ export const CO_NHAT_TUAN_PHONG = [
   "Hợi",
   "Thân",
   "Tỵ",
+];
+
+export const BAM_CUNG_NAM = [
+  "Dần",
+  "Mão",
+  "Thìn",
+  "Tỵ",
+  "Ngọ",
+  "Mùi",
+  "Thân",
+  "Dậu",
+  "Tuất",
+  "Hợi",
+  "Tý",
+  "Sửu",
+];
+export const BAM_CUNG_NU = [
+  "Thân",
+  "Mùi",
+  "Ngọ",
+  "Tỵ",
+  "Thìn",
+  "Mão",
+  "Dần",
+  "Sửu",
+  "Tý",
+  "Hợi",
+  "Tuất",
+  "Dậu",
+];
+export const TRUNG_TANG = ["Dần", "Thân", "Tỵ", "Hợi"];
+export const THIEN_DI = ["Tý", "Ngọ", "Mão", "Dậu"];
+export const NHAP_MO = ["Thìn", "Tuất", "Sửu", "Mùi"];
+// Kiep Sat
+export const CASE3_TRUNGTANG = {
+  Thân: "Tỵ",
+  Tý: "Tỵ",
+  Thìn: "Tỵ",
+  Dần: "Hợi",
+  Ngọ: "Hợi",
+  Tuất: "Hợi",
+  Tỵ: "Dần",
+  Dậu: "Dần",
+  Sửu: "Dần",
+  Hợi: "Thân",
+  Mão: "Thân",
+  Mùi: "Thân",
+};
+export const CASE4_TRUNGTANG = [
+  ["Canh Dần", "Canh Thân"], // 1
+  ["Canh Dần", "Canh Thân"], // 2
+  ["Tân Tỵ", "Tân Hợi"], //3
+  ["Nhâm Dần", "Nhâm Thân"], //4
+  ["Quý Tỵ", "Quý Hợi"], //5
+  ["Canh Dần", "Canh Thân"], // 6
+  ["Giáp Dần", "Giáp Thân"], // 7
+  ["Ất Tỵ", "Ất Hợi"], // 8
+  ["Canh Dần", "Canh Thân"], // 9
+  ["Bính Dần", "Bính Thân"], // 10
+  ["Đinh Tỵ", "Đinh Hợi"], //11
+  ["Canh Dần", "Canh Thân"], // 12
+];
+//Tung Phuc
+export const CASE5_TRUNGTANG = [
+  ["Canh"], // 1
+  ["Ất"], // 2
+  ["Kỷ"], //3
+  ["Nhâm"], //4
+  ["Quý"], //5
+  ["Mậu"], // 6
+  ["Giáp"], // 7
+  ["Tân"], // 8
+  ["Kỷ"], // 9
+  ["Nhâm", "Bính"], // 10
+  ["Đinh", "Quý"], //11
+  ["Mậu"], // 12
+];
+
+export const NGAY_KY_CHON_CAT = [
+  [7, 19], // 1
+  [6, 18, 30], // 2
+  [6, 18, 30], //3
+  [14, 16, 28], //4
+  [3, 15, 27], //5
+  [3, 15, 27], //6
+  [1, 12, 25], //7
+  [12, 24], //8
+  [12, 24], //9
+  [10, 22], //10
+  [9, 21], //11
+  [9, 21], //12
+];
+export const NGAY_GIO_TRUNG_TANG = [
+  "Giáp",
+  "Tân",
+  "Mậu",
+  "Bính",
+  "Đinh",
+  "Kỷ",
+  "Canh",
+  "Ất",
+  "Mậu",
+  "Nhâm",
+  "Quý",
+  "Kỷ",
+];
+export const NGAY_TRUNG_NHAT = ["Tỵ", "Hợi"];
+export const NGAY_GIO_HA_KHOI = [
+  "Hợi",
+  "Ngọ",
+  "Sửu",
+  "Thân",
+  "Mão",
+  "Tuất",
+  "Tỵ",
+  "Tý",
+  "Mùi",
+  "Dần",
+  "Dậu",
+  "Thìn",
+];
+
+export const NGAY_GIO_THIEN_TAC = [
+  "Sửu",
+  "Tý",
+  "Hợi",
+  "Tuất",
+  "Dậu",
+  "Thân",
+  "Mùi",
+  "Ngọ",
+  "Tỵ",
+  "Thìn",
+  "Mão",
+  "Dần",
 ];

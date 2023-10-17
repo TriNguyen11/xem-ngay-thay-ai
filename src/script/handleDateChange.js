@@ -17,11 +17,18 @@ import {
 } from "./AmLich";
 import { DefineHacDaoHoangDao } from "./calculatorCalender";
 import {
+  BAM_CUNG_NAM,
+  BAM_CUNG_NU,
   CAN,
   CAN_NAM,
+  CASE3_TRUNGTANG,
+  CASE4_TRUNGTANG,
+  CASE5_TRUNGTANG,
   CHI,
+  CHI_GIO_TANG_SU,
   CHI_HOANG_DAO,
   CHI_NAM,
+  CHI_NAM_SORTED,
   COMBINE_THIEN_CAN,
   CONG_CO,
   CO_NHAT_TUAN_PHONG,
@@ -35,7 +42,11 @@ import {
   HOANG_OC,
   HONG_XA_KY_NHAT,
   KIM_LAU_NU,
+  NGAY_GIO_HA_KHOI,
+  NGAY_GIO_THIEN_TAC,
+  NGAY_GIO_TRUNG_TANG,
   NGAY_SAT,
+  NGAY_TRUNG_NHAT,
   NGHENH_HON_KY_NHAT,
   NGU_HANH,
   NGU_HANH_TUONG_KHAC,
@@ -43,12 +54,17 @@ import {
   NGU_HANH_TUONG_SINH,
   NHAC_THAN,
   PHU_CHU,
+  SAT_CHU_AM,
+  SAT_CHU_DUONG,
   TAM_HOP,
   TAM_TAI,
   THE_CHU,
+  THIEN_DI,
   THIEN_TAI_DIA_HOA,
+  THO_TU,
   TIEU_LOI,
   TRUC_XUNG_HAI,
+  TRUNG_TANG,
   TUAN,
 } from "./Constant";
 
@@ -641,6 +657,59 @@ export const CheckTrucXungGio = (
     }
   });
 };
+// 1. Tránh địa chi giờ: trùng tuổi, xung tuổi, hình tuổi, hại tuổi (Tính tuổi của người chết)
+// 2. Tránh địa chi giờ chọn: xung với địa chi ngày, tháng thực hiện
+// 3. Tránh các giờ Kiếp sát, trùng tang, trùng phục, Trùng nhật, thọ tử, sát chủ, các giờ Dần, Thân, Tỵ, Hợi.
+// 4. Ưu tiên các địa chi giờ Thìn, Tuất, Sửu, Mùi
+// 5. Ưu tiên các giờ Tam hợp - Lục Hợp với tuổi người chết
+export const CheckTrucXungGioTangSu = (data) => {
+  // console.log(data, "check data");
+
+  return CHI.filter((item) => {
+    if (
+      // 1.
+      !CheckTrucXungHinhHaiChi(data.cungNguoiMat, item) &&
+      // 2.
+      CheckTrucXungNgayThangNam(item, data.ngayChi) === false &&
+      CheckTrucXungNgayThangNam(item, data.thangChi) === false &&
+      // // 3.
+      // // trung tang
+      !CheckTrungTang(
+        data.monthLunar,
+        data.arrGioCan[CHI_NAM_SORTED.indexOf(item)]
+      ) &&
+      // // kiep sat
+      // !CheckGioKiepSat(data.chiNamSinh, item) &&
+      // Trung Nhat
+      CheckNgayTrungNhat(item) &&
+      // Than Trung
+      CheckCase4TrungTang(
+        data.monthLunar,
+        data.arrGioCan[CHI_NAM_SORTED.indexOf(item)],
+        item
+      ).length === 0 &&
+      //Trung Phuc
+      CheckCase5TrungTang(
+        data.monthLunar,
+        data.arrGioCan[CHI_NAM_SORTED.indexOf(item)],
+        item
+      ).length === 0 &&
+      //Tho Tu
+      THO_TU[data.monthLunar - 1] !== item &&
+      SAT_CHU_AM[data.monthLunar - 1] !== item &&
+      SAT_CHU_DUONG[data.monthLunar - 1] !== item
+    ) {
+      console.log(
+        data.monthLunar,
+        data.arrGioCan[CHI_NAM_SORTED.indexOf(item)],
+        item,
+        "check item"
+      );
+      return item;
+      // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+    }
+  });
+};
 export const CheckTrucXungGioCuoiHoi = (
   toaChi,
   ngayChi,
@@ -767,6 +836,15 @@ export const CheckTuongXungTuongHaiTuoiMonth = (Chi1, Chi2) => {
       TRUC_XUNG_HAI[Chi1][1] === Chi2 ||
       TRUC_XUNG_HAI[Chi1][0] === Chi2 ||
       TRUC_XUNG_HAI[Chi1][2] === Chi2
+    );
+};
+export const CheckTrucXungHinhHaiChi = (Chi1, Chi2) => {
+  if (Chi1)
+    return (
+      TRUC_XUNG_HAI[Chi1][1] === Chi2 ||
+      TRUC_XUNG_HAI[Chi1][0] === Chi2 ||
+      TRUC_XUNG_HAI[Chi1][2] === Chi2 ||
+      DIA_CHI_HINH[Chi1].includes(Chi2)
     );
 };
 export const CheckTrucXungTuoi = (Chi1, Chi2) => {
@@ -905,5 +983,221 @@ export const getDateByTietKhi = (tiet_khi) => {
   lambda = lambda * dr;
   lambda = lambda - Math.PI * 2 * INT(lambda / (Math.PI * 2)); // Normalize to (0, 2*PI)
   return lambda;
+};
+const convertTimeChi = (hours) => {
+  if (hours >= 23 || hours < 1) return "Tý";
+  if (hours >= 1 && hours < 3) return "Sửu";
+  if (hours >= 3 && hours < 5) return "Dần";
+  if (hours >= 5 && hours < 7) return "Mão";
+  if (hours >= 7 && hours < 9) return "Thìn";
+  if (hours >= 9 && hours < 11) return "Tỵ";
+  if (hours >= 11 && hours < 13) return "Ngọ";
+  if (hours >= 13 && hours < 15) return "Mùi";
+  if (hours >= 15 && hours < 17) return "Thân";
+  if (hours >= 17 && hours < 19) return "Dậu";
+  if (hours >= 19 && hours < 21) return "Tuất";
+  if (hours >= 21 && hours < 23) return "Hợi";
+};
+export const CalcuBamCungNam = (age, month = 0, day = 0, hours) => {
+  let cungTuoi = (age % 10) + Math.floor(age / 10);
+  let cungThang = cungTuoi + Number(month);
+  let cungNgay = cungThang + Number(day);
+  let cungGio;
+  let bamCungGio;
+
+  let bamCungTuoi = BAM_CUNG_NAM[(cungTuoi - 1) % 12];
+  let bamCungThang = BAM_CUNG_NAM[(cungThang - 1) % 12];
+  let bamCungNgay = BAM_CUNG_NAM[(cungNgay - 1) % 12];
+  if (hours) {
+    cungGio = cungNgay + CHI_NAM_SORTED.indexOf(convertTimeChi(hours)) + 1;
+    bamCungGio = BAM_CUNG_NAM[(cungGio - 1) % 12];
+  }
+
+  // console.log(
+  //   age,
+  //   cungTuoi,
+  //   cungThang,
+  //   cungNgay,
+  //   cungGio,
+  //   "(age % 10) + Math.floor(age / 10)"
+  return {
+    bamCungTuoi,
+    bamCungThang,
+    bamCungNgay,
+    bamCungGio,
+  };
+};
+export const CalcuBamCungNu = (age, month = 0, day = 0, hours) => {
+  let cungTuoi = (age % 10) + Math.floor(age / 10);
+  let cungThang = cungTuoi + Number(month);
+  let cungNgay = cungThang + Number(day);
+  let cungGio;
+  let bamCungGio;
+
+  let bamCungTuoi = BAM_CUNG_NU[(cungTuoi - 1) % 12];
+  let bamCungThang = BAM_CUNG_NU[(cungThang - 1) % 12];
+  let bamCungNgay = BAM_CUNG_NU[(cungNgay - 1) % 12];
+  if (hours) {
+    cungGio = cungNgay + CHI_NAM_SORTED.indexOf(convertTimeChi(hours)) + 1;
+    bamCungGio = BAM_CUNG_NU[(cungGio - 1) % 12];
+  }
+
+  // console.log(
+  //   age,
+  //   cungTuoi,
+  //   cungThang,
+  //   cungNgay,
+  //   cungGio,
+  //   "(age % 10) + Math.floor(age / 10)"
+  return {
+    bamCungTuoi,
+    bamCungThang,
+    bamCungNgay,
+    bamCungGio,
+  };
+};
+export const CountStatusTrungTang = (bamCung) => {
+  let countTrungTangCase1 = 0;
+  let countThienDiCase1 = 0;
+  let countNhapMoCase1 = 0;
+  console.log(bamCung, "bamCung");
+  // tuoi
+  if (TRUNG_TANG.includes(bamCung.bamCungTuoi)) {
+    countTrungTangCase1++;
+  } else if (THIEN_DI.includes(bamCung.bamCungTuoi)) {
+    countThienDiCase1++;
+  } else {
+    countNhapMoCase1++;
+  }
+
+  // namMat
+  if (TRUNG_TANG.includes(bamCung.chiNamMat)) {
+    countTrungTangCase1++;
+  } else if (THIEN_DI.includes(bamCung.chiNamMat)) {
+    countThienDiCase1++;
+  } else {
+    countNhapMoCase1++;
+  }
+  // thang
+  if (TRUNG_TANG.includes(bamCung.bamCungThang)) {
+    countTrungTangCase1++;
+  } else if (THIEN_DI.includes(bamCung.bamCungThang)) {
+    countThienDiCase1++;
+  } else {
+    countNhapMoCase1++;
+  }
+  // ngay
+  if (TRUNG_TANG.includes(bamCung.bamCungNgay)) {
+    countTrungTangCase1++;
+  } else if (THIEN_DI.includes(bamCung.bamCungNgay)) {
+    countThienDiCase1++;
+  } else {
+    countNhapMoCase1++;
+  }
+
+  // gio
+  if (TRUNG_TANG.includes(bamCung.bamCungGio)) {
+    countTrungTangCase1++;
+  } else if (THIEN_DI.includes(bamCung.bamCungGio)) {
+    countThienDiCase1++;
+  } else {
+    countNhapMoCase1++;
+  }
+  // console.log({
+  //   countTrungTangCase1,
+  //   countThienDiCase1,
+  //   countNhapMoCase1,
+  // });
+  return {
+    countTrungTangCase1,
+    countThienDiCase1,
+    countNhapMoCase1,
+  };
+};
+export const CheckCase2TrungTang = (data) => {
+  let arrText = [];
+  console.log(data, "bamCung");
+  // tuoi
+  if (data.chiNamSinh === data.bamCungTuoi) {
+    countTrungTangCase1++;
+  }
+
+  // namMat
+  if (data.chiNamSinh === data.bamCungTuoi) {
+    arrText.push("CHI năm sinh trùng với CHI năm mất");
+  }
+  // thang
+  if (data.chiNamSinh === data.bamCungThang) {
+    arrText.push("CHI Năm sinh trùng với CHI tháng mất");
+  }
+  // ngay
+  if (data.chiNamSinh === data.bamCungNgay) {
+    arrText.push("CHI Năm sinh trùng với CHI ngày mất");
+  }
+
+  // gio
+  if (data.chiNamSinh === data.bamCungGio) {
+    arrText.push("CHI Năm sinh trùng với CHI giờ mất");
+  }
+  return arrText;
+};
+// KiepSat
+export const CheckCase3TrungTang = (data) => {
+  let arrText = [];
+  // tuoi
+  if (
+    CASE3_TRUNGTANG[data.chiNamSinh] === data.chiNamMat &&
+    CASE3_TRUNGTANG[data.chiNamSinh] === data.bamCungThang &&
+    CASE3_TRUNGTANG[data.chiNamSinh] === data.bamCungNgay &&
+    CASE3_TRUNGTANG[data.chiNamSinh] === data.bamCungGio
+  ) {
+    arrText.push(`Trùng tang liên táng tuổi: ${data.chiNamSinh}`);
+  }
+
+  return arrText;
+};
+// Than Trung
+export const CheckCase4TrungTang = (monthLunar, ngayCan, ngayChi) => {
+  let arrText = [];
+  // console.log(CASE4_TRUNGTANG[monthLunar - 1], ngayCan, ngayChi, monthLunar);
+  if (CASE4_TRUNGTANG[monthLunar - 1].includes(`${ngayCan} ${ngayChi}`)) {
+    // console.log(
+    //   `Chết phạm vào ngày Thần Trùng ngày ${ngayCan} ${ngayChi}, tháng ${monthLunar}`
+    // );
+    arrText.push(
+      `Chết phạm vào ngày Thần Trùng ngày ${ngayCan} ${ngayChi}, tháng ${monthLunar}`
+    );
+  }
+  return arrText;
+};
+//Trung Phuc
+export const CheckCase5TrungTang = (monthLunar, ngayCan, ngayChi) => {
+  let arrText = [];
+
+  if (CASE5_TRUNGTANG[monthLunar - 1].includes(`${ngayCan}`)) {
+    // console.log(
+    //   `Chết phạm vào ngày Trùng phục, ngày can ${ngayCan}, tháng ${monthLunar}`
+    // );
+    arrText.push(
+      `Chết phạm vào ngày Trùng phục, ngày can ${ngayCan}, tháng ${monthLunar}`
+    );
+  }
+  return arrText;
+};
+
+export const CheckTrungTang = (monthLunar, thienCan) => {
+  return NGAY_GIO_TRUNG_TANG[monthLunar - 1] === thienCan;
+};
+export const CheckGioKiepSat = (chi1, chi2) => {
+  return CASE3_TRUNGTANG[chi1] === chi2;
+};
+export const CheckNgayTrungNhat = (chiNgay) => {
+  return NGAY_TRUNG_NHAT.includes(chiNgay);
+};
+export const CheckNgayGioHaKhoi = (monthLunar, diaChi) => {
+  return NGAY_GIO_HA_KHOI[monthLunar - 1] === diaChi;
+};
+export const CheckNgayGioThienTac = (monthLunar, diaChi) => {
+  return NGAY_GIO_THIEN_TAC[monthLunar - 1] === diaChi;
 };
 export default handleDateChange;

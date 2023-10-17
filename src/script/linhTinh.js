@@ -119,6 +119,7 @@ export async function AmLich(dd, mm, yy) {
     tue: tue,
     tn: oLunar.daysTotalInLunar - oTiet.daysTotalInLunar + 1, // Tiết ngày: số ngày sau tiết, gồm cả ngày đầu
     t: t,
+    totalMonth: oLunar.totalMonth,
     full: monthDays(oLunar.yearLunar, oLunar.monthLunar) == 30,
     isLeap: oLunar.isLeap,
     dayLunar: oLunar.dayLunar,

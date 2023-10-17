@@ -37,6 +37,14 @@ const pages = [
     title: "Cưới hỏi",
     href: "cuoi-hoi",
   },
+  {
+    title: "Tang sự",
+    href: "tang-su",
+  },
+  {
+    title: "Sang cát",
+    href: "sang-cat",
+  },
 ];
 
 function ResponsiveAppBar() {
