@@ -14,6 +14,7 @@ import {
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
 import TableShow from "@Root/components/Table";
+import TableShowRecommend from "@Root/components/TableShowRecommend";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
@@ -26,6 +27,9 @@ import {
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
+  NGU_HANH_CAN_CHI_INT,
+  NGU_HANH_EXTENDS,
+  NGU_HANH_INT,
   NGU_HANH_TUONG_SINH,
   ObjectTruc,
   ObjectTu,
@@ -42,6 +46,7 @@ import {
   CheckDuongCong,
   CheckHoangDao,
   CheckHoangOc,
+  CheckHoangOcRecommend,
   CheckKimLau,
   CheckNguHanhTuongKhac,
   CheckNguHanhTuongKhacKhauQuyet,
@@ -71,6 +76,7 @@ export default function Home() {
     type: "danger",
   });
   const [dateStart, setDateStart] = useState();
+  const [arrRecommend, setArrRecommend] = useState();
   const [dateEnd, setDateEnd] = useState();
   const [valueText, setValueText] = useState("");
   const [textTrucXungTuoiMuonAndGiaChu, setTextTrucXungTuoiMuonAndGiaChu] =
@@ -104,6 +110,7 @@ export default function Home() {
     KimLau: [],
     HoangOc: [],
     descriptionHoangOc: [],
+    hoangOcShow: [],
   });
   const [valueSelect, setValueSelect] = useState("");
   const [isMuonTuoi, setIsMuonTuoi] = useState(false);
@@ -124,7 +131,7 @@ export default function Home() {
         dateEnd,
         valueText,
         valueAge,
-
+        valueAgeBorrow,
         valueSelect,
         isMuonTuoi,
       },
@@ -356,15 +363,26 @@ export default function Home() {
     let TamTai = [];
     let isTamTai = false;
     let descriptionHoangOc = [];
+    let hoangOcShow = [];
     let isYearHoangOc = "";
     let isKimLau = "";
+    let lunarYear = [];
 
     // Xac dinh KimLau, HoangOc,TamTai
     dateArr.map((item, index) => {
+      if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
+
       isTamTai = CheckTamTai(tuoiChiGiaChu, item.namChi);
       isYearHoangOc = CheckHoangOc(
         Number(item.yearLunar) - Number(tuoiGiaChu) + 1
       );
+      if (
+        CheckHoangOcRecommend(Number(item.yearLunar) - Number(tuoiGiaChu) + 1)
+          .length !== 0 &&
+        !hoangOcShow.includes(item.yearLunar)
+      )
+        hoangOcShow.push(item.yearLunar);
+
       isKimLau = CheckKimLau(item.yearLunar, Number(tuoiGiaChu));
       if (isTamTai && !TamTai.includes(item.yearLunar))
         TamTai.push(item.yearLunar);
@@ -375,11 +393,14 @@ export default function Home() {
       if (isKimLau.length !== 0 && !KimLau.includes(item.yearLunar))
         KimLau.push(item.yearLunar);
     });
+
+    if (valueSelect === "dong-tho") handleRecommendYearDongTho(lunarYear);
     setBonusConditionBuilding({
       ...bonusConditionBuilding,
       KimLau,
       HoangOc,
       descriptionHoangOc,
+      hoangOcShow,
       TamTai,
     });
 
@@ -1037,6 +1058,44 @@ export default function Home() {
 
     setLoading(false);
   };
+
+  const handleRecommendYearDongTho = (lunarYear) => {
+    let arrYearRecommend = {};
+    lunarYear?.map((year) => {
+      let arrYear = [];
+      for (let i = year - 80; i < year - 10; i++) {
+        if (
+          !CheckTamTai(CHI_NAM[Number(i) % 12], CHI_NAM[Number(year) % 12]) &&
+          CheckHoangOcRecommend(Number(year) - Number(i) + 1).length === 0 &&
+          CheckKimLau(year, Number(i)).length === 0
+        ) {
+          arrYear.push(
+            `${i} (${CAN_NAM[Number(i) % 10]} ${CHI_NAM[Number(i) % 12]}) (${
+              NGU_HANH_INT[
+                (NGU_HANH_CAN_CHI_INT[CAN_NAM[Number(i) % 10]] +
+                  NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(i) % 12]] -
+                  1) %
+                  5
+              ]
+            })`
+          );
+        }
+      }
+      arrYearRecommend[year] = arrYear;
+    });
+    setArrRecommend(arrYearRecommend);
+  };
+  console.log(
+    NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] +
+      NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] -
+      1,
+    NGU_HANH_INT[
+      (NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] +
+        NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] -
+        1) %
+        5
+    ]
+  );
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1311,7 +1370,7 @@ export default function Home() {
         </Button>
       </div>
       {/* table show */}
-      <div style={{ marginTop: 30, maxWidth: 500 }}>
+      <div style={{ marginTop: 30, maxWidth: 800 }}>
         {infoGiaChu.tuoi.length !== 0 && (
           <>
             <div className="text-black mb-2 font-bold text-lg">
@@ -1337,9 +1396,10 @@ export default function Home() {
                 </>
               )}
 
-            {(bonusConditionBuilding.TamTai?.length !== 0 ||
-              bonusConditionBuilding.HoangOc?.length !== 0 ||
-              bonusConditionBuilding.KimLau?.length !== 0) &&
+            {valueSelect === "dong-tho" &&
+              (bonusConditionBuilding.TamTai?.length !== 0 ||
+                bonusConditionBuilding.HoangOc?.length !== 0 ||
+                bonusConditionBuilding.KimLau?.length !== 0) &&
               valueSelect !== "dao-gieng" &&
               valueSelect !== "lap-gieng" && (
                 <div className=" mb-2 font-bold text-sm text-red-500 italic">
@@ -1396,6 +1456,19 @@ export default function Home() {
                         )
                       : ""}
                   </div>
+                  {(bonusConditionBuilding.KimLau?.length !== 0 ||
+                    bonusConditionBuilding.TamTai?.length !== 0 ||
+                    bonusConditionBuilding.hoangOcShow?.length !== 0) && (
+                    <div style={{ marginTop: 10, color: "green" }}>
+                      <div style={{ fontSize: 18 }}>
+                        Có thể mượn tuổi vào các năm{" "}
+                      </div>
+                      <TableShowRecommend
+                        data={arrRecommend}
+                        bonusConditionBuilding={bonusConditionBuilding}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
 
