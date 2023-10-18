@@ -27,6 +27,9 @@ import {
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
+  NGU_HANH_CAN_CHI_INT,
+  NGU_HANH_EXTENDS,
+  NGU_HANH_INT,
   NGU_HANH_TUONG_SINH,
   ObjectTruc,
   ObjectTu,
@@ -1067,7 +1070,14 @@ export default function Home() {
           CheckKimLau(year, Number(i)).length === 0
         ) {
           arrYear.push(
-            `${i} (${CAN_NAM[Number(i) % 10]} ${CHI_NAM[Number(i) % 12]} )`
+            `${i} (${CAN_NAM[Number(i) % 10]} ${CHI_NAM[Number(i) % 12]}) (${
+              NGU_HANH_INT[
+                (NGU_HANH_CAN_CHI_INT[CAN_NAM[Number(i) % 10]] +
+                  NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(i) % 12]] -
+                  1) %
+                  5
+              ]
+            })`
           );
         }
       }
@@ -1075,6 +1085,17 @@ export default function Home() {
     });
     setArrRecommend(arrYearRecommend);
   };
+  console.log(
+    NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] +
+      NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] -
+      1,
+    NGU_HANH_INT[
+      (NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] +
+        NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] -
+        1) %
+        5
+    ]
+  );
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1375,9 +1396,10 @@ export default function Home() {
                 </>
               )}
 
-            {(bonusConditionBuilding.TamTai?.length !== 0 ||
-              bonusConditionBuilding.HoangOc?.length !== 0 ||
-              bonusConditionBuilding.KimLau?.length !== 0) &&
+            {valueSelect === "dong-tho" &&
+              (bonusConditionBuilding.TamTai?.length !== 0 ||
+                bonusConditionBuilding.HoangOc?.length !== 0 ||
+                bonusConditionBuilding.KimLau?.length !== 0) &&
               valueSelect !== "dao-gieng" &&
               valueSelect !== "lap-gieng" && (
                 <div className=" mb-2 font-bold text-sm text-red-500 italic">

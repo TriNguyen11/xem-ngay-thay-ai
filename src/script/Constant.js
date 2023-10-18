@@ -166,6 +166,68 @@ export const NGU_HANH = {
   Khôn: "Thổ",
   Càn: "Kim",
 };
+export const NGU_HANH_EXTENDS = {
+  "": "",
+  Tý: "+",
+  Sửu: "-",
+  Dần: "+",
+  Mão: "-",
+  Thìn: "+",
+  Tỵ: "-",
+  Ngọ: "+",
+  Mùi: "-",
+  Thân: "+",
+  Dậu: "-",
+  Tuất: "+",
+  Mậu: "+",
+  Kỷ: "-",
+  Hợi: "-",
+
+  Giáp: "+",
+  Ất: "-",
+  Bính: "+",
+  Đinh: "-",
+  Canh: "+",
+  Tân: "-",
+  Nhâm: "+",
+  Quý: "-",
+
+  Cấn: "Thổ",
+  Tốn: "Mộc",
+  Khôn: "Thổ",
+  Càn: "Kim",
+};
+export const NGU_HANH_INT = ["Kim", "Thuỷ", "Hoả", "Thổ", "Mộc"];
+
+export const NGU_HANH_CAN_CHI_INT = {
+  "": "",
+  Tý: 0,
+  Sửu: 0,
+  Ngọ: 0,
+  Mùi: 0,
+
+  Dần: 1,
+  Mão: 1,
+  Thân: 1,
+  Dậu: 1,
+
+  Thìn: 2,
+  Tỵ: 2,
+
+  Tuất: 2,
+  Hợi: 2,
+
+  Giáp: 1,
+  Ất: 1,
+  Bính: 2,
+  Đinh: 2,
+  Mậu: 3,
+  Kỷ: 3,
+  Canh: 4,
+  Tân: 4,
+  Nhâm: 5,
+  Quý: 5,
+};
 export const TAM_HOP = {
   Tý: ["Thân", "Thìn"],
   Sửu: ["Tỵ", "Dậu"],
