@@ -2657,6 +2657,20 @@ export const HONG_XA_KY_NHAT = [
 ];
 // Nghênh hôn kỵ nhật - (Dễ xích mích, khó có con):
 export const NGHENH_HON_KY_NHAT = ["Ất Tỵ", "Tân Hợi", "Mậu Thân", "Giáp Dần"];
+export const NGU_LY = [
+  "Giáp Dần",
+  "Ất Mão",
+  "Bính Ngọ",
+  "Đinh Tỵ",
+  "Mậu Thìn",
+  "Mậu Tuất",
+  "Kỷ Sửu",
+  "Kỷ Mùi",
+  "Canh Thân",
+  "Tân Dậu",
+  "Nhâm Tý",
+  "Quý Hợi",
+];
 export const NGAY_SAT = {
   Mùi: ["Thân", "Tý", "Thìn"],
   Sửu: ["Dần", "Ngọ", "Tuất"],

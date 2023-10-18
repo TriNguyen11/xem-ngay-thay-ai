@@ -496,7 +496,7 @@ export default function Home() {
             <TextField
               value={infoGiaChu.name}
               id="standard-basic"
-              label="Họ tên gia chủ"
+              label="Họ tên người mất"
               placeholder="Nhập họ tên"
               variant="standard"
               style={{

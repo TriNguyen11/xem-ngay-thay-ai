@@ -44,7 +44,6 @@ const TableSangCatNam = ({
   toaNha,
   yearArr,
 }) => {
-  console.log(infoNguoiMat);
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -82,7 +81,6 @@ const TableSangCatNam = ({
             <TableBody>
               {yearArr.lunar?.map((year, index) => {
                 let xungNam = "";
-                console.log(yearArr, year);
                 if (
                   CheckTrucXungHinhHaiChi(
                     CHI_NAM[Number(year) % 12],

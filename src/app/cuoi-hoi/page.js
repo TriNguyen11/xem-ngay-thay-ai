@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
+import TableSangCatThang2 from "@Root/components/TableSangCatThang2";
 import TableWedding from "@Root/components/TableWedding";
 import TableWeddingNam from "@Root/components/TableWeddingNam";
 import TableWeddingThang from "@Root/components/TableWeddingThang";
@@ -51,6 +52,7 @@ import {
   CheckHongXaKyNhat,
   CheckKimLau,
   CheckKimLauNu,
+  CheckNgayNguLy,
   CheckNgaySat,
   CheckNghenhHonKyNhat,
   CheckNguHanhTuongKhac,
@@ -93,6 +95,11 @@ export default function Home() {
   const [valueText, setValueText] = useState({
     namToa: "",
     nuToa: "",
+  });
+  const [arrMonthInYear, setArrMonthInYear] = useState();
+  const [yearArr, setYearArr] = useState({
+    lunar: [],
+    solar: [],
   });
   const [infoGiaChu, setInfoGiaChu] = useState({
     nameNam: "",
@@ -210,6 +217,8 @@ export default function Home() {
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
     let toaNha = valueText.namToa || valueText.nuToa || "";
+    let monthInYear = {};
+
     // Xac dinh ngay/thang xung toa nxha
     // if (toaNha?.length !== 0)
     if (
@@ -254,14 +263,39 @@ export default function Home() {
         ) {
           arrPerfectDateStep1.push(item);
         }
+        if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
+          monthInYear[item.yearLunar] = {};
+        }
+        if (
+          !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)
+        ) {
+          monthInYear[item.yearLunar][item.monthLunar] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+          };
+        }
       });
     } else {
       dateArr.map((item, index) => {
         if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
+        if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
+          monthInYear[item.yearLunar] = {};
+        }
+        if (
+          !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)
+        ) {
+          monthInYear[item.yearLunar][item.monthLunar] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+          };
+        }
       });
       arrPerfectDateStep1 = dateArr;
     }
     setLunarYearArr(lunarYear);
+    setArrMonthInYear(monthInYear);
 
     setDataStep1(arrPerfectDateStep1);
     // Xet Thang
@@ -320,7 +354,6 @@ export default function Home() {
           item.ngayChi
         ) &&
         // xung,trung,hai tuoi nam
-
         CheckTuongXungTuongHaiTuoiMonth(
           CHI_NAM[namSinhNam % 12],
           item.ngayChi
@@ -335,6 +368,7 @@ export default function Home() {
         CheckNgaySat(item.ngayChi, CHI_NAM[namSinhNam % 12]) === false &&
         CheckHongXaKyNhat(item.monthLunar, item.ngayChi) === false &&
         CheckNghenhHonKyNhat(item.ngayCan + " " + item.ngayChi) === false &&
+        CheckNgayNguLy(item.ngayCan + " " + item.ngayChi) === false &&
         CheckCoNhatTuanPhong(item.monthLunar, item.ngayChi) === false &&
         //Thien tai dia hoa
         !CheckThienTaiDiaHoa(item.ngayChi, item.monthLunar) &&
@@ -890,6 +924,7 @@ export default function Home() {
             valueSelect={valueSelect}></TableWeddingThang>
         </div>
       </div>
+
       <div>
         <div
           className="font-bold text-[20px]"

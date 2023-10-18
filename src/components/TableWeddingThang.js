@@ -213,6 +213,7 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                     <TableCell
                       style={{
                         textAlign: "center",
+                        color: COLOR_TEXT_NGU_HANH[date.hanhNgay],
                       }}>
                       {date.thangCan} {date.thangChi} ({date.hanhThang})
                     </TableCell>

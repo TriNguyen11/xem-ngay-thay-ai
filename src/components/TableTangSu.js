@@ -178,6 +178,7 @@ const TableTangSu = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                 // Thien Tac
                 if (CheckNgayGioThienTac(date.monthLunar, date.ngayChi))
                   backky = "Thiên Tặc";
+
                 return (
                   <TableRow
                     style={{
@@ -217,6 +218,7 @@ const TableTangSu = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                     <TableCell
                       style={{
                         textAlign: "center",
+                        color: COLOR_TEXT_NGU_HANH[date.hanhNgay],
                       }}>
                       {date.thangCan} {date.thangChi} ({date.hanhThang})
                     </TableCell>

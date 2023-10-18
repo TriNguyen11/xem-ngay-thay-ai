@@ -45,6 +45,7 @@ import {
   NGAY_GIO_HA_KHOI,
   NGAY_GIO_THIEN_TAC,
   NGAY_GIO_TRUNG_TANG,
+  NGAY_KY_CHON_CAT,
   NGAY_SAT,
   NGAY_TRUNG_NHAT,
   NGHENH_HON_KY_NHAT,
@@ -52,6 +53,7 @@ import {
   NGU_HANH_TUONG_KHAC,
   NGU_HANH_TUONG_KHAC_KHAU_QUYET,
   NGU_HANH_TUONG_SINH,
+  NGU_LY,
   NHAC_THAN,
   PHU_CHU,
   SAT_CHU_AM,
@@ -663,7 +665,7 @@ export const CheckTrucXungGio = (
 // 4. Ưu tiên các địa chi giờ Thìn, Tuất, Sửu, Mùi
 // 5. Ưu tiên các giờ Tam hợp - Lục Hợp với tuổi người chết
 export const CheckTrucXungGioTangSu = (data) => {
-  // console.log(data, "check data");
+  console.log(data, "check data");
 
   return CHI.filter((item) => {
     if (
@@ -699,12 +701,12 @@ export const CheckTrucXungGioTangSu = (data) => {
       SAT_CHU_AM[data.monthLunar - 1] !== item &&
       SAT_CHU_DUONG[data.monthLunar - 1] !== item
     ) {
-      console.log(
-        data.monthLunar,
-        data.arrGioCan[CHI_NAM_SORTED.indexOf(item)],
-        item,
-        "check item"
-      );
+      // console.log(
+      //   data.monthLunar,
+      //   data.arrGioCan[CHI_NAM_SORTED.indexOf(item)],
+      //   item,
+      //   "check item"
+      // );
       return item;
       // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
     }
@@ -789,6 +791,9 @@ export const CheckThaiTueHinh = (chiYear, chiTuoi) => {
 };
 export const CheckNghenhHonKyNhat = (ngayCanChi) => {
   if (ngayCanChi) return NGHENH_HON_KY_NHAT.includes(ngayCanChi);
+};
+export const CheckNgayNguLy = (ngayCanChi) => {
+  if (ngayCanChi) return NGU_LY.includes(ngayCanChi);
 };
 export const CheckCoNhatTuanPhong = (monthLunar, chiNgay) => {
   if (chiNgay) return CO_NHAT_TUAN_PHONG[monthLunar - 1] === chiNgay;
@@ -1200,4 +1205,8 @@ export const CheckNgayGioHaKhoi = (monthLunar, diaChi) => {
 export const CheckNgayGioThienTac = (monthLunar, diaChi) => {
   return NGAY_GIO_THIEN_TAC[monthLunar - 1] === diaChi;
 };
+export const CheckKyChonCat = (monthLunar, dayLunar) => {
+  return NGAY_KY_CHON_CAT[monthLunar - 1].includes(dayLunar);
+};
+
 export default handleDateChange;
