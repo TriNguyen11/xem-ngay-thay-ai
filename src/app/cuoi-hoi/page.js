@@ -559,7 +559,7 @@ export default function Home() {
             <TextField
               value={infoGiaChu.nameNam}
               id="standard-basic"
-              label="Họ tên gia chủ"
+              label="Họ tên bạn trai"
               placeholder="Nhập họ tên"
               variant="standard"
               style={{
@@ -650,7 +650,7 @@ export default function Home() {
             <TextField
               value={infoGiaChu.nameNu}
               id="standard-basic"
-              label="Họ tên gia chủ"
+              label="Họ tên bạn gái"
               placeholder="Nhập họ tên"
               variant="standard"
               style={{

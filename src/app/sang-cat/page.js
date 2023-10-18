@@ -267,7 +267,7 @@ export default function Home() {
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
         CheckNguHanhTuongSinh(NGU_HANH[valueText], NGU_HANH[item.ngayCan]) &&
         // 2.
-        !CheckTrucXungHinhHaiChi(bamCung.bamCungTuoi, item.ngayChi) &&
+        !CheckTrucXungHinhHaiChi(CHI_NAM[Number(namSinh) % 12], item.ngayChi) &&
         // 3.
         item.dayLunar !== 1 &&
         item.dayLunar !== 15 &&
@@ -337,7 +337,7 @@ export default function Home() {
         ...item,
         gio: CheckTrucXungGioTangSu({
           ...item,
-          cungNguoiMat: bamCung.bamCungTuoi,
+          cungNguoiMat: CHI_NAM[Number(namSinh) % 12],
           chiNamSinh: CHI_NAM[namSinh % 12],
         }),
       });
@@ -479,7 +479,7 @@ export default function Home() {
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
         CheckNguHanhTuongSinh(NGU_HANH[valueText], NGU_HANH[item.ngayCan]) &&
         // 2.
-        !CheckTrucXungHinhHaiChi(bamCung.bamCungTuoi, item.ngayChi) &&
+        !CheckTrucXungHinhHaiChi(CHI_NAM[Number(namSinh) % 12], item.ngayChi) &&
         // 3.
         item.dayLunar !== 1 &&
         item.dayLunar !== 15 &&
@@ -549,7 +549,7 @@ export default function Home() {
         ...item,
         gio: CheckTrucXungGioTangSu({
           ...item,
-          cungNguoiMat: bamCung.bamCungTuoi,
+          cungNguoiMat: CHI_NAM[Number(namSinh) % 12],
           chiNamSinh: CHI_NAM[namSinh % 12],
         }),
       });
@@ -637,11 +637,11 @@ export default function Home() {
           </div>
           <div className="flex flex-row justify-center mt-10 mb-8 flex-wrap">
             <FormControl fullWidth style={{ marginLeft: 20, width: 200 }}>
-              <InputLabel id="demo-simple-select-label">Toạ nhà</InputLabel>
+              <InputLabel id="demo-simple-select-label">Toạ mộ</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                label="Toạ nhà"
+                label="Toạ mộ"
                 onChange={(e) => {
                   setValueText(TOA_NHA[e.target.value]);
                 }}>
