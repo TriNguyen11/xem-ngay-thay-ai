@@ -39,6 +39,7 @@ import {
   ObjectTu,
   SAT_CHU_AM,
   SAT_CHU_DUONG,
+  SERVICE_SANGCAT,
   SERVICE_TANGSU,
   SERVICE_XAYDUNG,
   TAM_NUONG,
@@ -589,10 +590,10 @@ export default function Home() {
               setCase4();
               setCase5();
             }}>
-            {Object.keys(SERVICE_TANGSU).map((key, inex) => {
+            {Object.keys(SERVICE_SANGCAT).map((key, inex) => {
               return (
                 <MenuItem key={Math.random()} value={key}>
-                  {SERVICE_TANGSU[key]}
+                  {SERVICE_SANGCAT[key]}
                 </MenuItem>
               );
             })}
