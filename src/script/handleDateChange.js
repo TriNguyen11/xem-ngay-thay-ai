@@ -920,6 +920,17 @@ export const CheckHoangOc = (age) => {
   // ];
   return HOANG_OC[((age % 10) + Math.floor(age / 10) - 1) % 6];
 };
+export const CheckHoangOcRecommend = (age) => {
+  const arrHoangOc = [
+    "",
+    "",
+    "phạm hạn Hoang Ốc",
+    "",
+    "phạm hạn Hoang Ốc",
+    "phạm hạn Hoang Ốc",
+  ];
+  return arrHoangOc[((age % 10) + Math.floor(age / 10) - 1) % 6];
+};
 export const CheckTamTai = (ChiTuoi, ChiNam) => {
   return TAM_TAI[ChiTuoi].includes(ChiNam);
 };
