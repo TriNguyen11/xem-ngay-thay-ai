@@ -321,7 +321,7 @@ export default function Home() {
     );
     setCase5(case5Text);
   };
-  const handleTangSuNu = async () => {
+  const handleSangCatNu = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
@@ -391,15 +391,68 @@ export default function Home() {
     // Chon ngay
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
-      if (!CheckTrucXungHinhHaiChi(bamCung.bamCungTuoi, item.ngayChi)) {
-        arrPerfectDateStep1.push(item);
+      if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
+      if (!solarYear.includes(item.yearSolar)) solarYear.push(item.yearSolar);
+      if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
+        monthInYear[item.yearLunar] = {};
+      }
+      if (!Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)) {
+        monthInYear[item.yearLunar][item.monthLunar] = {
+          month: item.monthLunar,
+          canMonth: item.thangCan,
+          chiMonth: item.thangChi,
+        };
       }
     });
-    setDataStep1(arrPerfectDateStep1);
-
-    // Tranh Bach ky
-    arrPerfectDateStep1.map((item, index) => {
+    // setDataStep1(arrPerfectDateStep1);
+    setYearArr({ lunar: lunarYear, solar: solarYear });
+    setArrMonthInYear(monthInYear);
+    // console.log(dateArr, "monthInYear");
+    // console.log(valueText, "valueSelect");
+    // Show bach ky trong thang
+    dateArr.map((item, index) => {
       if (
+        //nam
+        !CheckTrucXungHinhHaiChi(
+          CHI_NAM[Number(item.yearLunar) % 12],
+          CHI_NAM[Number(namSinh) % 12]
+        ) &&
+        !isLeapYearLunar(item.yearLunar) &&
+        //thang
+        !CheckTrucXungHinhHaiChi(
+          item.thangChi,
+          CHI_NAM[Number(namSinh) % 12]
+        ) &&
+        !CheckTrucXungNgayThangNam(item.thangChi, valueText)
+      ) {
+        arrPerfectDateStep2.push(item);
+      }
+    });
+    setDataStep2(arrPerfectDateStep2);
+
+    //Loai bach ky
+    dateArr.map((item, index) => {
+      if (
+        //nam
+        !CheckTrucXungHinhHaiChi(
+          CHI_NAM[Number(item.yearLunar) % 12],
+          CHI_NAM[Number(namSinh) % 12]
+        ) &&
+        !isLeapYearLunar(item.yearLunar) &&
+        //thang
+        !CheckTrucXungHinhHaiChi(
+          item.thangChi,
+          CHI_NAM[Number(namSinh) % 12]
+        ) &&
+        !CheckTrucXungNgayThangNam(item.thangChi, valueText) &&
+        // ngay
+        // 1.
+        //xung toa
+        !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
+        CheckNguHanhTuongSinh(NGU_HANH[valueText], NGU_HANH[item.ngayCan]) &&
+        // 2.
+        !CheckTrucXungHinhHaiChi(bamCung.bamCungTuoi, item.ngayChi) &&
+        // 3.
         item.dayLunar !== 1 &&
         item.dayLunar !== 15 &&
         monthDays(item.yearLunar, item.monthLunar) !== item.dayLunar &&
@@ -421,15 +474,27 @@ export default function Home() {
         // Ha Khoi
         !CheckNgayGioHaKhoi(item.monthLunar, item.ngayChi) &&
         // Thien Tac
-        !CheckNgayGioThienTac(item.monthLunar, item.ngayChi)
+        !CheckNgayGioThienTac(item.monthLunar, item.ngayChi) &&
+        //Trung tang
+        !CheckTrungTang(item.monthLunar, item.ngayCan) &&
+        //kiep sat
+        !CheckGioKiepSat(namSinh, item.ngayChi) &&
+        //Ky chon cat
+        !CheckKyChonCat(item.monthLunar, item.dayLunar)
       ) {
-        arrPerfectDateStep2.push(item);
+        arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
+    setDataStep3(arrPerfectDateStep3);
+    // Xet them hop hoa
+    arrPerfectDateStep6 = await handleHopHoaNgayThang(
+      arrPerfectDateStep3,
+      valueText
+    );
+    setDataStep6(arrPerfectDateStep6);
 
     // kiem tra truc/tu
-    arrPerfectDateStep2.map((item, ind) => {
+    arrPerfectDateStep6.map((item, ind) => {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
@@ -444,15 +509,15 @@ export default function Home() {
           !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
         ) {
         } else {
-          arrPerfectDateStep3.push(item);
+          arrPerfectDateStep4.push(item);
         }
       }
     });
-    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
 
     // Chon gio
-    arrPerfectDateStep3.map((item, ind) => {
-      arrPerfectDateStep4.push({
+    arrPerfectDateStep4.map((item, ind) => {
+      arrPerfectDateStep5.push({
         ...item,
         gio: CheckTrucXungGioTangSu({
           ...item,
@@ -461,11 +526,11 @@ export default function Home() {
         }),
       });
     });
-    setDataStep4(arrPerfectDateStep4);
+    setDataStep4(arrPerfectDateStep5);
 
     console.log(arrPerfectDateStep4, "namMat");
   };
-  const handleTangSuNam = async () => {
+  const handleSangCatNam = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
@@ -923,14 +988,9 @@ export default function Home() {
             //   });
             //   return refNotify.current.handleClick();
             // }
-            return handleTangSuNam();
-            if (valueSelect === "tinh-trung-tang") {
-              if (valueAge.gender === 1) return handleTrungTangNam();
-              return handleTrungTangNu();
-            } else {
-              if (valueAge.gender === 1) return handleTangSuNam();
-              return handleTangSuNu();
-            }
+
+            if (valueAge.gender === 1) return handleSangCatNam();
+            return handleSangCatNu();
           }}
           variant="contained"
           // disabled={
