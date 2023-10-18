@@ -132,199 +132,11 @@ export default function Home() {
   const [case4, setCase4] = useState();
   const [case5, setCase5] = useState();
 
-  const handleTrungTangNam = async () => {
-    let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
-    let namMat = Number(valueAge.dead_year);
-    let namSinh = Number(valueAge.year);
-    if (Number(valueAge.month) <= 2) {
-      const sunlong = getSunLongitude(
-        jdn(
-          Number(valueAge.day),
-          Number(valueAge.month),
-          Number(valueAge.year),
-          valueAge.time?.$H,
-          valueAge.time?.$m,
-          valueAge.time.$s
-        ),
-        7
-      );
-      if (sunlong <= 20 && sunlong >= 17) {
-        tuoiNguoiMat++;
-        namSinh--;
-      }
-    }
-    if (Number(valueAge.dead_month) <= 2) {
-      const sunlong = getSunLongitude(
-        jdn(
-          Number(valueAge.dead_day),
-          Number(valueAge.dead_month),
-          Number(valueAge.dead_year),
-          valueAge.dead_time?.$H,
-          valueAge.dead_time?.$m,
-          valueAge.dead_time.$s
-        ),
-        7
-      );
-      if (sunlong <= 20 && sunlong >= 17) {
-        namMat--;
-        tuoiNguoiMat--;
-      }
-    }
-    let bamCung = CalcuBamCungNam(
-      tuoiNguoiMat,
-      Number(valueAge.dead_month),
-      Number(valueAge.dead_day),
-      valueAge.dead_time?.$H
-    );
-    let momentAmLich = moment(
-      `${valueAge.dead_day}/${valueAge.dead_month}/${valueAge.dead_year}`,
-      "DD/MM/YYYY"
-    );
-    const lichAm = await getCanChi(
-      momentAmLich.date(),
-      momentAmLich.month() + 1,
-      momentAmLich.year()
-    );
-
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-    // Case 1
-    let countCase1 = CountStatusTrungTang({
-      ...bamCung,
-      chiNamMat: CHI_NAM[namMat % 12],
-    });
-    setCase1(countCase1);
-
-    // Case 2
-    let case2Text = CheckCase2TrungTang({
-      ...bamCung,
-      chiNamSinh: CHI_NAM[namSinh % 12],
-    });
-    setCase2(case2Text);
-    //Kiep Sat, Lien tang
-    // Case 3
-    let case3Text = CheckCase3TrungTang({
-      ...bamCung,
-      chiNamSinh: CHI_NAM[namSinh % 12],
-      chiNamMat: CHI_NAM[namMat % 12],
-    });
-    setCase3(case3Text);
-    // ThanTrung
-    // Case 4
-    // 29/10/2023
-    let case4Text = await CheckCase4TrungTang(
-      lichAm.monthLunar,
-      lichAm.ngayCan,
-      lichAm.ngayChi
-    );
-    setCase4(case4Text);
-    // Trung pHuc
-    // Case 5
-    let case5Text = await CheckCase5TrungTang(
-      lichAm.monthLunar,
-      lichAm.ngayCan,
-      lichAm.ngayChi
-    );
-    setCase5(case5Text);
-  };
-  const handleTrungTangNu = async () => {
-    let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
-    let namMat = Number(valueAge.dead_year);
-    let namSinh = Number(valueAge.year);
-    if (Number(valueAge.month) <= 2) {
-      const sunlong = getSunLongitude(
-        jdn(
-          Number(valueAge.day),
-          Number(valueAge.month),
-          Number(valueAge.year),
-          valueAge.time?.$H,
-          valueAge.time?.$m,
-          valueAge.time.$s
-        ),
-        7
-      );
-      if (sunlong <= 20 && sunlong >= 17) {
-        tuoiNguoiMat++;
-        namSinh--;
-      }
-    }
-    if (Number(valueAge.dead_month) <= 2) {
-      const sunlong = getSunLongitude(
-        jdn(
-          Number(valueAge.dead_day),
-          Number(valueAge.dead_month),
-          Number(valueAge.dead_year),
-          valueAge.dead_time?.$H,
-          valueAge.dead_time?.$m,
-          valueAge.dead_time.$s
-        ),
-        7
-      );
-      if (sunlong <= 20 && sunlong >= 17) {
-        namMat--;
-        tuoiNguoiMat--;
-      }
-    }
-
-    let bamCung = CalcuBamCungNu(
-      tuoiNguoiMat,
-      Number(valueAge.dead_month),
-      Number(valueAge.dead_day),
-      valueAge.dead_time?.$H
-    );
-    let momentAmLich = moment(
-      `${valueAge.dead_day}/${valueAge.dead_month}/${valueAge.dead_year}`,
-      "DD/MM/YYYY"
-    );
-    const lichAm = await getCanChi(
-      momentAmLich.date(),
-      momentAmLich.month() + 1,
-      momentAmLich.year()
-    );
-
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-
-    console.log(namMat, "namMat");
-
-    let countCase1 = CountStatusTrungTang({
-      ...bamCung,
-      chiNamMat: CHI_NAM[namMat % 12],
-    });
-    setCase1(countCase1);
-
-    // Case 2
-    let case2Text = CheckCase2TrungTang({
-      ...bamCung,
-      chiNamSinh: CHI_NAM[namSinh % 12],
-    });
-    setCase2(case2Text);
-
-    // Case 3
-    let case3Text = CheckCase3TrungTang({
-      ...bamCung,
-      chiNamSinh: CHI_NAM[namSinh % 12],
-      chiNamMat: CHI_NAM[namMat % 12],
-    });
-    setCase3(case3Text);
-    // Case 4
-    let case4Text = await CheckCase4TrungTang(
-      lichAm.monthLunar,
-      lichAm.ngayCan,
-      lichAm.ngayChi
-    );
-    setCase4(case4Text);
-
-    // Case 5
-    let case5Text = await CheckCase5TrungTang(
-      lichAm.monthLunar,
-      lichAm.ngayCan,
-      lichAm.ngayChi
-    );
-    setCase5(case5Text);
-  };
   const handleSangCatNu = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
+    console.log("Nu");
     if (Number(valueAge.month) <= 2) {
       const sunlong = getSunLongitude(
         jdn(
@@ -388,6 +200,9 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
+    let lunarYear = [];
+    let solarYear = [];
+    let monthInYear = {};
     // Chon ngay
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
