@@ -805,7 +805,7 @@ export default function Home() {
       {/* table show */}
       <div className="text-black mb-2 font-bold text-lg mt-10 max-w-3xl">
         {lunarYearArr
-          .forEach((item) => {
+          .map((item) => {
             return (
               " " +
               CAN_NAM[item % 10] +
