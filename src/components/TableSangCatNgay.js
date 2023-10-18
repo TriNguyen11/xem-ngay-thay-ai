@@ -145,7 +145,7 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                 // 2.
                 if (
                   CheckTrucXungHinhHaiChi(
-                    infoNguoiMat?.bamCungTuoi,
+                    CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
                     date.ngayChi
                   )
                 )
