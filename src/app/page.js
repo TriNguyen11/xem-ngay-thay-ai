@@ -124,7 +124,7 @@ export default function Home() {
         dateEnd,
         valueText,
         valueAge,
-        valueAgeBorrow,
+
         valueSelect,
         isMuonTuoi,
       },
