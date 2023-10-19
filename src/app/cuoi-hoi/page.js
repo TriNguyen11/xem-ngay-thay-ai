@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
+import TableResult from "@Root/components/TableResult";
 import TableSangCatThang2 from "@Root/components/TableSangCatThang2";
 import TableWedding from "@Root/components/TableWedding";
 import TableWeddingNam from "@Root/components/TableWeddingNam";
@@ -75,6 +76,7 @@ import {
   CheckTuongXungTuongHaiTuoiKhongToa,
   CheckTuongXungTuongHaiTuoiMonth,
   CombineThienCan,
+  ConvertToRangeDayInMonthLunar,
   getCanChi,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
@@ -122,15 +124,8 @@ export default function Home() {
     nuDay: "",
   });
 
-  const [bonusConditionBuilding, setBonusConditionBuilding] = useState({
-    TamTai: [],
-    KimLau: [],
-    HoangOc: [],
-    descriptionHoangOc: [],
-  });
-
   const [valueSelect, setValueSelect] = useState("");
-  const [isMuonTuoi, setIsMuonTuoi] = useState(false);
+  const [rangeDayInMonthLunar, setRangeDayInMonthLunar] = useState();
 
   const [step1, setDataStep1] = useState();
   const [step2, setDataStep2] = useState();
@@ -139,7 +134,6 @@ export default function Home() {
   const [step5, setDataStep5] = useState();
   const [step6, setDataStep6] = useState();
   const [step7, setDataStep7] = useState();
-  const [step8, setDataStep8] = useState();
   const [lunarYearArr, setLunarYearArr] = useState([]);
 
   const handleGetPerfectDate = async () => {
@@ -218,7 +212,8 @@ export default function Home() {
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
     let toaNha = valueText.namToa || valueText.nuToa || "";
     let monthInYear = {};
-
+    // Convert  RangeDayInMonthLunar
+    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Xac dinh ngay/thang xung toa nxha
     // if (toaNha?.length !== 0)
     if (
@@ -817,200 +812,285 @@ export default function Home() {
           })
           .toString()}
       </div>
-      <div style={{ marginTop: 30, maxWidth: 500 }}>
-        {infoGiaChu.tuoiCanChiNam?.length !== 0 && (
-          <>
-            <div className="text-black mb-2 font-bold text-lg">
-              Nam tên: {infoGiaChu.nameNam}
-              <div>
-                Tuổi:{" "}
-                <span className="text-[red]">{infoGiaChu.tuoiCanChiNam}</span> -{" "}
-                {lunarYearArr
-                  .map((item) => {
-                    return (
-                      " " +
-                      Number(item - valueAge.namYear + 1) +
-                      " Vào năm " +
-                      item +
-                      ""
-                    );
-                  })
-                  .toString()}
-              </div>
-              {valueText?.namToa?.length !== 0 &&
-                valueSelect === "ngay-cuoi" && (
-                  <div
-                    className="text-black mb-2 font-bold text-lg"
-                    style={{
-                      color: COLOR_TEXT_NGU_HANH[NGU_HANH[valueText.namToa]],
-                    }}>
-                    Toạ nhà: {valueText.namToa} ({NGU_HANH[valueText.namToa]})
-                    <div className="text-[green] mb-2 font-bold text-lg">
-                      Hành ngày chọn:{" "}
-                      {NGU_HANH_TUONG_SINH[NGU_HANH[valueText.namToa]]
-                        ?.toString()
-                        .replaceAll(",", " > ")}
-                    </div>
-                  </div>
-                )}
-            </div>
-            <div className="text-black mb-2 font-bold text-lg">
-              Nữ tên: {infoGiaChu.nameNu}
-              <div>
-                Tuổi:{" "}
-                <span className="text-[red]">{infoGiaChu.tuoiCanChiNu}</span>-{" "}
-                {lunarYearArr
-                  .map((item) => {
-                    return (
-                      " " +
-                      Number(item - valueAge.nuYear + 1) +
-                      " Vào năm " +
-                      item +
-                      ""
-                    );
-                  })
-                  .toString()}
-              </div>
-              {valueText?.nuToa?.length !== 0 &&
-                (valueSelect === "ngay-an-hoi" ||
-                  valueSelect === "ngay-lai-mat" ||
-                  valueSelect === "ngay-dam-ngo") && (
-                  <div
-                    className="text-black mb-2 font-bold text-lg"
-                    style={{
-                      color: COLOR_TEXT_NGU_HANH[NGU_HANH[valueText.nuToa]],
-                    }}>
-                    Toạ nhà: {valueText.nuToa} ({NGU_HANH[valueText.nuToa]})
-                    <div className="text-[green] mb-2 font-bold text-lg">
-                      Hành ngày chọn:{" "}
-                      {NGU_HANH_TUONG_SINH[NGU_HANH[valueText.nuToa]]
-                        ?.toString()
-                        .replaceAll(",", " > ")}
-                    </div>
-                  </div>
-                )}
-            </div>
-          </>
-        )}
-      </div>
-      <div className="">
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          Bước 1: Xét Năm {"(Tránh năm kim lâu nữ, thái tuế)"}
-          {lunarYearArr && `(${lunarYearArr?.length})`}
-        </div>
-        <div className="max-h-[500px] overflow-scroll">
-          <TableWeddingNam
-            data={step1}
-            toaNha={valueText.namToa || valueText.nuToa}
-            infoGiaChu={infoGiaChu}
-            lunarYearArr={lunarYearArr}
-            valueSelect={valueSelect}></TableWeddingNam>
-        </div>
-      </div>
-      <div className="">
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          Bước 2: Xét Tháng
-          {step1 && `(${step1?.length})`}
-        </div>
-        <div className="max-h-[500px] overflow-scroll">
-          <TableWeddingThang
-            data={step1}
-            toaNha={valueText.namToa || valueText.nuToa}
-            infoGiaChu={infoGiaChu}
-            valueSelect={valueSelect}></TableWeddingThang>
-        </div>
-      </div>
-
-      <div>
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          Bước 3: Xét ngày{step2 && ` (${step2?.length})`}
-        </div>
-        <div className="max-h-[500px] overflow-scroll">
-          <TableWedding
-            valueSelect={valueSelect}
-            data={step2}
-            toaNha={valueText.namToa || valueText.nuToa}
-            infoGiaChu={infoGiaChu}></TableWedding>
-        </div>
-      </div>
-
-      {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
-        <div>
+      {typeof window !== "undefined" && (
+        <>
+          {/* Thien */}
           <div
-            className="font-bold text-[20px]"
-            style={{ color: "black", marginTop: 30 }}>
-            Kiểm tra thêm hợp hoá ngày/tháng {step6 && `(${step6?.length})`}
+            className="text-black"
+            style={{
+              width: window.innerWidth * 0.9,
+            }}>
+            {rangeDayInMonthLunar &&
+              Object.keys(rangeDayInMonthLunar).map((year) => {
+                return (
+                  <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
+                    Năm {year}:{" "}
+                    {Object.keys(rangeDayInMonthLunar[year]).map((month) => {
+                      return (
+                        <li style={{ fontWeight: 400 }}>
+                          - Tháng {month} (
+                          {rangeDayInMonthLunar[year][month][0].thangCan}{" "}
+                          {rangeDayInMonthLunar[year][month][0].thangChi}): từ{" "}
+                          {rangeDayInMonthLunar[year][month][0].daySolar}/
+                          {rangeDayInMonthLunar[year][month][0].monthSolar}/
+                          {rangeDayInMonthLunar[year][month][0].yearSolar} đến
+                          ngày {rangeDayInMonthLunar[year][month][1].daySolar}/
+                          {rangeDayInMonthLunar[year][month][1].monthSolar}/
+                          {rangeDayInMonthLunar[year][month][1].yearSolar}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                );
+              })}
           </div>
+          {/* Nhan */}
+          <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>
+            {infoGiaChu.tuoiCanChiNam?.length !== 0 && (
+              <>
+                <div className="text-black mb-2 font-bold text-lg">
+                  Nam tên: {infoGiaChu.nameNam}
+                  <div>
+                    Tuổi:{" "}
+                    <span className="text-[red]">
+                      {infoGiaChu.tuoiCanChiNam}
+                    </span>{" "}
+                    -{" "}
+                    {lunarYearArr
+                      .map((item) => {
+                        return (
+                          " " +
+                          Number(item - valueAge.namYear + 1) +
+                          " Vào năm " +
+                          item +
+                          ""
+                        );
+                      })
+                      .toString()}
+                  </div>
+                  {valueText?.namToa?.length !== 0 &&
+                    valueSelect === "ngay-cuoi" && (
+                      <div
+                        className="text-black mb-2 font-bold text-lg"
+                        style={{
+                          color:
+                            COLOR_TEXT_NGU_HANH[NGU_HANH[valueText.namToa]],
+                        }}>
+                        Toạ nhà: {valueText.namToa} (
+                        {NGU_HANH[valueText.namToa]})
+                        <div className="text-[green] mb-2 font-bold text-lg">
+                          Hành ngày chọn:{" "}
+                          {NGU_HANH_TUONG_SINH[NGU_HANH[valueText.namToa]]
+                            ?.toString()
+                            .replaceAll(",", " > ")}
+                        </div>
+                      </div>
+                    )}
+                </div>
+                <div className="text-black mb-2 font-bold text-lg">
+                  Nữ tên: {infoGiaChu.nameNu}
+                  <div>
+                    Tuổi:{" "}
+                    <span className="text-[red]">
+                      {infoGiaChu.tuoiCanChiNu}
+                    </span>
+                    -{" "}
+                    {lunarYearArr
+                      .map((item) => {
+                        return (
+                          " " +
+                          Number(item - valueAge.nuYear + 1) +
+                          " Vào năm " +
+                          item +
+                          ""
+                        );
+                      })
+                      .toString()}
+                  </div>
+                  {valueText?.nuToa?.length !== 0 &&
+                    (valueSelect === "ngay-an-hoi" ||
+                      valueSelect === "ngay-lai-mat" ||
+                      valueSelect === "ngay-dam-ngo") && (
+                      <div
+                        className="text-black mb-2 font-bold text-lg"
+                        style={{
+                          color: COLOR_TEXT_NGU_HANH[NGU_HANH[valueText.nuToa]],
+                        }}>
+                        Toạ nhà: {valueText.nuToa} ({NGU_HANH[valueText.nuToa]})
+                        <div className="text-[green] mb-2 font-bold text-lg">
+                          Hành ngày chọn:{" "}
+                          {NGU_HANH_TUONG_SINH[NGU_HANH[valueText.nuToa]]
+                            ?.toString()
+                            .replaceAll(",", " > ")}
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </>
+            )}
+          </div>
+          {/* Show ket qua */}
+          {step7 && (
+            <>
+              <div className="text-[24px] font-bold mb-4 text-black">
+                {" "}
+                Tổng cộng có {step7?.length} kết quả{" "}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black ">
+                {step7?.map((item, index) => {
+                  return (
+                    <>
+                      <div
+                        className="font-bold text-[20px]"
+                        style={{
+                          color: "black",
+                          marginBottom: 10,
+                          marginTop: 20,
+                        }}>
+                        Kết quả {index + 1}
+                      </div>
+                      <div className="max-h-[500px] overflow-scroll">
+                        <TableResult
+                          data={item}
+                          infoGiaChu={infoGiaChu}
+                          valueSelect={valueSelect}></TableResult>
+                      </div>
+                    </>
+                  );
+                })}
+              </div>
+            </>
+          )}
+          <div className="">
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              Bước 1: Xét Năm {"(Tránh năm kim lâu nữ, thái tuế)"}
+              {lunarYearArr && `(${lunarYearArr?.length})`}
+            </div>
+            <div
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2 ">
+              <TableWeddingNam
+                data={step1}
+                toaNha={valueText.namToa || valueText.nuToa}
+                infoGiaChu={infoGiaChu}
+                lunarYearArr={lunarYearArr}
+                valueSelect={valueSelect}></TableWeddingNam>
+            </div>
+          </div>
+          <div className="">
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              Bước 2: Xét Tháng
+              {step1 && `(${step1?.length})`}
+            </div>
+            <div
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2 ">
+              <TableWeddingThang
+                data={step1}
+                toaNha={valueText.namToa || valueText.nuToa}
+                infoGiaChu={infoGiaChu}
+                valueSelect={valueSelect}></TableWeddingThang>
+            </div>
+          </div>
+          <div>
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              Bước 3: Xét ngày{step2 && ` (${step2?.length})`}
+            </div>
+            <div
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2 ">
+              <TableWedding
+                valueSelect={valueSelect}
+                data={step2}
+                toaNha={valueText.namToa || valueText.nuToa}
+                infoGiaChu={infoGiaChu}></TableWedding>
+            </div>
+          </div>
+          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Kiểm tra thêm hợp hoá ngày/tháng {step6 && `(${step6?.length})`}
+              </div>
 
-          <div className="max-h-[500px] overflow-scroll">
-            <TableWedding
-              valueSelect={valueSelect}
-              data={step6}
-              infoGiaChu={infoGiaChu}></TableWedding>
+              <div
+                className="max-h-[500px] overflow-scroll
+              px-10 border-2 border-black mt-2 ">
+                <TableWedding
+                  valueSelect={valueSelect}
+                  data={step6}
+                  infoGiaChu={infoGiaChu}></TableWedding>
+              </div>
+            </div>
+          )}
+          <div>
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              bước{" "}
+              {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
+                ? "4"
+                : "3"}{" "}
+              {"Kiểm tra Trực/Tú"}
+              {step4 && `(${step4?.length})`}
+            </div>
+
+            <div
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2 ">
+              <TableWedding
+                valueSelect={valueSelect}
+                data={step4}
+                infoGiaChu={infoGiaChu}></TableWedding>
+            </div>
           </div>
-        </div>
+          <div>
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              bước{" "}
+              {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
+                ? "5"
+                : "4"}{" "}
+              {"Chọn giờ"}
+            </div>
+
+            <div
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2 ">
+              <TableWedding
+                valueSelect={valueSelect}
+                data={step5}
+                infoGiaChu={infoGiaChu}></TableWedding>
+            </div>
+          </div>
+          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Kiểm tra thêm hợp hoá ngày/giờ {step7 && `(${step7?.length})`}
+              </div>
+
+              <div
+                className="max-h-[500px] overflow-scroll
+              px-10 border-2 border-black mt-2 ">
+                <TableWedding
+                  valueSelect={valueSelect}
+                  data={step7}
+                  infoGiaChu={infoGiaChu}></TableWedding>
+              </div>
+            </div>
+          )}
+        </>
       )}
-
-      <div>
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          bước{" "}
-          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-            ? "4"
-            : "3"}{" "}
-          {"Kiểm tra Trực/Tú"}
-          {step4 && `(${step4?.length})`}
-        </div>
-
-        <div className="max-h-[500px] overflow-scroll">
-          <TableWedding
-            valueSelect={valueSelect}
-            data={step4}
-            infoGiaChu={infoGiaChu}></TableWedding>
-        </div>
-      </div>
-      <div>
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          bước{" "}
-          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-            ? "5"
-            : "4"}{" "}
-          {"Chọn giờ"}
-        </div>
-
-        <div className="max-h-[500px] overflow-scroll">
-          <TableWedding
-            valueSelect={valueSelect}
-            data={step5}
-            infoGiaChu={infoGiaChu}></TableWedding>
-        </div>
-      </div>
-      {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
-        <div>
-          <div
-            className="font-bold text-[20px]"
-            style={{ color: "black", marginTop: 30 }}>
-            Kiểm tra thêm hợp hoá ngày/giờ {step7 && `(${step7?.length})`}
-          </div>
-
-          <div className="max-h-[500px] overflow-scroll">
-            <TableWedding
-              valueSelect={valueSelect}
-              data={step7}
-              infoGiaChu={infoGiaChu}></TableWedding>
-          </div>
-        </div>
-      )}
-
       <div style={{ height: 200 }}></div>
       <Notify
         description={infoNotify.description}

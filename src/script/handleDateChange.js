@@ -563,6 +563,35 @@ const handleDateChange = (date) => {
     iTruc,
   };
 };
+export const ConvertToRangeDayInMonthLunar = (dateArr) => {
+  const rangeDayInMonthLunar = {};
+  dateArr.map((date, index) => {
+    if (
+      Number(dateArr[index - 1]?.yearLunar) !==
+      Number(dateArr[index]?.yearLunar)
+    ) {
+      rangeDayInMonthLunar[date.yearLunar] = {};
+    }
+    if (date.dayLunar === 1) {
+      rangeDayInMonthLunar[date.yearLunar][date.monthLunar] = [date];
+    }
+    if (
+      Number(dateArr[index + 1]?.dayLunar) === 1 ||
+      dateArr.length - 1 === index
+    ) {
+      if (!rangeDayInMonthLunar[date.yearLunar][date.monthLunar]) {
+        rangeDayInMonthLunar[date.yearLunar] = {};
+        rangeDayInMonthLunar[date.yearLunar][date.monthLunar] = [date];
+      }
+      rangeDayInMonthLunar[date.yearLunar][date.monthLunar].push(date);
+    }
+    if (index === 0) {
+      rangeDayInMonthLunar[date.yearLunar] = {};
+      rangeDayInMonthLunar[date.yearLunar][date.monthLunar] = [dateArr[0]];
+    }
+  });
+  return rangeDayInMonthLunar;
+};
 
 export const getCanChi = async (day, month, year) => {
   const lunar = await AmLich(day, month, year);
@@ -1132,7 +1161,7 @@ export const CountStatusTrungTang = (bamCung) => {
 };
 export const CheckCase2TrungTang = (data) => {
   let arrText = [];
-  console.log(data, "bamCung");
+
   // tuoi
   if (data.chiNamSinh === data.bamCungTuoi) {
     countTrungTangCase1++;

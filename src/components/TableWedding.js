@@ -346,6 +346,16 @@ const TableShow = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                           ).includes(valueSelect)
                             ? "red"
                             : "green",
+                          textTransform: Object.keys(
+                            ObjectTruc[date.truc].CanLam
+                          ).includes(valueSelect)
+                            ? "uppercase"
+                            : "capitalize",
+                          fontWeight: Object.keys(
+                            ObjectTruc[date.truc].CanLam
+                          ).includes(valueSelect)
+                            ? "bold"
+                            : "400",
                         }}>
                         {date.truc} /{" "}
                       </span>
@@ -357,6 +367,16 @@ const TableShow = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                           ).includes(valueSelect)
                             ? "red"
                             : "green",
+                          textTransform: Object.keys(
+                            ObjectTruc[date.truc].CanLam
+                          ).includes(valueSelect)
+                            ? "uppercase"
+                            : "capitalize",
+                          fontWeight: Object.keys(
+                            ObjectTruc[date.truc].CanLam
+                          ).includes(valueSelect)
+                            ? "bold"
+                            : "400",
                         }}>
                         {date.tu}
                       </span>

@@ -9,11 +9,12 @@ import {
   MenuItem,
   Select,
   Switch,
-  TextField,
+  TextField
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
 import TableShow from "@Root/components/Table";
+import TableResult from "@Root/components/TableResult";
 import TableShowRecommend from "@Root/components/TableShowRecommend";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
@@ -27,9 +28,7 @@ import {
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
-  NGU_HANH_CAN_CHI_INT,
-  NGU_HANH_EXTENDS,
-  NGU_HANH_INT,
+  NGU_HANH_CAN_CHI_INT, NGU_HANH_INT,
   NGU_HANH_TUONG_SINH,
   ObjectTruc,
   ObjectTu,
@@ -39,7 +38,7 @@ import {
   TAM_NUONG,
   THO_TU,
   TOA_NHA,
-  VANG_VONG,
+  VANG_VONG
 } from "@Root/script/Constant";
 import {
   CheckDaiBai,
@@ -60,8 +59,9 @@ import {
   CheckTuongXungTuongHaiTuoiKhongToa,
   CheckTuongXungTuongHaiTuoiMonth,
   CombineThienCan,
+  ConvertToRangeDayInMonthLunar,
   getCanChi,
-  GetHoangVuTuQuy,
+  GetHoangVuTuQuy
 } from "@Root/script/handleDateChange";
 import dayjs from "dayjs";
 import moment from "moment";
@@ -114,6 +114,7 @@ export default function Home() {
   });
   const [valueSelect, setValueSelect] = useState("");
   const [isMuonTuoi, setIsMuonTuoi] = useState(false);
+  const [rangeDayInMonthLunar, setRangeDayInMonthLunar] = useState();
 
   const [step1, setDataStep1] = useState();
   const [step2, setDataStep2] = useState();
@@ -185,6 +186,8 @@ export default function Home() {
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
 
+    // Convert  RangeDayInMonthLunar
+    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
       if (
@@ -1085,17 +1088,7 @@ export default function Home() {
     });
     setArrRecommend(arrYearRecommend);
   };
-  console.log(
-    NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] +
-      NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] -
-      1,
-    NGU_HANH_INT[
-      (NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] +
-        NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(1949) % 12]] -
-        1) %
-        5
-    ]
-  );
+
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1370,283 +1363,369 @@ export default function Home() {
         </Button>
       </div>
       {/* table show */}
-      <div style={{ marginTop: 30, maxWidth: 800 }}>
-        {infoGiaChu.tuoi.length !== 0 && (
-          <>
-            <div className="text-black mb-2 font-bold text-lg">
-              Gia chủ tên: {infoGiaChu.name}
-              <div>Tuổi: {infoGiaChu.tuoi}</div>{" "}
-            </div>
-
-            {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") &&
-              valueSelect !== "dao-gieng" &&
-              valueSelect !== "lap-gieng" && (
-                <>
-                  {isMuonTuoi && (
-                    <div className="text-black mb-2 font-bold text-lg">
-                      Tuổi Mượn: {infoGiaChuBorrow.tuoi}
-                    </div>
-                  )}
-                  {isMuonTuoi && textTrucXungTuoiMuonAndGiaChu && (
-                    <div className="text-[red] mb-2 font-bold text-base italic">
-                      Gia chủ tuổi {infoGiaChu.tuoi} xung với tuổi mượn{" "}
-                      {infoGiaChuBorrow.tuoi}
-                    </div>
-                  )}
-                </>
-              )}
-
-            {valueSelect === "dong-tho" &&
-              (bonusConditionBuilding.TamTai?.length !== 0 ||
-                bonusConditionBuilding.HoangOc?.length !== 0 ||
-                bonusConditionBuilding.KimLau?.length !== 0) &&
-              valueSelect !== "dao-gieng" &&
-              valueSelect !== "lap-gieng" && (
-                <div className=" mb-2 font-bold text-sm text-red-500 italic">
-                  <div>
-                    {bonusConditionBuilding.HoangOc?.length !== 0
-                      ? "Hoang Ốc vào năm " +
-                        bonusConditionBuilding.HoangOc?.map((item, idx) => {
-                          return (
-                            bonusConditionBuilding.HoangOc[idx].toString() +
-                            " " +
-                            "(" +
-                            bonusConditionBuilding.descriptionHoangOc[
-                              idx
-                            ].toString() +
-                            (HOANG_OC.indexOf(
-                              bonusConditionBuilding.descriptionHoangOc[
-                                idx
-                              ].toString()
-                            ) === 1 ||
-                            HOANG_OC.indexOf(
-                              bonusConditionBuilding.descriptionHoangOc[
-                                idx
-                              ].toString()
-                            ) === 0 ||
-                            HOANG_OC.indexOf(
-                              bonusConditionBuilding.descriptionHoangOc[
-                                idx
-                              ].toString()
-                            ) === 3
-                              ? " Tốt"
-                              : " Xấu") +
-                            ") "
-                          );
-                        })
-                      : ""}
-                  </div>
-                  <div className="mt-5">
-                    *{isMuonTuoi ? "Người mượn tuổi " : "Gia chủ "}
-                    Phạm:{" "}
-                  </div>
-                  {bonusConditionBuilding.TamTai?.length !== 0
-                    ? "Tam Tai vào năm " +
-                      bonusConditionBuilding.TamTai?.toString().replaceAll(
-                        ",",
-                        ", "
-                      )
-                    : ""}
-                  <div>
-                    {bonusConditionBuilding.KimLau?.length !== 0
-                      ? "Kim Lâu vào năm " +
-                        bonusConditionBuilding.KimLau?.toString().replaceAll(
-                          ",",
-                          ", "
-                        )
-                      : ""}
-                  </div>
-                  {(bonusConditionBuilding.KimLau?.length !== 0 ||
-                    bonusConditionBuilding.TamTai?.length !== 0 ||
-                    bonusConditionBuilding.hoangOcShow?.length !== 0) && (
-                    <div style={{ marginTop: 10, color: "green" }}>
-                      <div style={{ fontSize: 18 }}>
-                        Có thể mượn tuổi vào các năm{" "}
-                      </div>
-                      <TableShowRecommend
-                        data={arrRecommend}
-                        bonusConditionBuilding={bonusConditionBuilding}
-                      />
-                    </div>
-                  )}
+      {typeof window !== "undefined" && (
+        <>
+          {/* Thien */}
+          <div
+            className="text-black"
+            style={{
+              width: window.innerWidth * 0.9,
+            }}>
+            {rangeDayInMonthLunar &&
+              Object.keys(rangeDayInMonthLunar).map((year) => {
+                return (
+                  <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
+                    Năm {year}:{" "}
+                    {Object.keys(rangeDayInMonthLunar[year]).map((month) => {
+                      return (
+                        <li style={{ fontWeight: 400 }}>
+                          - Tháng {month} (
+                          {rangeDayInMonthLunar[year][month][0].thangCan}{" "}
+                          {rangeDayInMonthLunar[year][month][0].thangChi}): từ{" "}
+                          {rangeDayInMonthLunar[year][month][0].daySolar}/
+                          {rangeDayInMonthLunar[year][month][0].monthSolar}/
+                          {rangeDayInMonthLunar[year][month][0].yearSolar} đến
+                          ngày {rangeDayInMonthLunar[year][month][1].daySolar}/
+                          {rangeDayInMonthLunar[year][month][1].monthSolar}/
+                          {rangeDayInMonthLunar[year][month][1].yearSolar}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                );
+              })}
+          </div>
+          {/* Nhan */}
+          <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>
+            {infoGiaChu.tuoi.length !== 0 && (
+              <>
+                <div className="text-black mb-2 font-bold text-lg">
+                  Gia chủ tên: {infoGiaChu.name}
+                  <div>Tuổi: {infoGiaChu.tuoi}</div>{" "}
                 </div>
-              )}
+
+                {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") &&
+                  valueSelect !== "dao-gieng" &&
+                  valueSelect !== "lap-gieng" && (
+                    <>
+                      {isMuonTuoi && (
+                        <div className="text-black mb-2 font-bold text-lg">
+                          Tuổi Mượn: {infoGiaChuBorrow.tuoi}
+                        </div>
+                      )}
+                      {isMuonTuoi && textTrucXungTuoiMuonAndGiaChu && (
+                        <div className="text-[red] mb-2 font-bold text-base italic">
+                          Gia chủ tuổi {infoGiaChu.tuoi} xung với tuổi mượn{" "}
+                          {infoGiaChuBorrow.tuoi}
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                {valueSelect === "dong-tho" &&
+                  (bonusConditionBuilding.TamTai?.length !== 0 ||
+                    bonusConditionBuilding.HoangOc?.length !== 0 ||
+                    bonusConditionBuilding.KimLau?.length !== 0) &&
+                  valueSelect !== "dao-gieng" &&
+                  valueSelect !== "lap-gieng" && (
+                    <div className=" mb-2 font-bold text-sm text-red-500 italic">
+                      <div>
+                        {bonusConditionBuilding.HoangOc?.length !== 0
+                          ? "Hoang Ốc vào năm " +
+                            bonusConditionBuilding.HoangOc?.map((item, idx) => {
+                              return (
+                                bonusConditionBuilding.HoangOc[idx].toString() +
+                                " " +
+                                "(" +
+                                bonusConditionBuilding.descriptionHoangOc[
+                                  idx
+                                ].toString() +
+                                (HOANG_OC.indexOf(
+                                  bonusConditionBuilding.descriptionHoangOc[
+                                    idx
+                                  ].toString()
+                                ) === 1 ||
+                                HOANG_OC.indexOf(
+                                  bonusConditionBuilding.descriptionHoangOc[
+                                    idx
+                                  ].toString()
+                                ) === 0 ||
+                                HOANG_OC.indexOf(
+                                  bonusConditionBuilding.descriptionHoangOc[
+                                    idx
+                                  ].toString()
+                                ) === 3
+                                  ? " Tốt"
+                                  : " Xấu") +
+                                ") "
+                              );
+                            })
+                          : ""}
+                      </div>
+                      <div className="mt-5">
+                        *{isMuonTuoi ? "Người mượn tuổi " : "Gia chủ "}
+                        Phạm:{" "}
+                      </div>
+                      {bonusConditionBuilding.TamTai?.length !== 0
+                        ? "Tam Tai vào năm " +
+                          bonusConditionBuilding.TamTai?.toString().replaceAll(
+                            ",",
+                            ", "
+                          )
+                        : ""}
+                      <div>
+                        {bonusConditionBuilding.KimLau?.length !== 0
+                          ? "Kim Lâu vào năm " +
+                            bonusConditionBuilding.KimLau?.toString().replaceAll(
+                              ",",
+                              ", "
+                            )
+                          : ""}
+                      </div>
+                      {(bonusConditionBuilding.KimLau?.length !== 0 ||
+                        bonusConditionBuilding.TamTai?.length !== 0 ||
+                        bonusConditionBuilding.hoangOcShow?.length !== 0) && (
+                        <div style={{ marginTop: 10, color: "green" }}>
+                          <div style={{ fontSize: 18 }}>
+                            Có thể mượn tuổi vào các năm{" "}
+                          </div>
+                          <TableShowRecommend
+                            data={arrRecommend}
+                            bonusConditionBuilding={bonusConditionBuilding}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                <div
+                  className="text-black mb-2 font-bold text-lg"
+                  style={{
+                    color: COLOR_TEXT_NGU_HANH[NGU_HANH[valueText]],
+                  }}>
+                  Toạ nhà: {valueText} ({NGU_HANH[valueText]})
+                </div>
+                <div className="text-black mb-2 font-bold text-lg">
+                  Hành ngày chọn:{" "}
+                  {NGU_HANH_TUONG_SINH[NGU_HANH[valueText]]
+                    ?.toString()
+                    .replaceAll(",", " > ")}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Show ket qua */}
+          {step7 && (
+            <>
+              <div className="text-[24px] font-bold mb-4 text-black">
+                {" "}
+                Tổng cộng có {step7?.length} kết quả{" "}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black ">
+                {step7?.map((item, index) => {
+                  return (
+                    <>
+                      <div
+                        className="font-bold text-[20px]"
+                        style={{
+                          color: "black",
+                          marginBottom: 10,
+                          marginTop: 20,
+                        }}>
+                        Kết quả {index + 1}
+                      </div>
+                      <div className="max-h-[500px] overflow-scroll">
+                        <TableResult
+                          data={item}
+                          infoGiaChu={infoGiaChu}
+                          valueSelect={valueSelect}></TableResult>
+                      </div>
+                    </>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {/* Show table */}
+          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
+            <div className="">
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Sau bước 1 {"(Tránh ngày, tháng xung toạ)"}
+                {step1 && `(${step1?.length})`}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableShow
+                  data={step1}
+                  infoGiaChu={infoGiaChu}
+                  valueSelect={valueSelect}></TableShow>
+              </div>
+            </div>
+          )}
+          <div>
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              Sau bước{" "}
+              {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
+                ? "2"
+                : "1"}
+              {"(Tránh bách kỵ)"}
+              {step2 && `(${step2?.length})`}
+            </div>
+            <div
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2 ">
+              <TableShow
+                valueSelect={valueSelect}
+                data={step2}
+                infoGiaChu={infoGiaChu}></TableShow>
+            </div>
+          </div>
+          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Kiểm tra thêm hợp hoá ngày/tháng {step6 && `(${step6?.length})`}
+              </div>
+
+              <div
+                className="max-h-[500px] overflow-scroll
+              px-10 border-2 border-black mt-2">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={step6}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
+            </div>
+          )}
+          {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Kiểm tra những ngày không nên {SERVICE_XAYDUNG[valueSelect]}{" "}
+                {step8 && `(${step8?.length})`}
+              </div>
+
+              <div
+                className="max-h-[500px] overflow-scroll
+              px-10 border-2 border-black mt-2">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={step8}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
+            </div>
+          )}
+          <div>
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              Sau bước{" "}
+              {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
+                ? "3"
+                : "2"}{" "}
+              {"(So với tuổi gia chủ)"} {step3 && `(${step3?.length})`}
+            </div>
 
             <div
-              className="text-black mb-2 font-bold text-lg"
-              style={{
-                color: COLOR_TEXT_NGU_HANH[NGU_HANH[valueText]],
-              }}>
-              Toạ nhà: {valueText} ({NGU_HANH[valueText]})
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2">
+              <TableShow
+                valueSelect={valueSelect}
+                data={step3}
+                infoGiaChu={infoGiaChu}></TableShow>
             </div>
-            <div className="text-black mb-2 font-bold text-lg">
-              Hành ngày chọn:{" "}
-              {NGU_HANH_TUONG_SINH[NGU_HANH[valueText]]
-                ?.toString()
-                .replaceAll(",", " > ")}
+          </div>
+          <div>
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              Sau bước{" "}
+              {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
+                ? "4"
+                : "3"}{" "}
+              {"Kiểm tra Trực/Tú"}
+              {step4 && `(${step4?.length})`}
             </div>
-          </>
-        )}
-      </div>
-      {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
-        <div className="">
-          <div
-            className="font-bold text-[20px]"
-            style={{ color: "black", marginTop: 30 }}>
-            Sau bước 1 {"(Tránh ngày, tháng xung toạ)"}
-            {step1 && `(${step1?.length})`}
+
+            <div
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2">
+              <TableShow
+                valueSelect={valueSelect}
+                data={step4}
+                infoGiaChu={infoGiaChu}></TableShow>
+            </div>
           </div>
-          <div className="max-h-[500px] overflow-scroll">
-            <TableShow
-              data={step1}
-              infoGiaChu={infoGiaChu}
-              valueSelect={valueSelect}></TableShow>
+          <div>
+            <div
+              className="font-bold text-[20px]"
+              style={{ color: "black", marginTop: 30 }}>
+              Sau bước{" "}
+              {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
+                ? "5"
+                : "4"}{" "}
+              {"Chọn giờ"}
+            </div>
+
+            <div
+              className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2">
+              <TableShow
+                valueSelect={valueSelect}
+                data={step5}
+                infoGiaChu={infoGiaChu}></TableShow>
+            </div>
           </div>
-        </div>
+          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Kiểm tra thêm hợp hoá ngày/giờ {step7 && `(${step7?.length})`}
+              </div>
+
+              <div
+                className="max-h-[500px] overflow-scroll
+              px-10 border-2 border-black mt-2">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={step7}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
+            </div>
+          )}
+          {valueSelect === "dong-tho" && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Sau bước 5 khi chọn việc động thổ{" "}
+                {"(Tránh Kim Lâu, Hoang Ốc, Tam Tai)"}
+              </div>
+
+              <div
+                className="max-h-[500px] overflow-scroll
+              px-10 border-2 border-black mt-2">
+                <TableShow valueSelect={valueSelect} data={step5}></TableShow>
+              </div>
+            </div>
+          )}
+
+          <div style={{ height: 200 }}></div>
+          <Notify
+            description={infoNotify.description}
+            type={infoNotify.type}
+            ref={refNotify}
+          />
+        </>
       )}
-      <div>
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          Sau bước{" "}
-          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-            ? "2"
-            : "1"}
-          {"(Tránh bách kỵ)"}
-          {step2 && `(${step2?.length})`}
-        </div>
-        <div className="max-h-[500px] overflow-scroll">
-          <TableShow
-            valueSelect={valueSelect}
-            data={step2}
-            infoGiaChu={infoGiaChu}></TableShow>
-        </div>
-      </div>
-      {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
-        <div>
-          <div
-            className="font-bold text-[20px]"
-            style={{ color: "black", marginTop: 30 }}>
-            Kiểm tra thêm hợp hoá ngày/tháng {step6 && `(${step6?.length})`}
-          </div>
-
-          <div className="max-h-[500px] overflow-scroll">
-            <TableShow
-              valueSelect={valueSelect}
-              data={step6}
-              infoGiaChu={infoGiaChu}></TableShow>
-          </div>
-        </div>
-      )}
-      {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") && (
-        <div>
-          <div
-            className="font-bold text-[20px]"
-            style={{ color: "black", marginTop: 30 }}>
-            Kiểm tra những ngày không nên {SERVICE_XAYDUNG[valueSelect]}{" "}
-            {step8 && `(${step8?.length})`}
-          </div>
-
-          <div className="max-h-[500px] overflow-scroll">
-            <TableShow
-              valueSelect={valueSelect}
-              data={step8}
-              infoGiaChu={infoGiaChu}></TableShow>
-          </div>
-        </div>
-      )}
-      <div>
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          Sau bước{" "}
-          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-            ? "3"
-            : "2"}{" "}
-          {"(So với tuổi gia chủ)"} {step3 && `(${step3?.length})`}
-        </div>
-
-        <div className="max-h-[500px] overflow-scroll">
-          <TableShow
-            valueSelect={valueSelect}
-            data={step3}
-            infoGiaChu={infoGiaChu}></TableShow>
-        </div>
-      </div>
-      <div>
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          Sau bước{" "}
-          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-            ? "4"
-            : "3"}{" "}
-          {"Kiểm tra Trực/Tú"}
-          {step4 && `(${step4?.length})`}
-        </div>
-
-        <div className="max-h-[500px] overflow-scroll">
-          <TableShow
-            valueSelect={valueSelect}
-            data={step4}
-            infoGiaChu={infoGiaChu}></TableShow>
-        </div>
-      </div>
-      <div>
-        <div
-          className="font-bold text-[20px]"
-          style={{ color: "black", marginTop: 30 }}>
-          Sau bước{" "}
-          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-            ? "5"
-            : "4"}{" "}
-          {"Chọn giờ"}
-        </div>
-
-        <div className="max-h-[500px] overflow-scroll">
-          <TableShow
-            valueSelect={valueSelect}
-            data={step5}
-            infoGiaChu={infoGiaChu}></TableShow>
-        </div>
-      </div>
-      {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
-        <div>
-          <div
-            className="font-bold text-[20px]"
-            style={{ color: "black", marginTop: 30 }}>
-            Kiểm tra thêm hợp hoá ngày/giờ {step7 && `(${step7?.length})`}
-          </div>
-
-          <div className="max-h-[500px] overflow-scroll">
-            <TableShow
-              valueSelect={valueSelect}
-              data={step7}
-              infoGiaChu={infoGiaChu}></TableShow>
-          </div>
-        </div>
-      )}
-      {valueSelect === "dong-tho" && (
-        <div>
-          <div
-            className="font-bold text-[20px]"
-            style={{ color: "black", marginTop: 30 }}>
-            Sau bước 5 khi chọn việc động thổ{" "}
-            {"(Tránh Kim Lâu, Hoang Ốc, Tam Tai)"}
-          </div>
-
-          <div className="max-h-[500px] overflow-scroll">
-            <TableShow valueSelect={valueSelect} data={step5}></TableShow>
-          </div>
-        </div>
-      )}
-
-      <div style={{ height: 200 }}></div>
-      <Notify
-        description={infoNotify.description}
-        type={infoNotify.type}
-        ref={refNotify}
-      />
     </div>
   );
 }
