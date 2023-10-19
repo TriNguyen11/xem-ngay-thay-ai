@@ -1038,7 +1038,8 @@ export default function Home() {
             {case2 && (
               <div className="text-black text-[20px] my-4">
                 <div className="font-bold">Trường hợp 2: </div>
-                {case2.toString()}
+
+                {case2.length !== 0 ? case2.toString() : "Không phạm"}
               </div>
             )}
             {case3 && (

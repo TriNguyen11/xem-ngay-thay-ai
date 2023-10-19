@@ -623,7 +623,7 @@ export default function Home() {
                 setInfoGiaChu({ ...infoGiaChu, name: e.target.value });
               }}
             />
-            <FormControl fullWidth style={{ marginLeft: 20, width: 200 }}>
+            {/* <FormControl fullWidth style={{ marginLeft: 20, width: 200 }}>
               <InputLabel id="demo-simple-select-label">Giới tính</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -640,7 +640,7 @@ export default function Home() {
                   );
                 })}
               </Select>
-            </FormControl>
+            </FormControl> */}
           </div>
           <div className="flex flex-row justify-center mt-10 mb-8 flex-wrap">
             <FormControl fullWidth style={{ marginLeft: 20, width: 200 }}>
@@ -711,7 +711,7 @@ export default function Home() {
               }}
             />
           </div>
-          <div>THỜI GIAN MẤT</div>
+          {/* <div>THỜI GIAN MẤT</div>
 
           <div className="flex flex-row justify-center mt-3 flex-wrap">
             <TextField
@@ -763,7 +763,7 @@ export default function Home() {
                 setValueAge({ ...valueAge, dead_time: e });
               }}
             />
-          </div>
+          </div> */}
           {/* Chon ngay xem tang su */}
           {valueSelect !== "tinh-trung-tang" && (
             <div className="flex flex-col w-full mt-5">
@@ -879,7 +879,7 @@ export default function Home() {
                     {CAN_NAM[infoNguoiMat.namSinh % 10]}{" "}
                     {CHI_NAM[infoNguoiMat.namSinh % 12]}
                   </div>{" "}
-                  <div
+                  {/* <div
                     style={{
                       color: TRUNG_TANG.includes(infoNguoiMat.bamCungTuoi)
                         ? "red"
@@ -967,7 +967,7 @@ export default function Home() {
                       ? "Nhập mộ"
                       : "Thiên di"}
                     )
-                  </div>{" "}
+                  </div>{" "} */}
                 </div>
               </>
             )}

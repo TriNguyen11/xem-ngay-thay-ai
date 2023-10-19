@@ -2573,11 +2573,9 @@ export const SERVICE_TANGSU = {
 export const SERVICE_SANGCAT = {
   "dong-tho-xay-ho": "Động thổ xây hố",
   "dao-mo-cu-mo-lap-van": "Đào mộ cũ - Mở lắp ván",
-  "kham-liem": "Khâm liệm",
   "ha-tieu": "Hạ tiểu",
   "dung-bia": "Dựng bia",
   "ta-mo": "Tạ mộ",
-  "ta-dat": "Tạ mộ",
 };
 
 export const MONTHS = [
