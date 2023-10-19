@@ -2636,6 +2636,8 @@ export const PHU_CHU = {
   Dậu: [3, 9],
   Tý: [4, 10],
   Ngọ: [4, 10],
+  Tỵ: [5, 11],
+  Hợi: [5, 11],
   Dần: [6, 12],
   Thân: [6, 12],
 };
@@ -2647,6 +2649,8 @@ export const THE_CHU = {
   Dậu: [2, 8],
   Thìn: [3, 9],
   Tuất: [3, 9],
+  Tỵ: [4, 10],
+  Hợi: [4, 10],
   Tý: [5, 11],
   Ngọ: [5, 11],
   Sửu: [6, 12],
@@ -2657,6 +2661,8 @@ export const DAI_LOI = {
   Dậu: [1, 7],
   Dần: [2, 8],
   Thân: [2, 8],
+  Tỵ: [3, 9],
+  Hợi: [3, 9],
   Thìn: [4, 10],
   Tuất: [4, 10],
   Sửu: [5, 11],
@@ -2667,6 +2673,8 @@ export const DAI_LOI = {
 export const TIEU_LOI = {
   Tý: [1, 7],
   Ngọ: [1, 7],
+  Tỵ: [2, 8],
+  Hợi: [2, 8],
   Dần: [3, 9],
   Thân: [3, 9],
   Sửu: [4, 10],
@@ -2678,6 +2686,8 @@ export const TIEU_LOI = {
 };
 // Công cô: Kỵ với cha mẹ bên chồng.
 export const CONG_CO = {
+  Tỵ: [1, 7],
+  Hợi: [1, 7],
   Tý: [2, 8],
   Ngọ: [2, 8],
   Sửu: [3, 9],
@@ -2701,6 +2711,8 @@ export const NHAC_THAN = {
   Dậu: [4, 10],
   Dần: [5, 11],
   Thân: [5, 11],
+  Tỵ: [6, 12],
+  Hợi: [6, 12],
 };
 // Hồng xa kỵ nhật: (Ảnh hưởng tới người nữ)
 export const HONG_XA_KY_NHAT = [

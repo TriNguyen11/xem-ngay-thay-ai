@@ -74,6 +74,7 @@ export default function Home() {
   const [valueSelect, setValueSelect] = useState("");
   const [isMuonTuoi, setIsMuonTuoi] = useState(false);
 
+  const [step1, setDataStep1] = useState();
   const [step2, setDataStep2] = useState();
   const [step3, setDataStep3] = useState();
   const [step4, setDataStep4] = useState();
@@ -138,8 +139,10 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
+    setDataStep1(dateArr);
 
     // Tranh Bach ky
+
     dateArr.map((item, index) => {
       if (
         item.dayLunar !== 1 &&
@@ -479,8 +482,22 @@ export default function Home() {
         <div
           className="font-bold text-[20px]"
           style={{ color: "black", marginTop: 30 }}>
-          Sau bước 2 {"(Tránh bách kỵ)"}
-          {step2 && `(${step2?.length})`}
+          Bước 1: Chọn ngày {"(Tránh bách kỵ)"}
+          {step1 && ` (${step1?.length})`}
+        </div>
+        <div className="max-h-[500px] overflow-scroll">
+          <TableShow
+            valueSelect={valueSelect}
+            data={step1}
+            infoGiaChu={infoGiaChu}></TableShow>
+        </div>
+      </div>
+      <div>
+        <div
+          className="font-bold text-[20px]"
+          style={{ color: "black", marginTop: 30 }}>
+          Sau bước 1 {"(Tránh bách kỵ)"}
+          {step2 && ` (${step2?.length})`}
         </div>
         <div className="max-h-[500px] overflow-scroll">
           <TableShow
@@ -494,7 +511,7 @@ export default function Home() {
         <div
           className="font-bold text-[20px]"
           style={{ color: "black", marginTop: 30 }}>
-          Sau bước 3 {"(So với tuổi gia chủ)"} {step3 && `(${step3?.length})`}
+          Bước 2: {"So với tuổi gia chủ"} {step3 && `(${step3?.length})`}
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
@@ -508,8 +525,8 @@ export default function Home() {
         <div
           className="font-bold text-[20px]"
           style={{ color: "black", marginTop: 30 }}>
-          Sau bước 4 {"Kiểm tra Trực/Tú"}
-          {step4 && `(${step4?.length})`}
+          Bước 3: {"Kiểm tra Trực/Tú"}
+          {step4 && ` (${step4?.length})`}
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
@@ -523,7 +540,8 @@ export default function Home() {
         <div
           className="font-bold text-[20px]"
           style={{ color: "black", marginTop: 30 }}>
-          Sau bước 5 {"Chọn giờ"}
+          Bước 4: {"Chọn giờ"}
+          {step5 && ` (${step5?.length})`}
         </div>
 
         <div className="max-h-[500px] overflow-scroll">
