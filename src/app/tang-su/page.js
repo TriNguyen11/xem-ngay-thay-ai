@@ -529,6 +529,7 @@ export default function Home() {
           <div className="flex flex-row justify-center mt-3 flex-wrap">
             <TextField
               type={"number"}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
               id="standard-basic"
               label="Ngày"
               placeholder="Ngày"
