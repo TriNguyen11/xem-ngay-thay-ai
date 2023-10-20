@@ -650,21 +650,24 @@ export default function Home() {
       tuoi: tuoiCanMuon + " " + tuoiChiMuon,
       tuoiTuoiMuon: tuoiMuon,
     });
+    // setTextTrucXungTuoiMuonAndGiaChu(
+    //   CheckTrucXungTuoiMuon(
+    //     `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
+    //     `${tuoiCanMuon} ${tuoiChiMuon}`
+    //   )
+    // );
     setTextTrucXungTuoiMuonAndGiaChu(
-      CheckTrucXungTuoiMuon(
-        `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
-        `${tuoiCanMuon} ${tuoiChiMuon}`
-      )
+      CheckTrucXungNgayThangNam(tuoiChiGiaChu, tuoiChiMuon)
     );
-    console.log(
-      CheckTrucXungTuoiMuon(
-        `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
-        `${tuoiCanMuon} ${tuoiChiMuon}`
-      ),
-      `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
-      `${tuoiCanMuon} ${tuoiChiMuon}`,
-      "2323"
-    );
+    // console.log(
+    //   CheckTrucXungTuoiMuon(
+    //     `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
+    //     `${tuoiCanMuon} ${tuoiChiMuon}`
+    //   ),
+    //   `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
+    //   `${tuoiCanMuon} ${tuoiChiMuon}`,
+    //   "2323"
+    // );
     setLoading(true);
     let dateArr = await enumerateDaysBetweenDates(
       `${moment(dateStart.$d).year()}-${
