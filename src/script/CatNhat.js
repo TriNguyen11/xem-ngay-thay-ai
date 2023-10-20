@@ -11,9 +11,9 @@
 // Lập xuân tiết đáo kinh trập tiết giá nhất đoạn thời gian nội.
 //
 
-import {canVi, DiaChi, ThienCan, TRUC12, TueCanVi} from './AmLich';
-import {chi3Hop, chiHop} from './CanChi';
-import {CAN, CHI} from './Constant';
+import { canVi, DiaChi, ThienCan, TRUC12, TueCanVi } from "./AmLich";
+import { chi3Hop, chiHop } from "./CanChi";
+import { CAN, CHI } from "./Constant";
 
 export function lucHopChi(nn) {
   var chi = DiaChi(nn);
@@ -1236,7 +1236,7 @@ export function catKyNhat(t, truc, nn) {
   var chi = DiaChi(nn);
   var k = 0;
 
-  if ('Trừ' == TRUC12[truc] && chi == tru) k = 1;
+  if ("Trừ" == TRUC12[truc] && chi == tru) k = 1;
 
   return k;
 }
@@ -1253,7 +1253,7 @@ export function phucDuc(t, truc, nn) {
   var chi = DiaChi(nn);
   var k = 0;
 
-  if ('Mãn' == TRUC12[truc] && chi == man) k = 1;
+  if ("Mãn" == TRUC12[truc] && chi == man) k = 1;
 
   return k;
 }
@@ -1269,7 +1269,7 @@ export function thoiAm(t, truc, nn) {
   var chi = DiaChi(nn);
   var k = 0;
 
-  if ('Định' == TRUC12[truc] && chi == dinh) k = 1;
+  if ("Định" == TRUC12[truc] && chi == dinh) k = 1;
 
   return k;
 }
@@ -1283,7 +1283,7 @@ export function chiDuc(t, truc, nn) {
   var chi = DiaChi(nn);
   var k = 0;
 
-  if ('Chấp' == TRUC12[truc] && chi == chap) k = 1;
+  if ("Chấp" == TRUC12[truc] && chi == chap) k = 1;
 
   return k;
 }
@@ -1299,7 +1299,7 @@ export function thienY(t, truc, nn) {
   var chi = DiaChi(nn);
   var k = 0;
 
-  if ('Thành' == TRUC12[truc] && chi == thanh) k = 1;
+  if ("Thành" == TRUC12[truc] && chi == thanh) k = 1;
 
   return k;
 }
@@ -1313,7 +1313,7 @@ export function thoiDuong(t, truc, nn) {
   var chi = DiaChi(nn);
   var k = 0;
 
-  if ('Khai' == TRUC12[truc] && chi == khai) k = 1;
+  if ("Khai" == TRUC12[truc] && chi == khai) k = 1;
 
   return k;
 }

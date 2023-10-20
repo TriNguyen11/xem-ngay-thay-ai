@@ -1,4 +1,4 @@
-import {NGAYHOANGDAO_NGAYHACDAO} from './Constant';
+import { NGAYHOANGDAO_NGAYHACDAO } from "./Constant";
 
 const getSunLongitude = (jdn, timeZone) => {
   var T, T2, dr, M, L0, DL, L;
@@ -149,7 +149,7 @@ const convertSolar2Lunar = (dd, mm, yy, timeZone) => {
   if (lunarMonth >= 11 && diff < 4) {
     lunarYear -= 1;
   }
-  return {lunarDay, lunarMonth, lunarYear};
+  return { lunarDay, lunarMonth, lunarYear };
 };
 export const Gregorian2JD = (d, m, y) => {
   return (

@@ -6414,7 +6414,7 @@ export function thuCatThan(thisday, truc) {
   // yearLunar: year,
   // daysTotalInLunar: dd,
 
-  var cat = []
+  var cat = [];
   if (thisday) {
     var Tiet = layTiet(thisday.yearSolar, thisday.monthSolar, thisday.daySolar);
     var THau = tietHau(thisday.yearSolar, thisday.monthSolar, thisday.daySolar);
