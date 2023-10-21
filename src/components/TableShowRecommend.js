@@ -37,7 +37,16 @@ import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
-const TableShowRecommend = ({ data, bonusConditionBuilding }) => {
+const TableShowRecommend = ({ data, bonusConditionBuilding, infoGiaChu }) => {
+  console.log(
+    infoGiaChu,
+    CheckTrucXungNgayThangNam(
+      CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
+      CHI_NAM[Number(2023) % 12]
+    ),
+    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12] === CHI_NAM[Number(2023) % 12],
+    "check"
+  );
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -79,7 +88,13 @@ const TableShowRecommend = ({ data, bonusConditionBuilding }) => {
                 if (
                   bonusConditionBuilding.TamTai.includes(Number(year)) ||
                   bonusConditionBuilding.KimLau.includes(Number(year)) ||
-                  bonusConditionBuilding.hoangOcShow.includes(Number(year))
+                  bonusConditionBuilding.hoangOcShow.includes(Number(year)) ||
+                  CheckTrucXungNgayThangNam(
+                    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
+                    CHI_NAM[Number(year) % 12]
+                  ) ||
+                  CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12] ===
+                    CHI_NAM[Number(year) % 12]
                 )
                   return (
                     <TableRow

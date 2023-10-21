@@ -1109,7 +1109,12 @@ export default function Home() {
         if (
           !CheckTamTai(CHI_NAM[Number(i) % 12], CHI_NAM[Number(year) % 12]) &&
           CheckHoangOcRecommend(Number(year) - Number(i) + 1).length === 0 &&
-          CheckKimLau(year, Number(i)).length === 0
+          CheckKimLau(year, Number(i)).length === 0 &&
+          !CheckTrucXungNgayThangNam(
+            CHI_NAM[Number(i) % 12],
+            CHI_NAM[Number(year) % 12]
+          ) &&
+          CHI_NAM[Number(i) % 12] !== CHI_NAM[Number(year) % 12]
         ) {
           arrYear.push(
             `${i} (${CAN_NAM[Number(i) % 10]} ${CHI_NAM[Number(i) % 12]}) (${
@@ -1148,14 +1153,14 @@ export default function Home() {
         }}>
         Xem ngày Xây dựng
       </div>
-      <Button
+      {/* <Button
         variant="contained"
         style={{ backgroundColr: "green" }}
         onClick={() => {
           handleInit();
         }}>
         asdsa
-      </Button>
+      </Button> */}
       <div>
         <FormControl fullWidth style={{ marginBottom: 20 }}>
           <InputLabel id="demo-simple-select-label">
@@ -1559,6 +1564,7 @@ export default function Home() {
                           <TableShowRecommend
                             data={arrRecommend}
                             bonusConditionBuilding={bonusConditionBuilding}
+                            infoGiaChu={infoGiaChu}
                           />
                         </div>
                       )}

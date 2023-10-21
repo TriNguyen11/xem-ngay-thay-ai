@@ -43,6 +43,7 @@ const TableNamKimLauHoangOcTamTai = ({
   lunarYearArr,
   bonusConditionBuilding,
 }) => {
+  console.log(infoGiaChu, "infoGiaChu");
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -84,6 +85,20 @@ const TableNamKimLauHoangOcTamTai = ({
                   }}>
                   Tam tai
                 </TableCell>
+                <TableCell
+                  style={{
+                    textAlign: "center",
+                    minWidth: 120,
+                  }}>
+                  Thái Tuế
+                </TableCell>
+                <TableCell
+                  style={{
+                    textAlign: "center",
+                    minWidth: 120,
+                  }}>
+                  Xung Thái Tuế
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -92,6 +107,13 @@ const TableNamKimLauHoangOcTamTai = ({
                   bonusConditionBuilding?.hoangOcShow.includes(year);
                 let TamTai = bonusConditionBuilding?.TamTai.includes(year);
                 let KimLau = bonusConditionBuilding?.KimLau.includes(year);
+                let XungThaiTue = CheckTrucXungNgayThangNam(
+                  CHI_NAM[Number(infoGiaChu.tuoiGiaChu) % 12],
+                  CHI_NAM[Number(year) % 12]
+                );
+                let ThaiTue =
+                  CHI_NAM[Number(infoGiaChu.tuoiGiaChu) % 12] ===
+                  CHI_NAM[Number(year) % 12];
                 return (
                   <TableRow
                     style={{
@@ -121,6 +143,18 @@ const TableNamKimLauHoangOcTamTai = ({
                         textAlign: "center",
                       }}>
                       {TamTai ? "Phạm Tam Tai" : ""}
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                      }}>
+                      {ThaiTue ? "Phạm" : ""}
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                      }}>
+                      {XungThaiTue ? "Phạm" : ""}
                     </TableCell>
                   </TableRow>
                 );
