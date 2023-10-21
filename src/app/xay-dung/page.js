@@ -291,7 +291,6 @@ export default function Home() {
       tuoiGiaChu: tuoiGiaChu,
     });
     // Convert  RangeDayInMonthLunar
-    setDataStep1(arrPerfectDateStep1);
     setDataStep2(arrPerfectDateStep2);
     setDataStep6(arrPerfectDateStep6);
     setDataStep3(arrPerfectDateStep3);
@@ -302,6 +301,8 @@ export default function Home() {
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
     setDataStep7(arrPerfectDateStep7);
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
+
+    setDataStep1(arrPerfectDateStep1);
 
     setLoading(false);
   };
@@ -1595,20 +1596,11 @@ export default function Home() {
                 {" "}
                 Tổng cộng có {step7?.length} kết quả{" "}
               </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black ">
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6">
                 {step7?.map((item, index) => {
                   return (
                     <>
-                      <div
-                        className="font-bold text-[20px]"
-                        style={{
-                          color: "black",
-                          marginBottom: 10,
-                          marginTop: 20,
-                        }}>
-                        Kết quả {index + 1}
-                      </div>
-                      <div className="max-h-[500px] overflow-scroll">
+                      <div className="max-h-[500px] overflow-scroll ">
                         <TableResult
                           data={item}
                           infoGiaChu={infoGiaChu}

@@ -526,15 +526,6 @@ export default function Home() {
                 {step5?.map((item, index) => {
                   return (
                     <>
-                      <div
-                        className="font-bold text-[20px]"
-                        style={{
-                          color: "black",
-                          marginBottom: 10,
-                          marginTop: 20,
-                        }}>
-                        Kết quả {index + 1}
-                      </div>
                       <div className="max-h-[500px] overflow-scroll">
                         <TableResult
                           data={item}

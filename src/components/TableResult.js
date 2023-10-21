@@ -1,4 +1,11 @@
-import { Box, Table, TableCell, TableHead, TableRow } from "@mui/material";
+import {
+  Box,
+  Collapse,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import {
   CAN_NAM,
   CHI,
@@ -10,200 +17,316 @@ import {
   ObjectTruc,
   ObjectTu,
 } from "@Root/script/Constant";
-import { CheckNhiHop, CheckTamHop } from "@Root/script/handleDateChange";
-import { memo } from "react";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import StarIcon from "@mui/icons-material/Star";
+import {
+  CheckArrNhiHop,
+  CheckArrTamHop,
+  CheckNhiHop,
+  CheckTamHop,
+} from "@Root/script/handleDateChange";
+import { memo, useState } from "react";
+import { DefineHacDaoHoangDao } from "@Root/script/calculatorCalender";
+import { chiVi, DiaChi } from "@Root/script/AmLich";
 
-const TableResult = ({ data, infoGiaChu, valueSelect }) => {
+const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
+  const [checked, setChecked] = useState(false);
+  console.log("213123");
+  console.log(
+    data,
+    DefineHacDaoHoangDao(
+      data.monthLunar,
+      CHI[chiVi(DiaChi(data.daysTotalInLunar))]
+    ),
+    "check hoang dao"
+  );
   return (
-    <Box sx={{ overflow: "auto" }}>
-      {typeof window !== "undefined" && (
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: window.innerWidth * 0.9,
-            display: "table",
-            tableLayout: "fixed",
-          }}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead className="">
-              {/* Status */}
-              <TableRow style={{}}>
-                <TableCell
-                  style={{
-                    textAlign: "left",
-                    minWidth: 150,
-                  }}>
-                  {Object.keys(ObjectTruc[data.truc].CanLam).includes
-                    ? Object.keys(ObjectTu[data.tu].CanLam).includes(
-                        valueSelect
-                      )
+    <Collapse
+      in={checked}
+      collapsedSize={40}
+      onClick={() => {
+        setChecked(!checked);
+      }}>
+      <Box sx={{ overflow: "auto" }}>
+        {typeof window !== "undefined" && (
+          <Box
+            sx={{
+              width: "100%",
+              maxWidth: window.innerWidth * 0.9,
+              display: "table",
+              tableLayout: "fixed",
+            }}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead className="">
+                <TableRow style={{ cursor: "pointer" }}>
+                  {/* Status */}
+                  <TableCell
+                    style={{
+                      textAlign: "left",
+                      width: "65%",
+                      fontSize: 18,
+                      fontWeight: "bold",
+                    }}>
+                    {Object.keys(ObjectTruc[data.truc].CanLam).includes(
+                      valueSelect
+                    ) &&
+                    Object.keys(ObjectTu[data.tu].CanLam).includes(valueSelect)
                       ? "Rất Tốt"
-                      : "Tốt"
-                    : "Bình Thường"}
-                </TableCell>
-                <TableCell
-                  style={{
-                    textAlign: "center",
-                    minWidth: 120,
-                  }}>
-                  {data.ngayCan} {data.ngayChi} / {data.thangCan}{" "}
-                  {data.thangChi} / {CAN_NAM[data.yearLunar % 10]}{" "}
-                  {CHI_NAM[data.yearLunar % 12]}
-                </TableCell>
-              </TableRow>
-              {/* "Dương lịch"*/}
-              <TableRow style={{}}>
-                <TableCell
-                  style={{
-                    textAlign: "left",
-                    minWidth: 120,
-                  }}>
-                  Dương lịch
-                </TableCell>
-                <TableCell
-                  style={{
-                    textAlign: "center",
-                    minWidth: 50,
-                  }}>
-                  {data.daySolar} / {data.monthSolar} / {data.yearSolar}
-                </TableCell>
-              </TableRow>
-              {/* "Âm lịch" */}
-              <TableRow style={{}}>
-                <TableCell
-                  style={{
-                    textAlign: "left",
-                    minWidth: 50,
-                  }}>
-                  Âm lịch
-                </TableCell>
-                <TableCell
-                  style={{
-                    textAlign: "center",
-                    minWidth: 120,
-                  }}>
-                  {data.dayLunar} / {data.monthLunar} / {data.yearLunar}
-                </TableCell>
-              </TableRow>
-              {/* , "Giờ", */}
-              <TableRow style={{}}>
-                <TableCell
-                  style={{
-                    textAlign: "left",
-                    minWidth: 50,
-                  }}>
-                  Giờ
-                </TableCell>
-                <TableCell
-                  style={{
-                    textAlign: "center",
-                    minWidth: 120,
-                  }}>
-                  {data &&
-                    data?.gio?.map((itemGio, index) => {
-                      return (
-                        <div
-                          key={Math.random()}
-                          style={{
-                            marginRight: 5,
-                            color:
-                              COLOR_TEXT_NGU_HANH[
-                                NGU_HANH[
-                                  data.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
+                      : !Object.keys(ObjectTu[data.tu].CanLam).includes(
+                          valueSelect
+                        ) &&
+                        !Object.keys(ObjectTruc[data.truc].CanLam).includes(
+                          valueSelect
+                        )
+                      ? "Hơi Tốt"
+                      : "Tốt"}
+                    {CheckArrTamHop(
+                      data.gio,
+                      CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
+                    ) ? (
+                      <StarIcon
+                        style={{
+                          color: "#F9D045",
+                          marginTop: -2,
+                          fontSize: 20,
+                        }}
+                      />
+                    ) : CheckArrNhiHop(
+                        data.gio,
+                        CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
+                      ) ? (
+                      <StarIcon style={{ color: "#F9D045", marginTop: -2 }} />
+                    ) : (
+                      ""
+                    )}
+                    {/* Ngay Tam Hop Nhi Hop */}
+                    {CheckTamHop(
+                      data.ngayChi,
+                      CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
+                    ) ? (
+                      <StarIcon
+                        style={{
+                          color: "#F9D045",
+                          marginTop: -2,
+                          fontSize: 20,
+                        }}
+                      />
+                    ) : CheckNhiHop(
+                        data.ngayChi,
+                        CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
+                      ) ? (
+                      <StarIcon style={{ color: "#F9D045", marginTop: -2 }} />
+                    ) : (
+                      ""
+                    )}
+                    {/* Ngay Hoang Dao Cuoi-hoi */}
+                    {description &&
+                    DefineHacDaoHoangDao(
+                      data.monthLunar,
+                      CHI[chiVi(DiaChi(data.daysTotalInLunar))]
+                    ) ? (
+                      <StarIcon style={{ color: "#F9D045", marginTop: -2 }} />
+                    ) : (
+                      <StarIcon style={{ color: "#A2612E", marginTop: -2 }} />
+                    )}
+                    <ChevronRightIcon
+                      style={{
+                        marginTop: -2,
+                        fontSize: 30,
+                      }}
+                    />{" "}
+                    {data.daySolar}/{data.monthSolar}/{data.yearSolar} | ÂL:{" "}
+                    {data.dayLunar}/{data.monthLunar}/{data.yearLunar}
+                    {"  ("}
+                    {data.ngayCan} {data.ngayChi} / {data.thangCan}{" "}
+                    {data.thangChi} / {CAN_NAM[data.yearLunar % 10]}{" "}
+                    {CHI_NAM[data.yearLunar % 12] + ")"}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      width: "50%",
+                      textDecorationLine: "underline",
+                      fontSize: 16,
+                    }}>
+                    Chi tiết
+                    <ChevronRightIcon
+                      sx={{
+                        rotate: "90deg",
+                      }}
+                      style={{
+                        marginTop: -2,
+                        fontSize: 30,
+                        transform: checked
+                          ? "rotateZ(0deg)"
+                          : "rotateZ(-90deg)",
+                        transition: "transform 0.2s",
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+                {/* "Dương lịch"*/}
+                <TableRow style={{}}>
+                  <TableCell
+                    style={{
+                      textAlign: "left",
+                      minWidth: 120,
+                      fontSize: 16,
+                    }}>
+                    Dương lịch
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      minWidth: 50,
+                      fontSize: 16,
+                    }}>
+                    {data.daySolar} / {data.monthSolar} / {data.yearSolar}
+                  </TableCell>
+                </TableRow>
+                {/* "Âm lịch" */}
+                <TableRow style={{}}>
+                  <TableCell
+                    style={{
+                      textAlign: "left",
+                      minWidth: 50,
+                      fontSize: 16,
+                    }}>
+                    Âm lịch
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      minWidth: 120,
+                      fontSize: 16,
+                    }}>
+                    {data.dayLunar} / {data.monthLunar} / {data.yearLunar}
+                  </TableCell>
+                </TableRow>
+                {/* , "Giờ", */}
+                <TableRow style={{}}>
+                  <TableCell
+                    style={{
+                      textAlign: "left",
+                      minWidth: 50,
+                      fontSize: 16,
+                    }}>
+                    Giờ
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      minWidth: 120,
+                      fontSize: 16,
+                    }}>
+                    {data &&
+                      data?.gio?.map((itemGio, index) => {
+                        return (
+                          <div
+                            key={Math.random()}
+                            style={{
+                              marginRight: 5,
+                              color:
+                                COLOR_TEXT_NGU_HANH[
+                                  NGU_HANH[
+                                    data.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ]
                                   ]
-                                ]
-                              ],
-                          }}>
-                          {data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)] +
-                            " " +
-                            itemGio +
-                            " (" +
-                            GIO_DIA_CHI[CHI.indexOf(itemGio)] +
-                            ") " +
-                            "(" +
-                            NGU_HANH[
-                              data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
-                            ] +
-                            ")" +
-                            (CheckTamHop(
-                              CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                              itemGio
-                            )
-                              ? "(Tam Hợp) "
-                              : CheckNhiHop(
-                                  CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                                  itemGio
-                                )
-                              ? "(Nhị Hợp) "
-                              : "")}
-                        </div>
-                      );
-                    })}
-                </TableCell>
-              </TableRow>
-              {/* "Trực/Tú" */}
-              <TableRow className="">
-                <TableCell
-                  style={{
-                    textAlign: "left",
-                    minWidth: 150,
-                  }}>
-                  Trực/Tú
-                </TableCell>
-                <TableCell
-                  style={{
-                    textAlign: "center",
-                    minWidth: 120,
-                  }}>
-                  <span
+                                ],
+                            }}>
+                            {data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)] +
+                              " " +
+                              itemGio +
+                              " (" +
+                              GIO_DIA_CHI[CHI.indexOf(itemGio)] +
+                              ") " +
+                              "(" +
+                              NGU_HANH[
+                                data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
+                              ] +
+                              ")" +
+                              (CheckTamHop(
+                                CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                itemGio
+                              )
+                                ? "(Tam Hợp) "
+                                : CheckNhiHop(
+                                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                    itemGio
+                                  )
+                                ? "(Nhị Hợp) "
+                                : "")}
+                          </div>
+                        );
+                      })}
+                  </TableCell>
+                </TableRow>
+                {/* "Trực/Tú" */}
+                <TableRow className="">
+                  <TableCell
                     style={{
-                      color: Object.keys(
-                        ObjectTruc[data.truc].KhongLam
-                      ).includes(valueSelect)
-                        ? "red"
-                        : "green",
-                      textTransform: Object.keys(
-                        ObjectTruc[data.truc].CanLam
-                      ).includes(valueSelect)
-                        ? "uppercase"
-                        : "capitalize",
-                      fontWeight: Object.keys(
-                        ObjectTruc[data.truc].CanLam
-                      ).includes(valueSelect)
-                        ? "bold"
-                        : "400",
+                      textAlign: "left",
+                      minWidth: 150,
+                      fontSize: 16,
                     }}>
-                    {data.truc} /{" "}
-                  </span>
+                    Trực/Tú
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      minWidth: 120,
+                      fontSize: 16,
+                    }}>
+                    <span
+                      style={{
+                        color: Object.keys(
+                          ObjectTruc[data.truc].KhongLam
+                        ).includes(valueSelect)
+                          ? "red"
+                          : "green",
+                        textTransform: Object.keys(
+                          ObjectTruc[data.truc].CanLam
+                        ).includes(valueSelect)
+                          ? "uppercase"
+                          : "capitalize",
+                        fontWeight: Object.keys(
+                          ObjectTruc[data.truc].CanLam
+                        ).includes(valueSelect)
+                          ? "bold"
+                          : "400",
+                      }}>
+                      {data.truc} /{" "}
+                    </span>
 
-                  <span
-                    style={{
-                      color: Object.keys(ObjectTu[data.tu].KhongLam).includes(
-                        valueSelect
-                      )
-                        ? "red"
-                        : "green",
-                      textTransform: Object.keys(
-                        ObjectTruc[data.truc].CanLam
-                      ).includes(valueSelect)
-                        ? "uppercase"
-                        : "capitalize",
-                      fontWeight: Object.keys(
-                        ObjectTruc[data.truc].CanLam
-                      ).includes(valueSelect)
-                        ? "bold"
-                        : "400",
-                    }}>
-                    {data.tu}
-                  </span>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-          </Table>
-        </Box>
-      )}
-    </Box>
+                    <span
+                      style={{
+                        color: Object.keys(ObjectTu[data.tu].KhongLam).includes(
+                          valueSelect
+                        )
+                          ? "red"
+                          : "green",
+                        textTransform: Object.keys(
+                          ObjectTu[data.tu].CanLam
+                        ).includes(valueSelect)
+                          ? "uppercase"
+                          : "capitalize",
+                        fontWeight: Object.keys(
+                          ObjectTu[data.tu].CanLam
+                        ).includes(valueSelect)
+                          ? "bold"
+                          : "400",
+                      }}>
+                      {data.tu}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+            </Table>
+          </Box>
+        )}
+      </Box>
+    </Collapse>
   );
 };
 export default memo(TableResult);

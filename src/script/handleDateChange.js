@@ -56,6 +56,7 @@ import {
   NGU_HANH_TUONG_SINH,
   NGU_LY,
   NHAC_THAN,
+  NHI_HOP,
   PHU_CHU,
   SAT_CHU_AM,
   SAT_CHU_DUONG,
@@ -631,6 +632,7 @@ export const getCanChi = async (day, month, year) => {
     dayLunar: lunar.dayLunar,
     monthLunar: lunar.monthLunar,
     yearLunar: lunar.yearLunar,
+    daysTotalInLunar: lunar.daysTotalInLunar,
     ngayCan,
     ngayChi,
     thangCan,
@@ -912,8 +914,23 @@ export const CheckNgayBachKy = (Chi1, Chi2) => {
 export const CheckTamHop = (Chi1, Chi2) => {
   if (Chi1) return TAM_HOP[Chi1].includes(Chi2);
 };
+export const CheckArrTamHop = (ArrChi1, Chi2) => {
+  const arrTrueFalse = ArrChi1.map((item) => {
+    return TAM_HOP[item].includes(Chi2);
+  });
+
+  if (ArrChi1) return arrTrueFalse.includes(true);
+};
+export const CheckArrNhiHop = (ArrChi1, Chi2) => {
+  const arrTrueFalse = ArrChi1.map((item) => {
+    return NHI_HOP[item].includes(Chi2);
+  });
+
+  if (ArrChi1) return arrTrueFalse.includes(true);
+};
+
 export const CheckNhiHop = (Chi1, Chi2) => {
-  if (Chi1) return TAM_HOP[Chi1].includes(Chi2);
+  if (Chi1) return NHI_HOP[Chi1].includes(Chi2);
 };
 export const CheckKimLau = (NamLamNha, NamSinhGiaChu) => {
   const arrKimLau = [

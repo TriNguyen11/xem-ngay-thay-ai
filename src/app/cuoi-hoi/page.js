@@ -935,23 +935,15 @@ export default function Home() {
                 {" "}
                 Tổng cộng có {step7?.length} kết quả{" "}
               </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black ">
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6 ">
                 {step7?.map((item, index) => {
                   return (
                     <>
-                      <div
-                        className="font-bold text-[20px]"
-                        style={{
-                          color: "black",
-                          marginBottom: 10,
-                          marginTop: 20,
-                        }}>
-                        Kết quả {index + 1}
-                      </div>
                       <div className="max-h-[500px] overflow-scroll">
                         <TableResult
                           data={item}
                           infoGiaChu={infoGiaChu}
+                          description="cuoi-hoi"
                           valueSelect={valueSelect}></TableResult>
                       </div>
                     </>
