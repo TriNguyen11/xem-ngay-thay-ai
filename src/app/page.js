@@ -66,9 +66,10 @@ import {
   getCanChi,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
+import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Home() {
   const refNotify = React.useRef();
@@ -164,12 +165,6 @@ export default function Home() {
         tuoiGiaChu--;
       }
     }
-    // Xac dinh can Chi gia chu
-    setInfoGiaChu({
-      ...infoGiaChu,
-      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
-      tuoiGiaChu: tuoiGiaChu,
-    });
 
     setLoading(true);
     let dateArr = await enumerateDaysBetweenDates(
@@ -190,8 +185,6 @@ export default function Home() {
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
 
-    // Convert  RangeDayInMonthLunar
-    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
       if (
@@ -210,7 +203,6 @@ export default function Home() {
         arrPerfectDateStep1.push(item);
       }
     });
-    setDataStep1(arrPerfectDateStep1);
 
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
@@ -237,11 +229,9 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     // Xet them hop hoa
     arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep2);
-    setDataStep6(arrPerfectDateStep6);
 
     //Tranh tuong xung tuong hai
     arrPerfectDateStep6.map((item, inex) => {
@@ -256,7 +246,6 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
 
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
@@ -279,8 +268,6 @@ export default function Home() {
       }
     });
 
-    setDataStep4(arrPerfectDateStep4);
-
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
       arrPerfectDateStep5.push({
@@ -295,12 +282,26 @@ export default function Home() {
         gioHoangDao: CheckHoangDao(item.ngayChi),
       });
     });
-    setDataStep5(arrPerfectDateStep5);
 
     // console.log(arrPerfectDateStep5, "length arr 5");
+    // Xac dinh can Chi gia chu
+    setInfoGiaChu({
+      ...infoGiaChu,
+      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
+      tuoiGiaChu: tuoiGiaChu,
+    });
+    // Convert  RangeDayInMonthLunar
+    setDataStep1(arrPerfectDateStep1);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep6(arrPerfectDateStep6);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
+    setDataStep5(arrPerfectDateStep5);
+
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
     setDataStep7(arrPerfectDateStep7);
+    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
 
     setLoading(false);
   };
@@ -340,12 +341,6 @@ export default function Home() {
         tuoiGiaChu--;
       }
     }
-    // Xac dinh can Chi gia chu
-    setInfoGiaChu({
-      ...infoGiaChu,
-      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
-      tuoiGiaChu: tuoiGiaChu,
-    });
 
     setLoading(true);
     let dateArr = await enumerateDaysBetweenDates(
@@ -404,14 +399,6 @@ export default function Home() {
     });
 
     if (valueSelect === "dong-tho") handleRecommendYearDongTho(lunarYear);
-    setBonusConditionBuilding({
-      ...bonusConditionBuilding,
-      KimLau,
-      HoangOc,
-      descriptionHoangOc,
-      hoangOcShow,
-      TamTai,
-    });
 
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
@@ -434,7 +421,6 @@ export default function Home() {
         arrPerfectDateStep1.push(item);
       }
     });
-    setDataStep1(arrPerfectDateStep1);
 
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
@@ -465,11 +451,9 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     // Xet them hop hoa ngay/thang
     arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep2);
-    setDataStep6(arrPerfectDateStep6);
 
     //xet them dong-tho nhap-trach
     arrPerfectDateStep6.map((item, ind) => {
@@ -514,7 +498,6 @@ export default function Home() {
           arrPerfectDateStep8.push(item);
       }
     });
-    setDataStep8(arrPerfectDateStep8);
 
     // check xung hai tuoi voi gia chu
     arrPerfectDateStep8.map((item, inex) => {
@@ -529,7 +512,6 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
 
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
@@ -552,8 +534,6 @@ export default function Home() {
       }
     });
 
-    setDataStep4(arrPerfectDateStep4);
-
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
       arrPerfectDateStep5.push({
@@ -569,11 +549,31 @@ export default function Home() {
       });
     });
 
-    setLunarYearArr(lunarYear);
-    setDataStep5(arrPerfectDateStep5);
-
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
+
+    // Xac dinh can Chi gia chu
+    setInfoGiaChu({
+      ...infoGiaChu,
+      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
+      tuoiGiaChu: tuoiGiaChu,
+    });
+    setBonusConditionBuilding({
+      ...bonusConditionBuilding,
+      KimLau,
+      HoangOc,
+      descriptionHoangOc,
+      hoangOcShow,
+      TamTai,
+    });
+    setDataStep1(arrPerfectDateStep1);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep6(arrPerfectDateStep6);
+    setDataStep8(arrPerfectDateStep8);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
+    setLunarYearArr(lunarYear);
+    setDataStep5(arrPerfectDateStep5);
     setDataStep7(arrPerfectDateStep7);
 
     setLoading(false);
@@ -638,35 +638,11 @@ export default function Home() {
       }
     }
 
-    // Xac dinh can Chi gia chu
-    setInfoGiaChu({
-      ...infoGiaChu,
-      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
-      tuoiGiaChu: tuoiGiaChu,
-    });
-    // xac dinh can chi tuoi muon
-    setInfoGiaChuBorrow({
-      ...infoGiaChuBorrow,
-      tuoi: tuoiCanMuon + " " + tuoiChiMuon,
-      tuoiTuoiMuon: tuoiMuon,
-    });
     // setTextTrucXungTuoiMuonAndGiaChu(
     //   CheckTrucXungTuoiMuon(
     //     `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
     //     `${tuoiCanMuon} ${tuoiChiMuon}`
     //   )
-    // );
-    setTextTrucXungTuoiMuonAndGiaChu(
-      CheckTrucXungNgayThangNam(tuoiChiGiaChu, tuoiChiMuon)
-    );
-    // console.log(
-    //   CheckTrucXungTuoiMuon(
-    //     `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
-    //     `${tuoiCanMuon} ${tuoiChiMuon}`
-    //   ),
-    //   `${tuoiCanGiaChu} ${tuoiChiGiaChu}`,
-    //   `${tuoiCanMuon} ${tuoiChiMuon}`,
-    //   "2323"
     // );
     setLoading(true);
     let dateArr = await enumerateDaysBetweenDates(
@@ -727,13 +703,6 @@ export default function Home() {
     });
 
     if (valueSelect === "dong-tho") handleRecommendYearDongTho(lunarYear);
-    setBonusConditionBuilding({
-      ...bonusConditionBuilding,
-      KimLau,
-      HoangOc,
-      TamTai,
-      descriptionHoangOc,
-    });
 
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
@@ -757,7 +726,6 @@ export default function Home() {
         arrPerfectDateStep1.push(item);
       }
     });
-    setDataStep1(arrPerfectDateStep1);
 
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
@@ -785,11 +753,9 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     // Xet them hop hoa ngay/thang
     arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep2);
-    setDataStep6(arrPerfectDateStep6);
 
     //xet them dong-tho nhap-trach
     arrPerfectDateStep6.map((item, ind) => {
@@ -834,7 +800,6 @@ export default function Home() {
           arrPerfectDateStep8.push(item);
       }
     });
-    setDataStep8(arrPerfectDateStep8);
 
     // check xung hai tuoi voi gia chu
     arrPerfectDateStep8.forEach((item, inex) => {
@@ -849,7 +814,6 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
 
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
@@ -872,8 +836,6 @@ export default function Home() {
       }
     });
 
-    setDataStep4(arrPerfectDateStep4);
-
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
       arrPerfectDateStep5.push({
@@ -888,10 +850,39 @@ export default function Home() {
         gioHoangDao: CheckHoangDao(item.ngayChi),
       });
     });
-    setDataStep5(arrPerfectDateStep5);
-    // Xet hop hoa ngay/gio
 
+    // Xac dinh can Chi gia chu
+    setInfoGiaChu({
+      ...infoGiaChu,
+      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
+      tuoiGiaChu: tuoiGiaChu,
+    });
+    // xac dinh can chi tuoi muon
+    setInfoGiaChuBorrow({
+      ...infoGiaChuBorrow,
+      tuoi: tuoiCanMuon + " " + tuoiChiMuon,
+      tuoiTuoiMuon: tuoiMuon,
+    });
+    setBonusConditionBuilding({
+      ...bonusConditionBuilding,
+      KimLau,
+      HoangOc,
+      TamTai,
+      descriptionHoangOc,
+    });
+
+    setTextTrucXungTuoiMuonAndGiaChu(
+      CheckTrucXungNgayThangNam(tuoiChiGiaChu, tuoiChiMuon)
+    );
+    // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
+    setDataStep1(arrPerfectDateStep1);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep6(arrPerfectDateStep6);
+    setDataStep8(arrPerfectDateStep8);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
+    setDataStep5(arrPerfectDateStep5);
     setDataStep7(arrPerfectDateStep7);
 
     setLoading(false);
@@ -1002,12 +993,6 @@ export default function Home() {
         tuoiGiaChu--;
       }
     }
-    // Xac dinh can Chi gia chu
-    setInfoGiaChu({
-      ...infoGiaChu,
-      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
-      tuoiGiaChu: tuoiGiaChu,
-    });
 
     setLoading(true);
     let dateArr = await enumerateDaysBetweenDates(
@@ -1055,7 +1040,6 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     //Tranh tuong xung tuong hai
     arrPerfectDateStep2.map((item, inex) => {
@@ -1068,7 +1052,6 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
 
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
@@ -1091,8 +1074,6 @@ export default function Home() {
       }
     });
 
-    setDataStep4(arrPerfectDateStep4);
-
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
       arrPerfectDateStep5.push({
@@ -1106,6 +1087,15 @@ export default function Home() {
         gioHoangDao: CheckHoangDao(item.ngayChi),
       });
     });
+    // Xac dinh can Chi gia chu
+    setInfoGiaChu({
+      ...infoGiaChu,
+      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
+      tuoiGiaChu: tuoiGiaChu,
+    });
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
     setDataStep5(arrPerfectDateStep5);
 
     setLoading(false);
@@ -1137,7 +1127,16 @@ export default function Home() {
     });
     setArrRecommend(arrYearRecommend);
   };
+  const handleInit = async () => {
+    const a = await axios.get(
+      "http://localhost:3000/xem-ngay/cong-viec-dai-su",
+      {}
+    );
 
+    console.log(a, "check a ");
+  };
+
+  useEffect(() => {}, []);
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1149,6 +1148,14 @@ export default function Home() {
         }}>
         Xem ngày Xây dựng
       </div>
+      <Button
+        variant="contained"
+        style={{ backgroundColr: "green" }}
+        onClick={() => {
+          handleInit();
+        }}>
+        asdsa
+      </Button>
       <div>
         <FormControl fullWidth style={{ marginBottom: 20 }}>
           <InputLabel id="demo-simple-select-label">

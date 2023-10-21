@@ -165,7 +165,6 @@ export default function Home() {
         arrPerfectDateStep1.push(item);
       }
     });
-    setDataStep1(arrPerfectDateStep1);
 
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
@@ -192,11 +191,9 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     // Xet them hop hoa
     arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep2);
-    setDataStep6(arrPerfectDateStep6);
 
     //Tranh tuong xung tuong hai
     arrPerfectDateStep6.map((item, inex) => {
@@ -211,7 +208,6 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
 
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
@@ -234,8 +230,6 @@ export default function Home() {
       }
     });
 
-    setDataStep4(arrPerfectDateStep4);
-
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
       arrPerfectDateStep5.push({
@@ -250,11 +244,17 @@ export default function Home() {
         gioHoangDao: CheckHoangDao(item.ngayChi),
       });
     });
-    setDataStep5(arrPerfectDateStep5);
 
     // console.log(arrPerfectDateStep5, "length arr 5");
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
+
+    setDataStep1(arrPerfectDateStep1);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep6(arrPerfectDateStep6);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
+    setDataStep5(arrPerfectDateStep5);
     setDataStep7(arrPerfectDateStep7);
 
     setLoading(false);

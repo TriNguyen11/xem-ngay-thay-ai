@@ -142,10 +142,8 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
-    setDataStep1(dateArr);
 
     // Convert  RangeDayInMonthLunar
-    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Tranh Bach ky
     dateArr.map((item, index) => {
       if (
@@ -173,7 +171,6 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     //Tranh tuong xung tuong hai
     arrPerfectDateStep2.map((item, inex) => {
@@ -186,7 +183,6 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
 
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
@@ -209,8 +205,6 @@ export default function Home() {
       }
     });
 
-    setDataStep4(arrPerfectDateStep4);
-
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
       arrPerfectDateStep5.push({
@@ -224,7 +218,13 @@ export default function Home() {
         gioHoangDao: CheckHoangDao(item.ngayChi),
       });
     });
+
+    setDataStep1(dateArr);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
     setDataStep5(arrPerfectDateStep5);
+    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
 
     setLoading(false);
   };

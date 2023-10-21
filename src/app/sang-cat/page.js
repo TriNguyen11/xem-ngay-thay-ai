@@ -114,7 +114,6 @@ export default function Home() {
   });
 
   const [valueSelect, setValueSelect] = useState("");
-  const [isMuonTuoi, setIsMuonTuoi] = useState(false);
 
   const [stepInit, setDataStepInit] = useState();
   const [rangeDayInMonthLunar, setRangeDayInMonthLunar] = useState();
@@ -130,17 +129,10 @@ export default function Home() {
 
   const [infoNguoiMat, setInfoNguoiMat] = useState();
 
-  const [case1, setCase1] = useState();
-  const [case2, setCase2] = useState();
-  const [case3, setCase3] = useState();
-  const [case4, setCase4] = useState();
-  const [case5, setCase5] = useState();
-
   const handleSangCatNu = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
-    console.log("Nu");
     if (Number(valueAge.month) <= 2) {
       const sunlong = getSunLongitude(
         jdn(
@@ -182,7 +174,6 @@ export default function Home() {
       Number(valueAge.dead_day),
       valueAge.dead_time?.$H
     );
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
 
     let dateArr = await enumerateDaysBetweenDates(
       `${moment(dateStart.$d).year()}-${
@@ -193,7 +184,6 @@ export default function Home() {
         dateEnd.$d
       ).date()}`
     );
-    setDataStepInit(dateArr);
 
     console.log(bamCung, "bamCungbamCung");
     let arrPerfectDate = [];
@@ -208,7 +198,6 @@ export default function Home() {
     let solarYear = [];
     let monthInYear = {};
     // Convert  RangeDayInMonthLunar
-    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Chon ngay
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
@@ -226,8 +215,6 @@ export default function Home() {
       }
     });
     // setDataStep1(arrPerfectDateStep1);
-    setYearArr({ lunar: lunarYear, solar: solarYear });
-    setArrMonthInYear(monthInYear);
     // console.log(dateArr, "monthInYear");
     // console.log(valueText, "valueSelect");
     // Show bach ky trong thang
@@ -249,7 +236,6 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     //Loai bach ky
     dateArr.map((item, index) => {
@@ -306,13 +292,11 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
     // Xet them hop hoa
     arrPerfectDateStep6 = await handleHopHoaNgayThang(
       arrPerfectDateStep3,
       valueText
     );
-    setDataStep6(arrPerfectDateStep6);
 
     // kiem tra truc/tu
     arrPerfectDateStep6.map((item, ind) => {
@@ -334,7 +318,6 @@ export default function Home() {
         }
       }
     });
-    setDataStep4(arrPerfectDateStep4);
 
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
@@ -347,9 +330,17 @@ export default function Home() {
         }),
       });
     });
-    setDataStep4(arrPerfectDateStep5);
 
-    console.log(arrPerfectDateStep4, "namMat");
+    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setDataStepInit(dateArr);
+    setYearArr({ lunar: lunarYear, solar: solarYear });
+    setArrMonthInYear(monthInYear);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep6(arrPerfectDateStep6);
+    setDataStep4(arrPerfectDateStep4);
+    setDataStep4(arrPerfectDateStep5);
+    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
   };
   const handleSangCatNam = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
@@ -395,7 +386,6 @@ export default function Home() {
       Number(valueAge.dead_day),
       valueAge.dead_time?.$H
     );
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
 
     let dateArr = await enumerateDaysBetweenDates(
       `${moment(dateStart.$d).year()}-${
@@ -406,7 +396,6 @@ export default function Home() {
         dateEnd.$d
       ).date()}`
     );
-    setDataStepInit(dateArr);
 
     console.log(bamCung, "bamCungbamCung");
     let arrPerfectDate = [];
@@ -440,8 +429,6 @@ export default function Home() {
       }
     });
     // setDataStep1(arrPerfectDateStep1);
-    setYearArr({ lunar: lunarYear, solar: solarYear });
-    setArrMonthInYear(monthInYear);
     // console.log(dateArr, "monthInYear");
     // console.log(valueText, "valueSelect");
     // Show bach ky trong thang
@@ -463,7 +450,6 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     //Loai bach ky
     dateArr.map((item, index) => {
@@ -520,13 +506,11 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
     // Xet them hop hoa
     arrPerfectDateStep6 = await handleHopHoaNgayThang(
       arrPerfectDateStep3,
       valueText
     );
-    setDataStep6(arrPerfectDateStep6);
 
     // kiem tra truc/tu
     arrPerfectDateStep6.map((item, ind) => {
@@ -548,7 +532,6 @@ export default function Home() {
         }
       }
     });
-    setDataStep4(arrPerfectDateStep4);
 
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
@@ -561,9 +544,16 @@ export default function Home() {
         }),
       });
     });
-    setDataStep4(arrPerfectDateStep5);
 
-    console.log(arrPerfectDateStep4, "namMat");
+    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setDataStepInit(dateArr);
+    setYearArr({ lunar: lunarYear, solar: solarYear });
+    setArrMonthInYear(monthInYear);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep6(arrPerfectDateStep6);
+    setDataStep4(arrPerfectDateStep4);
+    setDataStep4(arrPerfectDateStep5);
   };
 
   return (
@@ -591,11 +581,6 @@ export default function Home() {
               setDataStep2();
               setDataStepInit();
               setDataStep4();
-              setCase1();
-              setCase2();
-              setCase3();
-              setCase4();
-              setCase5();
             }}>
             {Object.keys(SERVICE_SANGCAT).map((key, inex) => {
               return (
@@ -1018,7 +1003,6 @@ export default function Home() {
                 <TableSangCatNam
                   valueSelect={valueSelect}
                   toaNha={valueText.namToa || valueText.nuToa}
-                  data={step1}
                   yearArr={yearArr}
                   infoNguoiMat={infoNguoiMat}></TableSangCatNam>
               </div>

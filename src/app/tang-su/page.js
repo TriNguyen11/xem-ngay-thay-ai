@@ -91,14 +91,7 @@ export default function Home() {
     dead_year: "",
     dead_time: dayjs(new Date()),
   });
-  const [bonusConditionBuilding, setBonusConditionBuilding] = useState({
-    TamTai: [],
-    KimLau: [],
-    HoangOc: [],
-    descriptionHoangOc: [],
-  });
   const [valueSelect, setValueSelect] = useState("");
-  const [isMuonTuoi, setIsMuonTuoi] = useState(false);
 
   const [stepInit, setDataStepInit] = useState();
 
@@ -174,20 +167,17 @@ export default function Home() {
       momentAmLich.year()
     );
 
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
     // Case 1
     let countCase1 = CountStatusTrungTang({
       ...bamCung,
       chiNamMat: CHI_NAM[namMat % 12],
     });
-    setCase1(countCase1);
 
     // Case 2
     let case2Text = CheckCase2TrungTang({
       ...bamCung,
       chiNamSinh: CHI_NAM[namSinh % 12],
     });
-    setCase2(case2Text);
     //Kiep Sat, Lien tang
     // Case 3
     let case3Text = CheckCase3TrungTang({
@@ -195,7 +185,6 @@ export default function Home() {
       chiNamSinh: CHI_NAM[namSinh % 12],
       chiNamMat: CHI_NAM[namMat % 12],
     });
-    setCase3(case3Text);
     // ThanTrung
     // Case 4
     // 29/10/2023
@@ -204,7 +193,6 @@ export default function Home() {
       lichAm.ngayCan,
       lichAm.ngayChi
     );
-    setCase4(case4Text);
     // Trung pHuc
     // Case 5
     let case5Text = await CheckCase5TrungTang(
@@ -212,6 +200,12 @@ export default function Home() {
       lichAm.ngayCan,
       lichAm.ngayChi
     );
+
+    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setCase1(countCase1);
+    setCase2(case2Text);
+    setCase3(case3Text);
+    setCase4(case4Text);
     setCase5(case5Text);
   };
   const handleTrungTangNu = async () => {
@@ -269,22 +263,18 @@ export default function Home() {
       momentAmLich.year()
     );
 
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-
     console.log(namMat, "namMat");
 
     let countCase1 = CountStatusTrungTang({
       ...bamCung,
       chiNamMat: CHI_NAM[namMat % 12],
     });
-    setCase1(countCase1);
 
     // Case 2
     let case2Text = CheckCase2TrungTang({
       ...bamCung,
       chiNamSinh: CHI_NAM[namSinh % 12],
     });
-    setCase2(case2Text);
 
     // Case 3
     let case3Text = CheckCase3TrungTang({
@@ -292,14 +282,12 @@ export default function Home() {
       chiNamSinh: CHI_NAM[namSinh % 12],
       chiNamMat: CHI_NAM[namMat % 12],
     });
-    setCase3(case3Text);
     // Case 4
     let case4Text = await CheckCase4TrungTang(
       lichAm.monthLunar,
       lichAm.ngayCan,
       lichAm.ngayChi
     );
-    setCase4(case4Text);
 
     // Case 5
     let case5Text = await CheckCase5TrungTang(
@@ -307,6 +295,11 @@ export default function Home() {
       lichAm.ngayCan,
       lichAm.ngayChi
     );
+    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setCase1(countCase1);
+    setCase2(case2Text);
+    setCase3(case3Text);
+    setCase4(case4Text);
     setCase5(case5Text);
   };
   const handleTangSuNu = async () => {
@@ -354,7 +347,6 @@ export default function Home() {
       Number(valueAge.dead_day),
       valueAge.dead_time?.$H
     );
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
 
     let dateArr = await enumerateDaysBetweenDates(
       `${moment(dateStart.$d).year()}-${
@@ -365,9 +357,7 @@ export default function Home() {
         dateEnd.$d
       ).date()}`
     );
-    setDataStepInit(dateArr);
 
-    console.log(bamCung, "bamCungbamCung");
     let arrPerfectDate = [];
     let arrPerfectDateStep1 = [];
     let arrPerfectDateStep2 = [];
@@ -377,7 +367,6 @@ export default function Home() {
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
     // Convert  RangeDayInMonthLunar
-    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Chon ngay
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
@@ -385,7 +374,6 @@ export default function Home() {
         arrPerfectDateStep1.push(item);
       }
     });
-    setDataStep1(arrPerfectDateStep1);
 
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
@@ -416,7 +404,6 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     // kiem tra truc/tu
     arrPerfectDateStep2.map((item, ind) => {
@@ -438,7 +425,6 @@ export default function Home() {
         }
       }
     });
-    setDataStep3(arrPerfectDateStep3);
 
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
@@ -451,9 +437,13 @@ export default function Home() {
         }),
       });
     });
+    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setDataStepInit(dateArr);
+    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
+    setDataStep1(arrPerfectDateStep1);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep3(arrPerfectDateStep3);
     setDataStep4(arrPerfectDateStep4);
-
-    console.log(arrPerfectDateStep4, "namMat");
   };
   const handleTangSuNam = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
@@ -500,7 +490,6 @@ export default function Home() {
       Number(valueAge.dead_day),
       valueAge.dead_time?.$H
     );
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
 
     let dateArr = await enumerateDaysBetweenDates(
       `${moment(dateStart.$d).year()}-${
@@ -511,7 +500,6 @@ export default function Home() {
         dateEnd.$d
       ).date()}`
     );
-    setDataStepInit(dateArr);
 
     console.log(bamCung, "bamCungbamCung");
     let arrPerfectDate = [];
@@ -524,7 +512,6 @@ export default function Home() {
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
 
     // Convert  RangeDayInMonthLunar
-    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Chon ngay
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
@@ -563,7 +550,6 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    setDataStep2(arrPerfectDateStep2);
 
     // kiem tra truc/tu
     arrPerfectDateStep2.map((item, ind) => {
@@ -585,7 +571,6 @@ export default function Home() {
         }
       }
     });
-    setDataStep3(arrPerfectDateStep3);
 
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
@@ -598,9 +583,13 @@ export default function Home() {
         }),
       });
     });
-    setDataStep4(arrPerfectDateStep4);
 
-    console.log(arrPerfectDateStep4, "namMat");
+    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setDataStepInit(dateArr);
+    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
   };
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">

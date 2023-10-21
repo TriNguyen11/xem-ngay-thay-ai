@@ -181,14 +181,7 @@ export default function Home() {
         namSinhNu--;
       }
     }
-    // Xac dinh can Chi  Nam/Nu
-    setInfoGiaChu({
-      ...infoGiaChu,
-      tuoiCanChiNam: tuoiCanNam + " " + tuoiChiNam,
-      tuoiCanChiNu: tuoiCanNu + " " + tuoiChiNu,
-      namSinhNam,
-      namSinhNu,
-    });
+
     try {
       dateArr = await enumerateDaysBetweenDates(
         `${moment(dateStart.$d).year()}-${
@@ -212,8 +205,7 @@ export default function Home() {
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
     let toaNha = valueText.namToa || valueText.nuToa || "";
     let monthInYear = {};
-    // Convert  RangeDayInMonthLunar
-    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
+
     // Xac dinh ngay/thang xung toa nxha
     // if (toaNha?.length !== 0)
     if (
@@ -289,10 +281,7 @@ export default function Home() {
       });
       arrPerfectDateStep1 = dateArr;
     }
-    setLunarYearArr(lunarYear);
-    setArrMonthInYear(monthInYear);
 
-    setDataStep1(arrPerfectDateStep1);
     // Xet Thang
     if (
       valueSelect !== "ngay-mai-moi" &&
@@ -318,7 +307,6 @@ export default function Home() {
     } else {
       arrPerfectDateStep2 = arrPerfectDateStep1;
     }
-    setDataStep2(arrPerfectDateStep2);
     // Xet ngay
 
     arrPerfectDateStep2.map((item, index) => {
@@ -407,7 +395,6 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
-    setDataStep3(arrPerfectDateStep3);
     // Xet them hop hoa
     if (
       valueSelect === "ngay-cuoi" ||
@@ -416,10 +403,8 @@ export default function Home() {
       valueSelect === "ngay-lai-mat"
     ) {
       arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep3);
-      setDataStep6(arrPerfectDateStep6);
     } else {
       arrPerfectDateStep6 = arrPerfectDateStep3;
-      setDataStep6(arrPerfectDateStep6);
     }
 
     // kiem tra truc/tu
@@ -443,8 +428,6 @@ export default function Home() {
       }
     });
 
-    setDataStep4(arrPerfectDateStep4);
-
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
       arrPerfectDateStep5.push({
@@ -462,10 +445,28 @@ export default function Home() {
       });
     });
     console.log(arrPerfectDateStep5, "arrPerfectDateStep5");
-    setDataStep5(arrPerfectDateStep5);
 
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
+    // Xac dinh can Chi  Nam/Nu
+    setInfoGiaChu({
+      ...infoGiaChu,
+      tuoiCanChiNam: tuoiCanNam + " " + tuoiChiNam,
+      tuoiCanChiNu: tuoiCanNu + " " + tuoiChiNu,
+      namSinhNam,
+      namSinhNu,
+    });
+
+    // Convert  RangeDayInMonthLunar
+    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
+    setLunarYearArr(lunarYear);
+    setArrMonthInYear(monthInYear);
+    setDataStep1(arrPerfectDateStep1);
+    setDataStep2(arrPerfectDateStep2);
+    setDataStep3(arrPerfectDateStep3);
+    setDataStep4(arrPerfectDateStep4);
+    setDataStep5(arrPerfectDateStep5);
+    setDataStep6(arrPerfectDateStep6);
     setDataStep7(arrPerfectDateStep7);
 
     setLoading(false);
@@ -503,8 +504,6 @@ export default function Home() {
         ArrHopHoa.push(item);
       }
     });
-    // return 1;
-    // console.log(ArrHopHoa, "ArrHopHoa");
     return ArrHopHoa;
   };
   const handleHopHoaNgayGio = async (arr, toa) => {
