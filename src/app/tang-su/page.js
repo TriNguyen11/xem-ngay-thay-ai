@@ -438,12 +438,12 @@ export default function Home() {
       });
     });
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-    setDataStepInit(dateArr);
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
-    setDataStep1(arrPerfectDateStep1);
     setDataStep2(arrPerfectDateStep2);
     setDataStep3(arrPerfectDateStep3);
     setDataStep4(arrPerfectDateStep4);
+    setDataStepInit(dateArr);
+    setDataStep1(arrPerfectDateStep1);
   };
   const handleTangSuNam = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
@@ -585,11 +585,11 @@ export default function Home() {
     });
 
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-    setDataStepInit(dateArr);
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     setDataStep2(arrPerfectDateStep2);
     setDataStep3(arrPerfectDateStep3);
     setDataStep4(arrPerfectDateStep4);
+    setDataStepInit(dateArr);
   };
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
@@ -997,6 +997,7 @@ export default function Home() {
                         <TableResult
                           data={item}
                           infoGiaChu={infoGiaChu}
+                          description="tang-su"
                           valueSelect={valueSelect}></TableResult>
                       </div>
                     </>

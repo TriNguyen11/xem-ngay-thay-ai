@@ -215,8 +215,6 @@ export default function Home() {
     });
     // Convert  RangeDayInMonthLunar
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
-    setDataStep1(dateArr);
-    setDataStep2(arrPerfectDateStep2);
     setDataStep3(arrPerfectDateStep3);
     setDataStep4(arrPerfectDateStep4);
     setDataStep5(arrPerfectDateStep5);
@@ -225,6 +223,9 @@ export default function Home() {
       tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
       tuoiGiaChu: tuoiGiaChu,
     });
+    setDataStep1(dateArr);
+    setDataStep2(arrPerfectDateStep2);
+
     setLoading(false);
   };
   const handleInit = async () => {

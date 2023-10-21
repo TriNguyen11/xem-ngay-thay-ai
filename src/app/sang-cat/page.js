@@ -332,15 +332,15 @@ export default function Home() {
     });
 
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-    setDataStepInit(dateArr);
     setYearArr({ lunar: lunarYear, solar: solarYear });
     setArrMonthInYear(monthInYear);
-    setDataStep2(arrPerfectDateStep2);
     setDataStep3(arrPerfectDateStep3);
     setDataStep6(arrPerfectDateStep6);
     setDataStep4(arrPerfectDateStep4);
     setDataStep4(arrPerfectDateStep5);
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
+    setDataStepInit(dateArr);
+    setDataStep2(arrPerfectDateStep2);
   };
   const handleSangCatNam = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
@@ -546,14 +546,14 @@ export default function Home() {
     });
 
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-    setDataStepInit(dateArr);
     setYearArr({ lunar: lunarYear, solar: solarYear });
     setArrMonthInYear(monthInYear);
-    setDataStep2(arrPerfectDateStep2);
     setDataStep3(arrPerfectDateStep3);
     setDataStep6(arrPerfectDateStep6);
     setDataStep4(arrPerfectDateStep4);
     setDataStep4(arrPerfectDateStep5);
+    setDataStepInit(dateArr);
+    setDataStep2(arrPerfectDateStep2);
   };
 
   return (
@@ -972,6 +972,7 @@ export default function Home() {
                         <TableResult
                           data={item}
                           infoGiaChu={infoGiaChu}
+                          description="sang-cat"
                           valueSelect={valueSelect}></TableResult>
                       </div>
                     </>

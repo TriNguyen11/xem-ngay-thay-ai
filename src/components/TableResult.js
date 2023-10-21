@@ -31,15 +31,7 @@ import { chiVi, DiaChi } from "@Root/script/AmLich";
 
 const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
   const [checked, setChecked] = useState(false);
-  console.log("213123");
-  console.log(
-    data,
-    DefineHacDaoHoangDao(
-      data.monthLunar,
-      CHI[chiVi(DiaChi(data.daysTotalInLunar))]
-    ),
-    "check hoang dao"
-  );
+  console.log(description, "description");
   return (
     <Collapse
       in={checked}
@@ -120,15 +112,56 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                       ""
                     )}
                     {/* Ngay Hoang Dao Cuoi-hoi */}
-                    {description &&
-                    DefineHacDaoHoangDao(
-                      data.monthLunar,
-                      CHI[chiVi(DiaChi(data.daysTotalInLunar))]
-                    ) ? (
-                      <StarIcon style={{ color: "#F9D045", marginTop: -2 }} />
+                    {description === "cuoi-hoi" ? (
+                      DefineHacDaoHoangDao(
+                        data.monthLunar,
+                        CHI[chiVi(DiaChi(data.daysTotalInLunar))]
+                      ) ? (
+                        <StarIcon style={{ color: "#F9D045", marginTop: -2 }} />
+                      ) : (
+                        <StarIcon style={{ color: "#A2612E", marginTop: -2 }} />
+                      )
                     ) : (
-                      <StarIcon style={{ color: "#A2612E", marginTop: -2 }} />
+                      ""
                     )}
+                    {/* Tang su Tam/Nhi Hop */}
+                    {description === "tang-su" ? (
+                      CheckTamHop(
+                        data.ngayChi,
+                        CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
+                      ) ? (
+                        <StarIcon
+                          style={{
+                            color: "#F9D045",
+                            marginTop: -2,
+                            fontSize: 20,
+                          }}
+                        />
+                      ) : CheckNhiHop(
+                          data.ngayChi,
+                          CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
+                        ) ? (
+                        <StarIcon style={{ color: "#F9D045", marginTop: -2 }} />
+                      ) : (
+                        ""
+                      )
+                    ) : (
+                      ""
+                    )}
+                    {description === "tang-su" || description === "sang-cat"
+                      ? (data.ngayChi === "Thìn" ||
+                          data.ngayChi === "Tuất" ||
+                          data.ngayChi === "Sửu" ||
+                          data.ngayChi === "Mùi") && (
+                          <StarIcon
+                            style={{
+                              color: "#F9D045",
+                              marginTop: -2,
+                              fontSize: 20,
+                            }}
+                          />
+                        )
+                      : ""}
                     <ChevronRightIcon
                       style={{
                         marginTop: -2,

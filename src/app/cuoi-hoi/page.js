@@ -460,14 +460,15 @@ export default function Home() {
     // Convert  RangeDayInMonthLunar
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     setLunarYearArr(lunarYear);
-    setArrMonthInYear(monthInYear);
-    setDataStep1(arrPerfectDateStep1);
-    setDataStep2(arrPerfectDateStep2);
     setDataStep3(arrPerfectDateStep3);
     setDataStep4(arrPerfectDateStep4);
     setDataStep5(arrPerfectDateStep5);
     setDataStep6(arrPerfectDateStep6);
     setDataStep7(arrPerfectDateStep7);
+
+    setArrMonthInYear(monthInYear);
+    setDataStep1(arrPerfectDateStep1);
+    setDataStep2(arrPerfectDateStep2);
 
     setLoading(false);
   };

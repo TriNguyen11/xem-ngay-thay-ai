@@ -219,12 +219,12 @@ export default function Home() {
       });
     });
 
-    setDataStep1(dateArr);
     setDataStep2(arrPerfectDateStep2);
     setDataStep3(arrPerfectDateStep3);
     setDataStep4(arrPerfectDateStep4);
     setDataStep5(arrPerfectDateStep5);
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
+    setDataStep1(dateArr);
 
     setLoading(false);
   };
