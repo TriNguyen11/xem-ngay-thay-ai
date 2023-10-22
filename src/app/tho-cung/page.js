@@ -12,9 +12,9 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import Notify from "@Root/components/Notify";
-import TableShow from "@Root/components/Table";
-import TableResult from "@Root/components/TableResult";
+import Notify from "@Root/app/components/Notify";
+import TableShow from "@Root/app/components/Table";
+import TableResult from "@Root/app/components/TableResult";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
@@ -79,12 +79,17 @@ export default function Home() {
   const [valueSelect, setValueSelect] = useState("");
   const [rangeDayInMonthLunar, setRangeDayInMonthLunar] = useState();
 
-  const [step1, setDataStep1] = useState();
-  const [step2, setDataStep2] = useState();
-  const [step3, setDataStep3] = useState();
-  const [step4, setDataStep4] = useState();
-  const [step5, setDataStep5] = useState();
-  const [step6, setDataStep6] = useState();
+  const [stepShow, setStepShow] = useState({
+    step1: undefined,
+    step2: undefined,
+    step3: undefined,
+    step4: undefined,
+    step5: undefined,
+    step6: undefined,
+    step7: undefined,
+    step8: undefined,
+  });
+
   const [step7, setDataStep7] = useState();
 
   const handleGetPerfectDate = async () => {
@@ -249,14 +254,22 @@ export default function Home() {
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
 
-    setDataStep1(arrPerfectDateStep1);
-    setDataStep2(arrPerfectDateStep2);
-    setDataStep6(arrPerfectDateStep6);
-    setDataStep3(arrPerfectDateStep3);
-    setDataStep4(arrPerfectDateStep4);
-    setDataStep5(arrPerfectDateStep5);
-    setDataStep7(arrPerfectDateStep7);
-
+    // setDataStep2(arrPerfectDateStep2);
+    // setDataStep6(arrPerfectDateStep6);
+    // setDataStep3(arrPerfectDateStep3);
+    // setDataStep4(arrPerfectDateStep4);
+    // setDataStep5(arrPerfectDateStep5);
+    // setDataStep7(arrPerfectDateStep7);
+    // setDataStep1(arrPerfectDateStep1);
+    setStepShow({
+      step1: arrPerfectDateStep1,
+      step2: arrPerfectDateStep2,
+      step3: arrPerfectDateStep3,
+      step4: arrPerfectDateStep4,
+      step5: arrPerfectDateStep5,
+      step6: arrPerfectDateStep6,
+      step7: arrPerfectDateStep7,
+    });
     setLoading(false);
   };
 
@@ -298,37 +311,6 @@ export default function Home() {
     return ArrHopHoa;
   };
   const handleHopHoaNgayGio = async (arr, toa) => {
-    // let ArrHopHoa = [];
-    // arr?.forEach((item, ind) => {
-    //   let combineThienCanNgayGio = "";
-    //   item.gio.map((itemGio) => {
-    //     combineThienCanNgayGio = CombineThienCan(
-    //       item.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)],
-    //       item.ngayCan
-    //     );
-    //     if (combineThienCanNgayGio.length !== 0) {
-    //       if (
-    //         !CheckNguHanhTuongKhac(
-    //           NGU_HANH[valueText],
-    //           combineThienCanNgayGio
-    //         ) &&
-    //         !CheckNguHanhTuongKhac(
-    //           NGU_HANH[item.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]],
-    //           combineThienCanNgayGio
-    //         ) &&
-    //         !CheckNguHanhTuongKhac(
-    //           NGU_HANH[item.ngayChi],
-    //           combineThienCanNgayGio
-    //         )
-    //       ) {
-    //         ArrHopHoa.push(itemGio);
-    //       }
-    //     } else {
-    //       ArrHopHoa.push(itemGio);
-    //     }
-    //   });
-    //   item.gio = ArrHopHoa;
-    // });
     return arr;
   };
   return (
@@ -353,6 +335,16 @@ export default function Home() {
             label=" Chọn việc cần xem"
             onChange={(e) => {
               setValueSelect(e.target.value);
+              setStepShow({
+                step1: undefined,
+                step2: undefined,
+                step3: undefined,
+                step4: undefined,
+                step5: undefined,
+                step6: undefined,
+                step7: undefined,
+                step8: undefined,
+              });
             }}>
             {Object.keys(SERVICE_THOCUNG).map((key, inex) => {
               return (
@@ -574,14 +566,14 @@ export default function Home() {
           </div>
 
           {/* Show ket qua */}
-          {step7 && (
+          {stepShow.step7 && (
             <>
               <div className="text-[24px] font-bold mb-4 text-black">
                 {" "}
-                Tổng cộng có {step7?.length} kết quả{" "}
+                Tổng cộng có {stepShow.step7?.length} kết quả{" "}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6 ">
-                {step7?.map((item, index) => {
+                {stepShow.step7?.map((item, index) => {
                   return (
                     <>
                       <div className="max-h-[500px] overflow-scroll">
@@ -596,120 +588,124 @@ export default function Home() {
               </div>
             </>
           )}
-          <div className="">
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Sau bước 1 {"(Tránh ngày, tháng xung toạ)"}
-              {step1 && `(${step1?.length})`}
+          {stepShow.step1 && (
+            <div className="">
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Sau bước 1 {"(Tránh ngày, tháng xung toạ)"}
+                {`(${stepShow.step1?.length})`}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableShow
+                  data={stepShow.step1}
+                  infoGiaChu={infoGiaChu}
+                  valueSelect={valueSelect}></TableShow>
+              </div>
             </div>
-            <div
-              className="max-h-[500px] overflow-scroll
-        px-10 border-2 border-black mt-2">
-              <TableShow
-                data={step1}
-                infoGiaChu={infoGiaChu}
-                valueSelect={valueSelect}></TableShow>
+          )}
+          {stepShow.step2 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Sau bước 2 {"(Tránh bách kỵ)"}
+                {`(${stepShow.step2?.length})`}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={stepShow.step2}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
             </div>
-          </div>
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Sau bước 2 {"(Tránh bách kỵ)"}
-              {step2 && `(${step2?.length})`}
-            </div>
-            <div
-              className="max-h-[500px] overflow-scroll
-        px-10 border-2 border-black mt-2">
-              <TableShow
-                valueSelect={valueSelect}
-                data={step2}
-                infoGiaChu={infoGiaChu}></TableShow>
-            </div>
-          </div>
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Kiểm tra thêm hợp hoá ngày/tháng {step6 && `(${step6?.length})`}
-            </div>
+          )}
+          {stepShow.step6 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Kiểm tra thêm hợp hoá ngày/tháng{" "}
+                {stepShow.step6 && `(${stepShow.step6?.length})`}
+              </div>
 
-            <div
-              className="max-h-[500px] overflow-scroll
-        px-10 border-2 border-black mt-2">
-              <TableShow
-                valueSelect={valueSelect}
-                data={step6}
-                infoGiaChu={infoGiaChu}></TableShow>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={stepShow.step6}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
             </div>
-          </div>
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Sau bước 3 {"(So với tuổi gia chủ)"}{" "}
-              {step3 && `(${step3?.length})`}
-            </div>
+          )}
+          {stepShow.step3 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Sau bước 3 {"(So với tuổi gia chủ)"}{" "}
+                {stepShow.step3 && `(${stepShow.step3?.length})`}
+              </div>
 
-            <div
-              className="max-h-[500px] overflow-scroll
-        px-10 border-2 border-black mt-2">
-              <TableShow
-                valueSelect={valueSelect}
-                data={step3}
-                infoGiaChu={infoGiaChu}></TableShow>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={stepShow.step3}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
             </div>
-          </div>
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Sau bước 4 {"Kiểm tra Trực/Tú"}
-              {step4 && `(${step4?.length})`}
-            </div>
+          )}
+          {stepShow.step4 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Sau bước 4 {"Kiểm tra Trực/Tú"}
+                {stepShow.step4 && `(${stepShow.step4?.length})`}
+              </div>
 
-            <div
-              className="max-h-[500px] overflow-scroll
-        px-10 border-2 border-black mt-2">
-              <TableShow
-                valueSelect={valueSelect}
-                data={step4}
-                infoGiaChu={infoGiaChu}></TableShow>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={stepShow.step4}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
             </div>
-          </div>
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Sau bước 5 {"Chọn giờ"}
-            </div>
+          )}
+          {stepShow.step5 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Sau bước 5 {"Chọn giờ"}
+              </div>
 
-            <div
-              className="max-h-[500px] overflow-scroll
-        px-10 border-2 border-black mt-2">
-              <TableShow
-                valueSelect={valueSelect}
-                data={step5}
-                infoGiaChu={infoGiaChu}></TableShow>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={stepShow.step5}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
             </div>
-          </div>
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Kiểm tra thêm hợp hoá ngày/giờ {step7 && `(${step7?.length})`}
-            </div>
+          )}
+          {stepShow.step7 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Kiểm tra thêm hợp hoá ngày/giờ{" "}
+                {stepShow.step7 && `(${stepShow.step7?.length})`}
+              </div>
 
-            <div
-              className="max-h-[500px] overflow-scroll
+              <div
+                className="max-h-[500px] overflow-scroll
         px-10 border-2 border-black mt-2">
-              <TableShow
-                valueSelect={valueSelect}
-                data={step7}
-                infoGiaChu={infoGiaChu}></TableShow>
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={stepShow.step7}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
       <div style={{ height: 200 }}></div>

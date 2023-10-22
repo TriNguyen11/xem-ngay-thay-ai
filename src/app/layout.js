@@ -3,7 +3,7 @@ import "./globals.css";
 import Favicon from "../../public/favicon/favicon.ico";
 import { LocalizationProvide } from "@Root/app/LocalProviderApp";
 import Head from "next/head";
-import ResponsiveAppBar from "@Root/components/ResponsiveNav";
+import ResponsiveAppBar from "@Root/app/components/ResponsiveNav";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {

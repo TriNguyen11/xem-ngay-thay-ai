@@ -12,12 +12,12 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import Notify from "@Root/components/Notify";
-import TableResult from "@Root/components/TableResult";
-import TableSangCatThang2 from "@Root/components/TableSangCatThang2";
-import TableWedding from "@Root/components/TableWedding";
-import TableWeddingNam from "@Root/components/TableWeddingNam";
-import TableWeddingThang from "@Root/components/TableWeddingThang";
+import Notify from "@Root/app/components/Notify";
+import TableResult from "@Root/app/components/TableResult";
+import TableSangCatThang2 from "@Root/app/components/TableSangCatThang2";
+import TableWedding from "@Root/app/components/TableWedding";
+import TableWeddingNam from "@Root/app/components/TableWeddingNam";
+import TableWeddingThang from "@Root/app/components/TableWeddingThang";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
@@ -99,10 +99,6 @@ export default function Home() {
     nuToa: "",
   });
   const [arrMonthInYear, setArrMonthInYear] = useState();
-  const [yearArr, setYearArr] = useState({
-    lunar: [],
-    solar: [],
-  });
   const [infoGiaChu, setInfoGiaChu] = useState({
     nameNam: "",
     tuoiNam: "",
@@ -127,14 +123,18 @@ export default function Home() {
   const [valueSelect, setValueSelect] = useState("");
   const [rangeDayInMonthLunar, setRangeDayInMonthLunar] = useState();
 
-  const [step1, setDataStep1] = useState();
-  const [step2, setDataStep2] = useState();
-  const [step3, setDataStep3] = useState();
-  const [step4, setDataStep4] = useState();
-  const [step5, setDataStep5] = useState();
-  const [step6, setDataStep6] = useState();
-  const [step7, setDataStep7] = useState();
-  const [lunarYearArr, setLunarYearArr] = useState([]);
+  const [stepShow, setStepShow] = useState({
+    step1: undefined,
+    step2: undefined,
+    step3: undefined,
+    step4: undefined,
+    step5: undefined,
+    step6: undefined,
+    step7: undefined,
+    step8: undefined,
+  });
+
+  const [lunarYearArr, setLunarYearArr] = useState();
 
   const handleGetPerfectDate = async () => {
     let tuoiChiNam = CHI_NAM[valueAge.namYear % 12];
@@ -307,6 +307,7 @@ export default function Home() {
     } else {
       arrPerfectDateStep2 = arrPerfectDateStep1;
     }
+    console.log(arrPerfectDateStep2, "arrPerfectDateStep2");
     // Xet ngay
 
     arrPerfectDateStep2.map((item, index) => {
@@ -460,16 +461,16 @@ export default function Home() {
     // Convert  RangeDayInMonthLunar
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     setLunarYearArr(lunarYear);
-    setDataStep3(arrPerfectDateStep3);
-    setDataStep4(arrPerfectDateStep4);
-    setDataStep5(arrPerfectDateStep5);
-    setDataStep6(arrPerfectDateStep6);
-    setDataStep7(arrPerfectDateStep7);
-
     setArrMonthInYear(monthInYear);
-    setDataStep1(arrPerfectDateStep1);
-    setDataStep2(arrPerfectDateStep2);
-
+    setStepShow({
+      step1: arrPerfectDateStep1,
+      step2: arrPerfectDateStep2,
+      step3: arrPerfectDateStep3,
+      step4: arrPerfectDateStep4,
+      step5: arrPerfectDateStep5,
+      step6: arrPerfectDateStep6,
+      step7: arrPerfectDateStep7,
+    });
     setLoading(false);
   };
 
@@ -535,6 +536,16 @@ export default function Home() {
               setValueText({
                 namToa: "",
                 nuToa: "",
+              });
+              setStepShow({
+                step1: undefined,
+                step2: undefined,
+                step3: undefined,
+                step4: undefined,
+                step5: undefined,
+                step6: undefined,
+                step7: undefined,
+                step8: undefined,
               });
             }}>
             {Object.keys(SERVICE_CUOIHOI).map((key, inex) => {
@@ -800,7 +811,7 @@ export default function Home() {
       {/* table show */}
       <div className="text-black mb-2 font-bold text-lg mt-10 max-w-3xl">
         {lunarYearArr
-          .map((item) => {
+          ?.map((item) => {
             return (
               " " +
               CAN_NAM[item % 10] +
@@ -857,7 +868,7 @@ export default function Home() {
                     </span>{" "}
                     -{" "}
                     {lunarYearArr
-                      .map((item) => {
+                      ?.map((item) => {
                         return (
                           " " +
                           Number(item - valueAge.namYear + 1) +
@@ -896,7 +907,7 @@ export default function Home() {
                     </span>
                     -{" "}
                     {lunarYearArr
-                      .map((item) => {
+                      ?.map((item) => {
                         return (
                           " " +
                           Number(item - valueAge.nuYear + 1) +
@@ -930,14 +941,14 @@ export default function Home() {
             )}
           </div>
           {/* Show ket qua */}
-          {step7 && (
+          {stepShow.step7 && (
             <>
               <div className="text-[24px] font-bold mb-4 text-black">
                 {" "}
-                Tổng cộng có {step7?.length} kết quả{" "}
+                Tổng cộng có {stepShow.step7?.length} kết quả{" "}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6 ">
-                {step7?.map((item, index) => {
+                {stepShow.step7?.map((item, index) => {
                   return (
                     <>
                       <div className="max-h-[500px] overflow-scroll">
@@ -953,134 +964,151 @@ export default function Home() {
               </div>
             </>
           )}
-          <div className="">
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Bước 1: Xét Năm {"(Tránh năm kim lâu nữ, thái tuế)"}
-              {lunarYearArr && `(${lunarYearArr?.length})`}
-            </div>
-            <div
-              className="max-h-[500px] overflow-scroll
+          {lunarYearArr && (
+            <div className="">
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Bước 1: Xét Năm {"(Tránh năm kim lâu nữ, thái tuế)"}
+                {lunarYearArr && `(${lunarYearArr?.length})`}
+              </div>
+              <div
+                className="max-h-[500px] overflow-scroll
             px-10 border-2 border-black mt-2 ">
-              <TableWeddingNam
-                data={step1}
-                toaNha={valueText.namToa || valueText.nuToa}
-                infoGiaChu={infoGiaChu}
-                lunarYearArr={lunarYearArr}
-                valueSelect={valueSelect}></TableWeddingNam>
+                <TableWeddingNam
+                  data={stepShow.step1}
+                  toaNha={valueText.namToa || valueText.nuToa}
+                  infoGiaChu={infoGiaChu}
+                  lunarYearArr={lunarYearArr || []}
+                  valueSelect={valueSelect}></TableWeddingNam>
+              </div>
             </div>
-          </div>
-          <div className="">
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Bước 2: Xét Tháng
-              {step1 && `(${step1?.length})`}
-            </div>
-            <div
-              className="max-h-[500px] overflow-scroll
+          )}
+          {stepShow.step1 && (
+            <div className="">
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Bước 2: Xét Tháng
+                {stepShow.step1 && `(${stepShow.step1?.length})`}
+              </div>
+              <div
+                className="max-h-[500px] overflow-scroll
             px-10 border-2 border-black mt-2 ">
-              <TableWeddingThang
-                data={step1}
-                toaNha={valueText.namToa || valueText.nuToa}
-                infoGiaChu={infoGiaChu}
-                valueSelect={valueSelect}></TableWeddingThang>
+                <TableWeddingThang
+                  data={stepShow.step1}
+                  toaNha={valueText.namToa || valueText.nuToa}
+                  infoGiaChu={infoGiaChu}
+                  valueSelect={valueSelect}></TableWeddingThang>
+              </div>
             </div>
-          </div>
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              Bước 3: Xét ngày{step2 && ` (${step2?.length})`}
-            </div>
-            <div
-              className="max-h-[500px] overflow-scroll
-            px-10 border-2 border-black mt-2 ">
-              <TableWedding
-                valueSelect={valueSelect}
-                data={step2}
-                toaNha={valueText.namToa || valueText.nuToa}
-                infoGiaChu={infoGiaChu}></TableWedding>
-            </div>
-          </div>
-          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
+          )}
+          {stepShow.step2 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Kiểm tra thêm hợp hoá ngày/tháng {step6 && `(${step6?.length})`}
+                Bước 3: Xét ngày
+                {stepShow.step2 && ` (${stepShow.step2?.length})`}
               </div>
-
               <div
                 className="max-h-[500px] overflow-scroll
-              px-10 border-2 border-black mt-2 ">
+            px-10 border-2 border-black mt-2 ">
                 <TableWedding
                   valueSelect={valueSelect}
-                  data={step6}
+                  data={stepShow.step2}
+                  toaNha={valueText.namToa || valueText.nuToa}
                   infoGiaChu={infoGiaChu}></TableWedding>
               </div>
             </div>
           )}
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              bước{" "}
-              {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-                ? "4"
-                : "3"}{" "}
-              {"Kiểm tra Trực/Tú"}
-              {step4 && `(${step4?.length})`}
-            </div>
+          {valueSelect !== "dao-gieng" &&
+            valueSelect !== "lap-gieng" &&
+            stepShow.step6 && (
+              <div>
+                <div
+                  className="font-bold text-[20px]"
+                  style={{ color: "black", marginTop: 30 }}>
+                  Kiểm tra thêm hợp hoá ngày/tháng{" "}
+                  {stepShow.step6 && `(${stepShow.step6?.length})`}
+                </div>
 
-            <div
-              className="max-h-[500px] overflow-scroll
-            px-10 border-2 border-black mt-2 ">
-              <TableWedding
-                valueSelect={valueSelect}
-                data={step4}
-                infoGiaChu={infoGiaChu}></TableWedding>
-            </div>
-          </div>
-          <div>
-            <div
-              className="font-bold text-[20px]"
-              style={{ color: "black", marginTop: 30 }}>
-              bước{" "}
-              {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-                ? "5"
-                : "4"}{" "}
-              {"Chọn giờ"}
-            </div>
-
-            <div
-              className="max-h-[500px] overflow-scroll
-            px-10 border-2 border-black mt-2 ">
-              <TableWedding
-                valueSelect={valueSelect}
-                data={step5}
-                infoGiaChu={infoGiaChu}></TableWedding>
-            </div>
-          </div>
-          {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng" && (
+                <div
+                  className="max-h-[500px] overflow-scroll
+              px-10 border-2 border-black mt-2 ">
+                  <TableWedding
+                    valueSelect={valueSelect}
+                    data={stepShow.step6}
+                    infoGiaChu={infoGiaChu}></TableWedding>
+                </div>
+              </div>
+            )}
+          {stepShow.step4 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Kiểm tra thêm hợp hoá ngày/giờ {step7 && `(${step7?.length})`}
+                bước{" "}
+                {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
+                  ? "4"
+                  : "3"}{" "}
+                {"Kiểm tra Trực/Tú"}
+                {stepShow.step4 && `(${stepShow.step4?.length})`}
               </div>
 
               <div
                 className="max-h-[500px] overflow-scroll
-              px-10 border-2 border-black mt-2 ">
+            px-10 border-2 border-black mt-2 ">
                 <TableWedding
                   valueSelect={valueSelect}
-                  data={step7}
+                  data={stepShow.step4}
                   infoGiaChu={infoGiaChu}></TableWedding>
               </div>
             </div>
           )}
+          {stepShow.step5 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                bước{" "}
+                {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
+                  ? "5"
+                  : "4"}{" "}
+                {"Chọn giờ"}
+              </div>
+
+              <div
+                className="max-h-[500px] overflow-scroll
+            px-10 border-2 border-black mt-2 ">
+                <TableWedding
+                  valueSelect={valueSelect}
+                  data={stepShow.step5}
+                  infoGiaChu={infoGiaChu}></TableWedding>
+              </div>
+            </div>
+          )}
+          {valueSelect !== "dao-gieng" &&
+            valueSelect !== "lap-gieng" &&
+            stepShow.step7 && (
+              <div>
+                <div
+                  className="font-bold text-[20px]"
+                  style={{ color: "black", marginTop: 30 }}>
+                  Kiểm tra thêm hợp hoá ngày/giờ{" "}
+                  {stepShow.step7 && `(${stepShow.step7?.length})`}
+                </div>
+
+                <div
+                  className="max-h-[500px] overflow-scroll
+              px-10 border-2 border-black mt-2 ">
+                  <TableWedding
+                    valueSelect={valueSelect}
+                    data={stepShow.step7}
+                    infoGiaChu={infoGiaChu}></TableWedding>
+                </div>
+              </div>
+            )}
         </>
       )}
       <div style={{ height: 200 }}></div>

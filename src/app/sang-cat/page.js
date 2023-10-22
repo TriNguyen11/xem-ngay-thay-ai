@@ -11,13 +11,13 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import Notify from "@Root/components/Notify";
-import TableShow from "@Root/components/Table";
-import TableResult from "@Root/components/TableResult";
-import TableSangCatNam from "@Root/components/TableSangCatNam";
-import TableSangCatNgay from "@Root/components/TableSangCatNgay";
-import TableSangCatThang from "@Root/components/TableSangCatThang";
-import TableTangSu from "@Root/components/TableTangSu";
+import Notify from "@Root/app/components/Notify";
+import TableShow from "@Root/app/components/Table";
+import TableResult from "@Root/app/components/TableResult";
+import TableSangCatNam from "@Root/app/components/TableSangCatNam";
+import TableSangCatNgay from "@Root/app/components/TableSangCatNgay";
+import TableSangCatThang from "@Root/app/components/TableSangCatThang";
+import TableTangSu from "@Root/app/components/TableTangSu";
 import {
   getSunLongitude,
   isLeapYearLunar,
@@ -117,6 +117,16 @@ export default function Home() {
 
   const [stepInit, setDataStepInit] = useState();
   const [rangeDayInMonthLunar, setRangeDayInMonthLunar] = useState();
+  const [stepShow, setStepShow] = useState({
+    step1: undefined,
+    step2: undefined,
+    step3: undefined,
+    step4: undefined,
+    step5: undefined,
+    step6: undefined,
+    step7: undefined,
+    step8: undefined,
+  });
 
   const [step1, setDataStep1] = useState();
   const [step2, setDataStep2] = useState();
@@ -130,6 +140,7 @@ export default function Home() {
   const [infoNguoiMat, setInfoNguoiMat] = useState();
 
   const handleSangCatNu = async () => {
+    console.log("asds");
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
@@ -334,226 +345,17 @@ export default function Home() {
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
     setYearArr({ lunar: lunarYear, solar: solarYear });
     setArrMonthInYear(monthInYear);
-    setDataStep3(arrPerfectDateStep3);
-    setDataStep6(arrPerfectDateStep6);
-    setDataStep4(arrPerfectDateStep4);
-    setDataStep4(arrPerfectDateStep5);
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
-    setDataStepInit(dateArr);
-    setDataStep2(arrPerfectDateStep2);
-  };
-  const handleSangCatNam = async () => {
-    let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
-    let namMat = Number(valueAge.dead_year);
-    let namSinh = Number(valueAge.year);
-    if (Number(valueAge.month) <= 2) {
-      const sunlong = getSunLongitude(
-        jdn(
-          Number(valueAge.day),
-          Number(valueAge.month),
-          Number(valueAge.year),
-          valueAge.time?.$H,
-          valueAge.time?.$m,
-          valueAge.time.$s
-        ),
-        7
-      );
-      if (sunlong <= 20 && sunlong >= 17) {
-        tuoiNguoiMat++;
-        namSinh--;
-      }
-    }
-    if (Number(valueAge.dead_month) <= 2) {
-      const sunlong = getSunLongitude(
-        jdn(
-          Number(valueAge.dead_day),
-          Number(valueAge.dead_month),
-          Number(valueAge.dead_year),
-          valueAge.dead_time?.$H,
-          valueAge.dead_time?.$m,
-          valueAge.dead_time.$s
-        ),
-        7
-      );
-      if (sunlong <= 20 && sunlong >= 17) {
-        namMat--;
-        tuoiNguoiMat--;
-      }
-    }
-    let bamCung = CalcuBamCungNam(
-      tuoiNguoiMat,
-      Number(valueAge.dead_month),
-      Number(valueAge.dead_day),
-      valueAge.dead_time?.$H
-    );
 
-    let dateArr = await enumerateDaysBetweenDates(
-      `${moment(dateStart.$d).year()}-${
-        moment(dateStart.$d).month() + 1
-      }-${moment(dateStart.$d).date()}`,
-
-      `${moment(dateEnd.$d).year()}-${moment(dateEnd.$d).month() + 1}-${moment(
-        dateEnd.$d
-      ).date()}`
-    );
-
-    console.log(bamCung, "bamCungbamCung");
-    let arrPerfectDate = [];
-    let arrPerfectDateStep1 = [];
-    let arrPerfectDateStep2 = [];
-    let arrPerfectDateStep3 = [];
-    let arrPerfectDateStep4 = [];
-    let arrPerfectDateStep5 = [];
-    let arrPerfectDateStep6 = []; // hop hoa ngay/thang
-    let arrPerfectDateStep7 = []; // hop hoa ngay/gio
-    let lunarYear = [];
-    let solarYear = [];
-    let monthInYear = {};
-
-    // Convert  RangeDayInMonthLunar
-    setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
-    // Chon ngay
-    // Xac dinh ngay/thang xung toa nha
-    dateArr.map((item, index) => {
-      if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
-      if (!solarYear.includes(item.yearSolar)) solarYear.push(item.yearSolar);
-      if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
-        monthInYear[item.yearLunar] = {};
-      }
-      if (!Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
-      }
+    setStepShow({
+      step1: dateArr,
+      step2: arrPerfectDateStep2,
+      step3: arrPerfectDateStep3,
+      step4: arrPerfectDateStep5,
+      // step5: arrPerfectDateStep5,
+      step6: arrPerfectDateStep6,
+      step7: arrPerfectDateStep7,
     });
-    // setDataStep1(arrPerfectDateStep1);
-    // console.log(dateArr, "monthInYear");
-    // console.log(valueText, "valueSelect");
-    // Show bach ky trong thang
-    dateArr.map((item, index) => {
-      if (
-        //nam
-        !CheckTrucXungHinhHaiChi(
-          CHI_NAM[Number(item.yearLunar) % 12],
-          CHI_NAM[Number(namSinh) % 12]
-        ) &&
-        !isLeapYearLunar(item.yearLunar) &&
-        //thang
-        !CheckTrucXungHinhHaiChi(
-          item.thangChi,
-          CHI_NAM[Number(namSinh) % 12]
-        ) &&
-        !CheckTrucXungNgayThangNam(item.thangChi, valueText)
-      ) {
-        arrPerfectDateStep2.push(item);
-      }
-    });
-
-    //Loai bach ky
-    dateArr.map((item, index) => {
-      if (
-        //nam
-        !CheckTrucXungHinhHaiChi(
-          CHI_NAM[Number(item.yearLunar) % 12],
-          CHI_NAM[Number(namSinh) % 12]
-        ) &&
-        !isLeapYearLunar(item.yearLunar) &&
-        //thang
-        !CheckTrucXungHinhHaiChi(
-          item.thangChi,
-          CHI_NAM[Number(namSinh) % 12]
-        ) &&
-        !CheckTrucXungNgayThangNam(item.thangChi, valueText) &&
-        // ngay
-        // 1.
-        //xung toa
-        !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
-        CheckNguHanhTuongSinh(NGU_HANH[valueText], NGU_HANH[item.ngayCan]) &&
-        // 2.
-        !CheckTrucXungHinhHaiChi(CHI_NAM[Number(namSinh) % 12], item.ngayChi) &&
-        // 3.
-        item.dayLunar !== 1 &&
-        item.dayLunar !== 15 &&
-        monthDays(item.yearLunar, item.monthLunar) !== item.dayLunar &&
-        !NGUYET_KY.includes(item.dayLunar) &&
-        // !TAM_NUONG.includes(item.dayLunar) &&
-        THO_TU[item.monthLunar - 1] !== item.ngayChi &&
-        SAT_CHU_AM[item.monthLunar - 1] !== item.ngayChi &&
-        SAT_CHU_DUONG[item.monthLunar - 1] !== item.ngayChi &&
-        // VANG_VONG[item.monthLunar - 1] !== item.ngayChi &&
-        NGUYET_PHA[item.monthLunar - 1] !== item.ngayChi &&
-        //Trung Phuc
-        CheckCase5TrungTang(item.monthLunar, item.ngayCan, item.ngayChi)
-          .length === 0 &&
-        // than Trung
-        CheckCase4TrungTang(item.monthLunar, item.ngayCan, item.ngayChi)
-          .length === 0 &&
-        // Trung Nhat
-        !CheckNgayTrungNhat(item.ngayChi) &&
-        // Ha Khoi
-        !CheckNgayGioHaKhoi(item.monthLunar, item.ngayChi) &&
-        // Thien Tac
-        !CheckNgayGioThienTac(item.monthLunar, item.ngayChi) &&
-        //Trung tang
-        !CheckTrungTang(item.monthLunar, item.ngayCan) &&
-        //kiep sat
-        !CheckGioKiepSat(namSinh, item.ngayChi) &&
-        //Ky chon cat
-        !CheckKyChonCat(item.monthLunar, item.dayLunar)
-      ) {
-        arrPerfectDateStep3.push(item);
-      }
-    });
-    // Xet them hop hoa
-    arrPerfectDateStep6 = await handleHopHoaNgayThang(
-      arrPerfectDateStep3,
-      valueText
-    );
-
-    // kiem tra truc/tu
-    arrPerfectDateStep6.map((item, ind) => {
-      if (
-        //   !! || 1 trong 2 pham deu` bi
-        //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)
-        // &&
-        // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
-        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-      ) {
-      } else {
-        if (
-          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        ) {
-        } else {
-          arrPerfectDateStep4.push(item);
-        }
-      }
-    });
-
-    // Chon gio
-    arrPerfectDateStep4.map((item, ind) => {
-      arrPerfectDateStep5.push({
-        ...item,
-        gio: CheckTrucXungGioTangSu({
-          ...item,
-          cungNguoiMat: CHI_NAM[Number(namSinh) % 12],
-          chiNamSinh: CHI_NAM[namSinh % 12],
-        }),
-      });
-    });
-
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-    setYearArr({ lunar: lunarYear, solar: solarYear });
-    setArrMonthInYear(monthInYear);
-    setDataStep3(arrPerfectDateStep3);
-    setDataStep6(arrPerfectDateStep6);
-    setDataStep4(arrPerfectDateStep4);
-    setDataStep4(arrPerfectDateStep5);
-    setDataStepInit(dateArr);
-    setDataStep2(arrPerfectDateStep2);
   };
 
   return (
@@ -578,9 +380,16 @@ export default function Home() {
             label=" Chọn việc cần xem"
             onChange={(e) => {
               setValueSelect(e.target.value);
-              setDataStep2();
-              setDataStepInit();
-              setDataStep4();
+              setStepShow({
+                step1: undefined,
+                step2: undefined,
+                step3: undefined,
+                step4: undefined,
+                step5: undefined,
+                step6: undefined,
+                step7: undefined,
+                step8: undefined,
+              });
             }}>
             {Object.keys(SERVICE_SANGCAT).map((key, inex) => {
               return (
@@ -797,7 +606,6 @@ export default function Home() {
             //   return refNotify.current.handleClick();
             // }
 
-            if (valueAge.gender === 1) return handleSangCatNam();
             return handleSangCatNu();
           }}
           variant="contained"
@@ -864,108 +672,19 @@ export default function Home() {
                     {CAN_NAM[infoNguoiMat.namSinh % 10]}{" "}
                     {CHI_NAM[infoNguoiMat.namSinh % 12]}
                   </div>{" "}
-                  {/* <div
-                    style={{
-                      color: TRUNG_TANG.includes(infoNguoiMat.bamCungTuoi)
-                        ? "red"
-                        : NHAP_MO.includes(infoNguoiMat.bamCungTuoi)
-                        ? "green"
-                        : "black",
-                    }}>
-                    Tuổi mất: {infoNguoiMat.bamCungTuoi} - (
-                    {TRUNG_TANG.includes(infoNguoiMat.bamCungTuoi)
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(infoNguoiMat.bamCungTuoi)
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(infoNguoiMat.bamCungThang)
-                        ? "red"
-                        : NHAP_MO.includes(infoNguoiMat.bamCungThang)
-                        ? "green"
-                        : "black",
-                    }}>
-                    Tháng mất: {infoNguoiMat.bamCungThang}- (
-                    {TRUNG_TANG.includes(infoNguoiMat.bamCungThang)
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(infoNguoiMat.bamCungThang)
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(infoNguoiMat.bamCungNgay)
-                        ? "red"
-                        : NHAP_MO.includes(infoNguoiMat.bamCungNgay)
-                        ? "green"
-                        : "black",
-                    }}>
-                    Ngày mất: {infoNguoiMat.bamCungNgay} - (
-                    {TRUNG_TANG.includes(infoNguoiMat.bamCungNgay)
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(infoNguoiMat.bamCungNgay)
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(infoNguoiMat.bamCungGio)
-                        ? "red"
-                        : NHAP_MO.includes(infoNguoiMat.bamCungGio)
-                        ? "green"
-                        : "black",
-                    }}>
-                    Giờ mất: {infoNguoiMat.bamCungGio}- (
-                    {TRUNG_TANG.includes(infoNguoiMat.bamCungGio)
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(infoNguoiMat.bamCungGio)
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(
-                        CHI_NAM[Number(infoNguoiMat.namMat) % 12]
-                      )
-                        ? "red"
-                        : NHAP_MO.includes(
-                            CHI_NAM[Number(infoNguoiMat.namMat) % 12]
-                          )
-                        ? "green"
-                        : "black",
-                    }}>
-                    Năm mất: {CAN_NAM[Number(infoNguoiMat.namMat) % 10]}{" "}
-                    {CHI_NAM[Number(infoNguoiMat.namMat) % 12]}- (
-                    {TRUNG_TANG.includes(
-                      CHI_NAM[Number(infoNguoiMat.namMat) % 12]
-                    )
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(
-                          CHI_NAM[Number(infoNguoiMat.namMat) % 12]
-                        )
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "} */}
                 </div>
               </>
             )}
           </div>
           {/* Show ket qua */}
-          {step4 && (
+          {stepShow.step4 && (
             <>
               <div className="text-[24px] font-bold mb-4 text-black">
                 {" "}
-                Tổng cộng có {step4?.length} kết quả{" "}
+                Tổng cộng có {stepShow.step4?.length} kết quả{" "}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6">
-                {step4?.map((item, index) => {
+                {stepShow.step4?.map((item, index) => {
                   return (
                     <>
                       <div className="max-h-[500px] overflow-scroll">
@@ -1018,77 +737,77 @@ export default function Home() {
               </div>
             </div>
           )}
-          {step2 && (
+          {stepShow.step2 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Bước 3: Chọn ngày
-                {step2 && `(${step2?.length})`}
+                {stepShow.step2 && `(${stepShow.step2?.length})`}
               </div>
               <div
                 className="max-h-[500px] overflow-scroll
               px-10 border-2 border-black mt-2 ">
                 <TableSangCatNgay
                   valueSelect={valueSelect}
-                  data={step2}
+                  data={stepShow.step2}
                   infoNguoiMat={infoNguoiMat}
                   toaNha={valueText}></TableSangCatNgay>
               </div>
             </div>
           )}
-          {step6 && (
+          {stepShow.step6 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Xét thêm hợp hoá
-                {step6 && `(${step6?.length})`}
+                {stepShow.step6 && `(${stepShow.step6?.length})`}
               </div>
               <div
                 className="max-h-[500px] overflow-scroll
               px-10 border-2 border-black mt-2 ">
                 <TableSangCatNgay
                   valueSelect={valueSelect}
-                  data={step6}
+                  data={stepShow.step6}
                   infoNguoiMat={infoNguoiMat}
                   toaNha={valueText}></TableSangCatNgay>
               </div>
             </div>
           )}
-          {step3 && (
+          {stepShow.step3 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Bước 4: Xét Trực/Tú
-                {step3 && `(${step3?.length})`}
+                {stepShow.step3 && `(${stepShow.step3?.length})`}
               </div>
               <div
                 className="max-h-[500px] overflow-scroll
               px-10 border-2 border-black mt-2 ">
                 <TableSangCatNgay
                   valueSelect={valueSelect}
-                  data={step3}
+                  data={stepShow.step3}
                   infoNguoiMat={infoNguoiMat}
                   toaNha={valueText}></TableSangCatNgay>
               </div>
             </div>
           )}
-          {step4 && (
+          {stepShow.step4 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Bước 5: Chọn giờ
-                {step4 && `(${step4?.length})`}
+                {stepShow.step4 && `(${stepShow.step4?.length})`}
               </div>
               <div
                 className="max-h-[500px] overflow-scroll
               px-10 border-2 border-black mt-2 ">
                 <TableSangCatNgay
                   valueSelect={valueSelect}
-                  data={step4}
+                  data={stepShow.step4}
                   infoNguoiMat={infoNguoiMat}
                   toaNha={valueText}></TableSangCatNgay>
               </div>

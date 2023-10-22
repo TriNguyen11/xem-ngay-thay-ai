@@ -31,7 +31,7 @@ import { chiVi, DiaChi } from "@Root/script/AmLich";
 
 const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
   const [checked, setChecked] = useState(false);
-  console.log(description, "description");
+
   return (
     <Collapse
       in={checked}

@@ -700,8 +700,6 @@ export const CheckTrucXungGio = (
 // 4. Ưu tiên các địa chi giờ Thìn, Tuất, Sửu, Mùi
 // 5. Ưu tiên các giờ Tam hợp - Lục Hợp với tuổi người chết
 export const CheckTrucXungGioTangSu = (data) => {
-  console.log(data, "check data");
-
   return CHI.filter((item) => {
     if (
       // 1.

@@ -11,10 +11,10 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import Notify from "@Root/components/Notify";
-import TableShow from "@Root/components/Table";
-import TableResult from "@Root/components/TableResult";
-import TableTangSu from "@Root/components/TableTangSu";
+import Notify from "@Root/app/components/Notify";
+import TableShow from "@Root/app/components/Table";
+import TableResult from "@Root/app/components/TableResult";
+import TableTangSu from "@Root/app/components/TableTangSu";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
@@ -71,9 +71,6 @@ export default function Home() {
   });
   const [dateStart, setDateStart] = useState();
   const [dateEnd, setDateEnd] = useState();
-  const [valueText, setValueText] = useState("");
-  const [textTrucXungTuoiMuonAndGiaChu, setTextTrucXungTuoiMuonAndGiaChu] =
-    useState("");
   const [infoGiaChu, setInfoGiaChu] = useState({
     name: "",
     tuoi: "",
@@ -93,25 +90,23 @@ export default function Home() {
   });
   const [valueSelect, setValueSelect] = useState("");
 
-  const [stepInit, setDataStepInit] = useState();
-
-  const [step1, setDataStep1] = useState();
-  const [step2, setDataStep2] = useState();
-  const [step3, setDataStep3] = useState();
-  const [step4, setDataStep4] = useState();
-  const [step5, setDataStep5] = useState();
-  const [step6, setDataStep6] = useState();
-  const [step7, setDataStep7] = useState();
-  const [step8, setDataStep8] = useState();
+  const [stepShow, setStepShow] = useState({
+    stepInit: undefined,
+    step1: undefined,
+    step2: undefined,
+    step3: undefined,
+    step4: undefined,
+  });
+  const [caseShow, setCaseShow] = useState({
+    case1: undefined,
+    case2: undefined,
+    case3: undefined,
+    case4: undefined,
+    case5: undefined,
+  });
   const [rangeDayInMonthLunar, setRangeDayInMonthLunar] = useState();
 
   const [infoNguoiMat, setInfoNguoiMat] = useState();
-
-  const [case1, setCase1] = useState();
-  const [case2, setCase2] = useState();
-  const [case3, setCase3] = useState();
-  const [case4, setCase4] = useState();
-  const [case5, setCase5] = useState();
 
   const handleTrungTangNam = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
@@ -202,11 +197,13 @@ export default function Home() {
     );
 
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-    setCase1(countCase1);
-    setCase2(case2Text);
-    setCase3(case3Text);
-    setCase4(case4Text);
-    setCase5(case5Text);
+    setCaseShow({
+      case1: countCase1,
+      case2: case2Text,
+      case3: case3Text,
+      case4: case4Text,
+      case5: case5Text,
+    });
   };
   const handleTrungTangNu = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
@@ -296,11 +293,14 @@ export default function Home() {
       lichAm.ngayChi
     );
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
-    setCase1(countCase1);
-    setCase2(case2Text);
-    setCase3(case3Text);
-    setCase4(case4Text);
-    setCase5(case5Text);
+
+    setCaseShow({
+      case1: countCase1,
+      case2: case2Text,
+      case3: case3Text,
+      case4: case4Text,
+      case5: case5Text,
+    });
   };
   const handleTangSuNu = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
@@ -439,11 +439,18 @@ export default function Home() {
     });
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
-    setDataStep2(arrPerfectDateStep2);
-    setDataStep3(arrPerfectDateStep3);
-    setDataStep4(arrPerfectDateStep4);
-    setDataStepInit(dateArr);
-    setDataStep1(arrPerfectDateStep1);
+
+    setStepShow({
+      stepInit: dateArr,
+      step1: arrPerfectDateStep1,
+      step2: arrPerfectDateStep2,
+      step3: arrPerfectDateStep3,
+      step4: arrPerfectDateStep4,
+    });
+    // setDataStep2(arrPerfectDateStep2);
+    // setDataStep3(arrPerfectDateStep3);
+    // setDataStep4(arrPerfectDateStep4);
+    // setDataStepInit(dateArr);
   };
   const handleTangSuNam = async () => {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
@@ -519,7 +526,6 @@ export default function Home() {
         arrPerfectDateStep1.push(item);
       }
     });
-    setDataStep1(arrPerfectDateStep1);
 
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
@@ -586,10 +592,14 @@ export default function Home() {
 
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
-    setDataStep2(arrPerfectDateStep2);
-    setDataStep3(arrPerfectDateStep3);
-    setDataStep4(arrPerfectDateStep4);
-    setDataStepInit(dateArr);
+
+    setStepShow({
+      stepInit: dateArr,
+      step1: arrPerfectDateStep1,
+      step2: arrPerfectDateStep2,
+      step3: arrPerfectDateStep3,
+      step4: arrPerfectDateStep4,
+    });
   };
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
@@ -613,14 +623,20 @@ export default function Home() {
             label=" Chọn việc cần xem"
             onChange={(e) => {
               setValueSelect(e.target.value);
-              setDataStep2();
-              setDataStepInit();
-              setDataStep4();
-              setCase1();
-              setCase2();
-              setCase3();
-              setCase4();
-              setCase5();
+              setStepShow({
+                stepInit: undefined,
+                step1: undefined,
+                step2: undefined,
+                step3: undefined,
+                step4: undefined,
+              });
+              setCaseShow({
+                case1: undefined,
+                case2: undefined,
+                case3: undefined,
+                case4: undefined,
+                case5: undefined,
+              });
             }}>
             {Object.keys(SERVICE_TANGSU).map((key, inex) => {
               return (
@@ -983,14 +999,14 @@ export default function Home() {
             )}
           </div>
           {/* Show ket qua */}
-          {step4 && (
+          {stepShow.step4 && (
             <>
               <div className="text-[24px] font-bold mb-4 text-black">
                 {" "}
-                Tổng cộng có {step4?.length} kết quả{" "}
+                Tổng cộng có {stepShow.step4?.length} kết quả{" "}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6 ">
-                {step4?.map((item, index) => {
+                {stepShow.step4?.map((item, index) => {
                   return (
                     <>
                       <div className="max-h-[500px] overflow-scroll">
@@ -1008,97 +1024,93 @@ export default function Home() {
           )}
           {/* Show Case Trung Tang */}
           <div>
-            {case1 && (
+            {caseShow.case1 && (
               <div className="text-black text-[20px] my-4">
                 <div className="font-bold">Trường hợp 1: </div>
-                Có {case1.countNhapMoCase1} cung rơi vào Nhập mộ,{" "}
-                {case1.countTrungTangCase1} cung rơi vào Trùng tang,{" "}
-                {case1.countThienDiCase1} cung vào Thiên di.
+                Có {caseShow.case1.countNhapMoCase1} cung rơi vào Nhập mộ,{" "}
+                {caseShow.case1.countTrungTangCase1} cung rơi vào Trùng tang,{" "}
+                {caseShow.case1.countThienDiCase1} cung vào Thiên di.
               </div>
             )}
-            {case2 && (
+            {caseShow.case2 && (
               <div className="text-black text-[20px] my-4">
                 <div className="font-bold">Trường hợp 2: </div>
 
-                {case2.length !== 0 ? case2.toString() : "Không phạm"}
+                {caseShow.case2.length !== 0
+                  ? caseShow.case2.toString()
+                  : "Không phạm"}
               </div>
             )}
-            {case3 && (
+            {caseShow.case3 && (
               <div className="text-black text-[20px] my-4">
                 <div className="font-bold">Trường hợp 3: </div>
-                {case3.length !== 0
-                  ? case3.toString()
+                {caseShow.case3.length !== 0
+                  ? caseShow.case3.toString()
                   : "Không bị trùng tang liên táng"}
               </div>
             )}
-            {case4 && (
+            {caseShow.case4 && (
               <div className="text-black text-[20px] my-4">
                 <div className="font-bold">Trường hợp 4: </div>
-                {case4.length !== 0
-                  ? case4.toString()
+                {caseShow.case4.length !== 0
+                  ? caseShow.case4.toString()
                   : "Không phạm vào ngày Thần Trùng"}
               </div>
             )}
-            {case5 && (
+            {caseShow.case5 && (
               <div className="text-black text-[20px] my-4">
                 <div className="font-bold">Trường hợp 5: </div>
-                {case5.length !== 0
-                  ? case5.toString()
+                {caseShow.case5.length !== 0
+                  ? caseShow.case5.toString()
                   : "Không phạm vào ngày Trùng phục"}
               </div>
             )}
           </div>
 
-          {stepInit && (
+          {stepShow.stepInit && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Bước 1: Chọn ngày
-                {stepInit && `(${stepInit?.length})`}
+                {stepShow.stepInit && `(${stepShow.stepInit?.length})`}
               </div>
-              <div
-                className="max-h-[500px] overflow-scroll
-          px-10 border-2 border-black mt-2 ">
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                 <TableTangSu
                   valueSelect={valueSelect}
-                  data={stepInit}
+                  data={stepShow.stepInit}
                   infoNguoiMat={infoNguoiMat}></TableTangSu>
               </div>
             </div>
           )}
-          {step2 && (
+          {stepShow.step2 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Xét Trực/Tú
-                {step2 && `(${step2?.length})`}
+                {stepShow.step2 && `(${stepShow.step2?.length})`}
               </div>
-              <div
-                className="max-h-[500px] overflow-scroll
-          px-10 border-2 border-black mt-2 ">
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                 <TableTangSu
                   valueSelect={valueSelect}
-                  data={step2}
+                  data={stepShow.step2}
                   infoNguoiMat={infoNguoiMat}></TableTangSu>
               </div>
             </div>
           )}
-          {step4 && (
+          {stepShow.step4 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Bước 2: Chọn giờ
-                {step4 && `(${step4?.length})`}
+                {stepShow.step4 && `(${stepShow.step4?.length})`}
               </div>
-              <div
-                className="max-h-[500px] overflow-scroll
-          px-10 border-2 border-black mt-2 ">
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                 <TableTangSu
                   valueSelect={valueSelect}
-                  data={step4}
+                  data={stepShow.step4}
                   infoNguoiMat={infoNguoiMat}></TableTangSu>
               </div>
             </div>
