@@ -288,16 +288,16 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                           ).includes(valueSelect)
                             ? "red"
                             : "green",
-                          textTransform: Object.keys(
-                            ObjectTu[date.tu]?.CanLam
-                          ).includes(valueSelect)
-                            ? "uppercase"
-                            : "capitalize",
-                          fontWeight: Object.keys(
-                            ObjectTu[date.tu]?.CanLam
-                          ).includes(valueSelect)
-                            ? "bold"
-                            : "400",
+                          // textTransform: Object.keys(
+                          //   ObjectTu[date.tu]?.CanLam
+                          // ).includes(valueSelect)
+                          //   ? "uppercase"
+                          //   : "capitalize",
+                          // fontWeight: Object.keys(
+                          //   ObjectTu[date.tu]?.CanLam
+                          // ).includes(valueSelect)
+                          //   ? "bold"
+                          //   : "400",
                         }}>
                         {date.tu}
                       </span>

@@ -339,16 +339,16 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                         )
                           ? "red"
                           : "green",
-                        textTransform: Object.keys(
-                          ObjectTu[data.tu].CanLam
-                        ).includes(valueSelect)
-                          ? "uppercase"
-                          : "capitalize",
-                        fontWeight: Object.keys(
-                          ObjectTu[data.tu].CanLam
-                        ).includes(valueSelect)
-                          ? "bold"
-                          : "400",
+                        // textTransform: Object.keys(
+                        //   ObjectTu[data.tu].CanLam
+                        // ).includes(valueSelect)
+                        //   ? "uppercase"
+                        //   : "capitalize",
+                        // fontWeight: Object.keys(
+                        //   ObjectTu[data.tu].CanLam
+                        // ).includes(valueSelect)
+                        //   ? "bold"
+                        //   : "400",
                       }}>
                       {data.tu}
                     </span>
