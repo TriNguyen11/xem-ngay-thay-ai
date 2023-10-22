@@ -12,11 +12,11 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import Notify from "@Root/app/components/Notify";
-import TableShow from "@Root/app/components/Table";
-import TableNamKimLauHoangOcTamTai from "@Root/app/components/TableNamKimLauHoangOcTamTai";
-import TableResult from "@Root/app/components/TableResult";
-import TableShowRecommend from "@Root/app/components/TableShowRecommend";
+import Notify from "@Root/components/Notify";
+import TableShow from "@Root/components/Table";
+import TableNamKimLauHoangOcTamTai from "@Root/components/TableNamKimLauHoangOcTamTai";
+import TableResult from "@Root/components/TableResult";
+import TableShowRecommend from "@Root/components/TableShowRecommend";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,

@@ -12,12 +12,12 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import Notify from "@Root/app/components/Notify";
-import TableResult from "@Root/app/components/TableResult";
-import TableSangCatThang2 from "@Root/app/components/TableSangCatThang2";
-import TableWedding from "@Root/app/components/TableWedding";
-import TableWeddingNam from "@Root/app/components/TableWeddingNam";
-import TableWeddingThang from "@Root/app/components/TableWeddingThang";
+import Notify from "@Root/components/Notify";
+import TableResult from "@Root/components/TableResult";
+import TableSangCatThang2 from "@Root/components/TableSangCatThang2";
+import TableWedding from "@Root/components/TableWedding";
+import TableWeddingNam from "@Root/components/TableWeddingNam";
+import TableWeddingThang from "@Root/components/TableWeddingThang";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,

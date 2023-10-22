@@ -11,13 +11,13 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import Notify from "@Root/app/components/Notify";
-import TableShow from "@Root/app/components/Table";
-import TableResult from "@Root/app/components/TableResult";
-import TableSangCatNam from "@Root/app/components/TableSangCatNam";
-import TableSangCatNgay from "@Root/app/components/TableSangCatNgay";
-import TableSangCatThang from "@Root/app/components/TableSangCatThang";
-import TableTangSu from "@Root/app/components/TableTangSu";
+import Notify from "@Root/components/Notify";
+import TableShow from "@Root/components/Table";
+import TableResult from "@Root/components/TableResult";
+import TableSangCatNam from "@Root/components/TableSangCatNam";
+import TableSangCatNgay from "@Root/components/TableSangCatNgay";
+import TableSangCatThang from "@Root/components/TableSangCatThang";
+import TableTangSu from "@Root/components/TableTangSu";
 import {
   getSunLongitude,
   isLeapYearLunar,
