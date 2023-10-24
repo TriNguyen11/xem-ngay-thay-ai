@@ -1202,14 +1202,14 @@ export default function Home() {
         }}>
         Xem ngày Xây dựng
       </div>
-      {/* <Button
+      <Button
         variant="contained"
         style={{ backgroundColr: "green" }}
         onClick={() => {
           handleInit();
         }}>
         asdsa
-      </Button> */}
+      </Button>
       <div>
         <FormControl fullWidth style={{ marginBottom: 20 }}>
           <InputLabel id="demo-simple-select-label">

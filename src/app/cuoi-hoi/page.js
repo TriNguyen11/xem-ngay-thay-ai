@@ -408,6 +408,7 @@ export default function Home() {
     } else {
       arrPerfectDateStep6 = arrPerfectDateStep3;
     }
+    console.log("123123123");
 
     // kiem tra truc/tu
     arrPerfectDateStep6.map((item, ind) => {
@@ -475,6 +476,44 @@ export default function Home() {
     });
     setLoading(false);
   };
+  const handleHopHoaNgayThang = async (arr, toa) => {
+    let ArrHopHoa = [];
+    arr?.map((item, ind) => {
+      let combineThienCanNgayThang = CombineThienCan(
+        item.thangCan,
+        item.ngayCan
+      );
+
+      if (combineThienCanNgayThang.length !== 0) {
+        if (
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[item.thangChi],
+            combineThienCanNgayThang
+          ) &&
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[item.ngayChi],
+            combineThienCanNgayThang
+          )
+        ) {
+          if (
+            !CheckNguHanhTuongKhac(
+              NGU_HANH[valueText],
+              combineThienCanNgayThang
+            )
+          )
+            ArrHopHoa.push(item);
+        } else {
+          ArrHopHoa.push(item);
+        }
+      } else {
+        ArrHopHoa.push(item);
+      }
+    });
+    // return 1;
+    // console.log(ArrHopHoa, "ArrHopHoa");
+    return ArrHopHoa;
+  };
+  console.log(stepShow, "232");
   const handleInit = async () => {
     console.log(valueAge, "valueAge");
     const a = await axios.post("http://localhost:3000/xem-ngay/cuoi-hoi", {
