@@ -80,6 +80,7 @@ import {
   getCanChi,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
+import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
@@ -448,7 +449,8 @@ export default function Home() {
     console.log(arrPerfectDateStep5, "arrPerfectDateStep5");
 
     // Xet hop hoa ngay/gio
-    arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
+    // arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
+    arrPerfectDateStep7 = arrPerfectDateStep5;
     // Xac dinh can Chi  Nam/Nu
     setInfoGiaChu({
       ...infoGiaChu,
@@ -473,43 +475,18 @@ export default function Home() {
     });
     setLoading(false);
   };
-
-  const handleHopHoaNgayThang = async (arr, toa) => {
-    let ArrHopHoa = [];
-    let toaNha = valueText.namToa || valueText.nuToa;
-    // console.log(first)
-    arr?.map((item, ind) => {
-      let combineThienCanNgayThang = CombineThienCan(
-        item.thangCan,
-        item.ngayCan
-      );
-
-      if (combineThienCanNgayThang.length !== 0 && toaNha) {
-        if (
-          !CheckNguHanhTuongKhacKhauQuyet(
-            NGU_HANH[item.thangChi],
-            combineThienCanNgayThang
-          ) &&
-          !CheckNguHanhTuongKhacKhauQuyet(
-            NGU_HANH[item.ngayChi],
-            combineThienCanNgayThang
-          )
-        ) {
-          if (
-            !CheckNguHanhTuongKhac(NGU_HANH[toaNha], combineThienCanNgayThang)
-          )
-            ArrHopHoa.push(item);
-        } else {
-          ArrHopHoa.push(item);
-        }
-      } else {
-        ArrHopHoa.push(item);
-      }
+  const handleInit = async () => {
+    console.log(valueAge, "valueAge");
+    const a = await axios.post("http://localhost:3000/xem-ngay/cuoi-hoi", {
+      dateStart,
+      dateEnd,
+      infoGiaChu,
+      valueSelect,
+      valueAge,
+      toaNha: valueText.namToa || valueText.nuToa,
     });
-    return ArrHopHoa;
-  };
-  const handleHopHoaNgayGio = async (arr, toa) => {
-    return arr;
+
+    console.log(a, "check a ");
   };
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
@@ -992,9 +969,7 @@ export default function Home() {
                 Bước 2: Xét Tháng
                 {stepShow.step1 && `(${stepShow.step1?.length})`}
               </div>
-              <div
-                className="max-h-[500px] overflow-scroll
-            px-10 border-2 border-black mt-2 ">
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                 <TableWeddingThang
                   data={stepShow.step1}
                   toaNha={valueText.namToa || valueText.nuToa}

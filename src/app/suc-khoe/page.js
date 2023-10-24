@@ -39,6 +39,7 @@ import {
   ConvertToRangeDayInMonthLunar,
   getCanChi,
 } from "@Root/script/handleDateChange";
+import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
@@ -86,12 +87,6 @@ export default function Home() {
     step7: undefined,
     step8: undefined,
   });
-
-  const [step1, setDataStep1] = useState();
-  const [step2, setDataStep2] = useState();
-  const [step3, setDataStep3] = useState();
-  const [step4, setDataStep4] = useState();
-  const [step5, setDataStep5] = useState();
 
   const handleGetPerfectDate = async () => {
     console.log(
@@ -240,6 +235,18 @@ export default function Home() {
       step7: arrPerfectDateStep7,
     });
     setLoading(false);
+  };
+  const handleInit = async () => {
+    console.log(valueAge, "valueAge");
+    const a = await axios.post("http://localhost:3000/xem-ngay/suc-khoe", {
+      dateStart,
+      dateEnd,
+      infoGiaChu,
+      valueSelect,
+      valueAge,
+    });
+
+    console.log(a, "check a ");
   };
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">

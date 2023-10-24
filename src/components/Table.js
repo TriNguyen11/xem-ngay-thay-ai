@@ -250,7 +250,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                     <TableCell
                       style={{
                         textAlign: "center",
-                        color: COLOR_TEXT_NGU_HANH[date.hanhNgay],
+                        color: COLOR_TEXT_NGU_HANH[date.hanhThang],
                       }}>
                       {date.thangCan} {date.thangChi} ({date.hanhThang})
                     </TableCell>

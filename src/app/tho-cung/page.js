@@ -49,6 +49,7 @@ import {
   ConvertToRangeDayInMonthLunar,
   getCanChi,
 } from "@Root/script/handleDateChange";
+import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
@@ -313,6 +314,19 @@ export default function Home() {
   const handleHopHoaNgayGio = async (arr, toa) => {
     return arr;
   };
+  const handleInit = async () => {
+    console.log(valueAge, "valueAge");
+    const a = await axios.post("http://localhost:3000/xem-ngay/tho-cung", {
+      dateStart,
+      dateEnd,
+      infoGiaChu,
+      valueSelect,
+      valueAge,
+      toaNha: valueText,
+    });
+
+    console.log(a, "check a ");
+  };
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -324,6 +338,14 @@ export default function Home() {
         }}>
         Xem ngày Thờ cúng
       </div>
+      {/* <Button
+        variant="contained"
+        style={{ backgroundColr: "green" }}
+        onClick={() => {
+          handleInit();
+        }}>
+        asdsa
+      </Button> */}
       <div>
         <FormControl fullWidth style={{ marginBottom: 20 }}>
           <InputLabel id="demo-simple-select-label">

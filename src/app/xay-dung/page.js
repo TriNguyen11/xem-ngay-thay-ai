@@ -420,7 +420,13 @@ export default function Home() {
         ) &&
         !KimLau.includes(item.yearLunar) &&
         !TamTai.includes(item.yearLunar) &&
-        !hoangOcShow.includes(item.yearLunar)
+        !hoangOcShow.includes(item.yearLunar) &&
+        !CheckTrucXungNgayThangNam(
+          CHI_NAM[Number(valueAge.year) % 12],
+          CHI_NAM[Number(item.yearLunar) % 12]
+        ) &&
+        CHI_NAM[Number(valueAge.year) % 12] !==
+          CHI_NAM[Number(item.yearLunar) % 12]
         //  &&
         // CheckNguHanhTuongSinh(
         //   NGU_HANH[valueText],
@@ -745,7 +751,6 @@ export default function Home() {
         arrPerfectDateStep1.push(item);
       }
     });
-
     // Tranh Bach ky
     arrPerfectDateStep1.map((item, index) => {
       if (
@@ -908,7 +913,7 @@ export default function Home() {
       step2: arrPerfectDateStep2,
       step3: arrPerfectDateStep3,
       step4: arrPerfectDateStep4,
-      step5: arrPserfectDateStep5,
+      step5: arrPerfectDateStep5,
       step6: arrPerfectDateStep6,
       step7: arrPerfectDateStep7,
       step8: arrPerfectDateStep8,
@@ -1131,8 +1136,9 @@ export default function Home() {
       step2: arrPerfectDateStep2,
       step3: arrPerfectDateStep3,
       step4: arrPerfectDateStep4,
-      step6: arrPerfectDateStep6,
-      step7: arrPerfectDateStep7,
+      step5: arrPerfectDateStep5,
+      step6: arrPerfectDateStep5,
+      step7: arrPerfectDateStep5,
     });
 
     // setLoading(false);
@@ -1170,10 +1176,16 @@ export default function Home() {
     setArrRecommend(arrYearRecommend);
   };
   const handleInit = async () => {
-    const a = await axios.get(
-      "http://localhost:3000/xem-ngay/cong-viec-dai-su",
-      { valueAge, dateStart, dateEnd, infoGiaChu, valueSelect }
-    );
+    const a = await axios.post("http://localhost:3000/xem-ngay/xay-dung", {
+      valueAge,
+      dateStart,
+      dateEnd,
+      infoGiaChu,
+      valueSelect,
+      toaNha: valueText,
+      isMuonTuoi: isMuonTuoi,
+      valueAgeBorrow,
+    });
 
     console.log(a, "check a ");
   };

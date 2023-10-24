@@ -74,6 +74,7 @@ import {
   CountStatusTrungTang,
   getCanChi,
 } from "@Root/script/handleDateChange";
+import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
@@ -357,6 +358,19 @@ export default function Home() {
       step7: arrPerfectDateStep7,
     });
   };
+  const handleInit = async () => {
+    console.log(valueAge, "valueAge");
+    const a = await axios.post("http://localhost:3000/xem-ngay/sang-cat", {
+      dateStart,
+      dateEnd,
+      infoGiaChu,
+      valueSelect,
+      valueAge,
+      toaMo: valueText,
+    });
+
+    console.log(a, "check a ");
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
@@ -369,6 +383,7 @@ export default function Home() {
         }}>
         Xem ngày Sang cát
       </div>
+
       <div>
         <FormControl fullWidth style={{ marginBottom: 20 }}>
           <InputLabel id="demo-simple-select-label">
