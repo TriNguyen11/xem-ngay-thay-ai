@@ -539,6 +539,14 @@ export default function Home() {
         Xem ngày Cưới hỏi
       </div>
       <div>
+        {/* <Button
+          variant="contained"
+          style={{ backgroundColr: "green" }}
+          onClick={() => {
+            handleInit();
+          }}>
+          asdsa
+        </Button> */}
         <FormControl fullWidth style={{ marginBottom: 20 }}>
           <InputLabel id="demo-simple-select-label">
             Chọn việc cần xem
