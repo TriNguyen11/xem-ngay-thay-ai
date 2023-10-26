@@ -143,6 +143,7 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
+    let arrPerfectDateStep8 = []; // xoa gio khong co
 
     // Tranh Bach ky
     dateArr.map((item, index) => {
@@ -205,17 +206,31 @@ export default function Home() {
       }
     });
 
+    let arrHours = [];
+    let gioHoangDaoVar = [];
+
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
+      arrHours = CheckTrucXungGioKhongToa(
+        item.ngayChi,
+        item.thangChi,
+        CHI_NAM[tuoiGiaChu % 12],
+        item.monthLunar
+      );
+      gioHoangDaoVar = CheckHoangDao(item.ngayChi);
+
+      if (arrHours.length !== 0) {
+        arrPerfectDateStep8.push({
+          ...item,
+          gio: arrHours,
+          gioHoangDao: gioHoangDaoVar,
+        });
+      }
+
       arrPerfectDateStep5.push({
         ...item,
-        gio: CheckTrucXungGioKhongToa(
-          item.ngayChi,
-          item.thangChi,
-          CHI_NAM[tuoiGiaChu % 12],
-          item.monthLunar
-        ),
-        gioHoangDao: CheckHoangDao(item.ngayChi),
+        gio: arrHours,
+        gioHoangDao: gioHoangDaoVar,
       });
     });
     // Convert  RangeDayInMonthLunar
@@ -233,6 +248,7 @@ export default function Home() {
       step5: arrPerfectDateStep5,
       step6: arrPerfectDateStep6,
       step7: arrPerfectDateStep7,
+      step8: arrPerfectDateStep8,
     });
 
     setLoading(false);
@@ -466,6 +482,16 @@ export default function Home() {
               format={"DD-MM-YYYY"}
               onChange={(value) => {
                 setDateStart(value);
+                setStepShow({
+                  step1: undefined,
+                  step2: undefined,
+                  step3: undefined,
+                  step4: undefined,
+                  step5: undefined,
+                  step6: undefined,
+                  step7: undefined,
+                  step8: undefined,
+                });
               }}
             />
             <DatePicker
@@ -474,6 +500,16 @@ export default function Home() {
               format={"DD-MM-YYYY"}
               onChange={(value) => {
                 setDateEnd(value);
+                setStepShow({
+                  step1: undefined,
+                  step2: undefined,
+                  step3: undefined,
+                  step4: undefined,
+                  step5: undefined,
+                  step6: undefined,
+                  step7: undefined,
+                  step8: undefined,
+                });
               }}
             />
           </div>
@@ -552,14 +588,13 @@ export default function Home() {
             )}
           </div>
           {/* Show ket qua */}
-          {stepShow.step5 && (
+          {stepShow.step8?.length !== 0 ? (
             <>
               <div className="text-[24px] font-bold mb-4 text-black">
-                {" "}
-                Tổng cộng có {stepShow.step5?.length} kết quả{" "}
+                Tổng cộng có {stepShow.step8?.length} kết quả{" "}
               </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6 ">
-                {stepShow.step5?.map((item, index) => {
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6">
+                {stepShow.step8?.map((item, index) => {
                   return (
                     <>
                       <div className="max-h-[500px] overflow-scroll">
@@ -571,6 +606,12 @@ export default function Home() {
                     </>
                   );
                 })}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-[24px] font-bold my-4 uppercase text-[red] ">
+                Không tìm thấy ngày giờ nào phù hợp cho công việc đang chọn{" "}
               </div>
             </>
           )}
@@ -654,6 +695,22 @@ export default function Home() {
                 <TableShow
                   valueSelect={valueSelect}
                   data={stepShow.step5}
+                  infoGiaChu={infoGiaChu}></TableShow>
+              </div>
+            </div>
+          )}
+          {stepShow.step8 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Bước 5: Loại bỏ những ngày không có giờ
+                {stepShow.step8 && `(${stepShow.step8?.length})`}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
+                <TableShow
+                  valueSelect={valueSelect}
+                  data={stepShow.step8}
                   infoGiaChu={infoGiaChu}></TableShow>
               </div>
             </div>

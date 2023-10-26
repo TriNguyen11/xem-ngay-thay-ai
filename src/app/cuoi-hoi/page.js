@@ -204,6 +204,7 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
+    let arrPerfectDateStep8 = []; // cuoi hoi gio
     let toaNha = valueText.namToa || valueText.nuToa || "";
     let monthInYear = {};
 
@@ -430,24 +431,35 @@ export default function Home() {
         }
       }
     });
+    let arrHours = [];
+    let gioHoangDaoVar = [];
 
     // Chon gio
     arrPerfectDateStep4.map((item, ind) => {
+      arrHours = CheckTrucXungGioCuoiHoi(
+        toaNha,
+        item.ngayChi,
+        item.thangChi,
+        item.monthLunar,
+        CHI_NAM[namSinhNam % 12],
+        CHI_NAM[namSinhNu % 12],
+        valueSelect
+      );
+
+      gioHoangDaoVar = CheckHoangDao(item.ngayChi);
+      if (arrHours.length !== 0) {
+        arrPerfectDateStep8.push({
+          ...item,
+          gio: arrHours,
+          gioHoangDao: gioHoangDaoVar,
+        });
+      }
       arrPerfectDateStep5.push({
         ...item,
-        gio: CheckTrucXungGioCuoiHoi(
-          toaNha,
-          item.ngayChi,
-          item.thangChi,
-          item.monthLunar,
-          CHI_NAM[namSinhNam % 12],
-          CHI_NAM[namSinhNu % 12],
-          valueSelect
-        ),
-        gioHoangDao: CheckHoangDao(item.ngayChi),
+        gio: arrHours,
+        gioHoangDao: gioHoangDaoVar,
       });
     });
-    console.log(arrPerfectDateStep5, "arrPerfectDateStep5");
 
     // Xet hop hoa ngay/gio
     // arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
@@ -473,6 +485,7 @@ export default function Home() {
       step5: arrPerfectDateStep5,
       step6: arrPerfectDateStep6,
       step7: arrPerfectDateStep7,
+      step8: arrPerfectDateStep8,
     });
     setLoading(false);
   };
@@ -513,7 +526,6 @@ export default function Home() {
     // console.log(ArrHopHoa, "ArrHopHoa");
     return ArrHopHoa;
   };
-  console.log(stepShow, "232");
   const handleInit = async () => {
     console.log(valueAge, "valueAge");
     const a = await axios.post("http://localhost:3000/xem-ngay/cuoi-hoi", {
@@ -965,14 +977,13 @@ export default function Home() {
             )}
           </div>
           {/* Show ket qua */}
-          {stepShow.step7 && (
+          {stepShow.step8?.length !== 0 ? (
             <>
               <div className="text-[24px] font-bold mb-4 text-black">
-                {" "}
-                Tổng cộng có {stepShow.step7?.length} kết quả{" "}
+                Tổng cộng có {stepShow.step8?.length} kết quả{" "}
               </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6 ">
-                {stepShow.step7?.map((item, index) => {
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6">
+                {stepShow.step8?.map((item, index) => {
                   return (
                     <>
                       <div className="max-h-[500px] overflow-scroll">
@@ -985,6 +996,12 @@ export default function Home() {
                     </>
                   );
                 })}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-[24px] font-bold my-4 uppercase text-[red] ">
+                Không tìm thấy ngày giờ nào phù hợp cho công việc đang chọn{" "}
               </div>
             </>
           )}
@@ -1033,9 +1050,7 @@ export default function Home() {
                 Bước 3: Xét ngày
                 {stepShow.step2 && ` (${stepShow.step2?.length})`}
               </div>
-              <div
-                className="max-h-[500px] overflow-scroll
-            px-10 border-2 border-black mt-2 ">
+              <div className="max-h-[500px] overflow-scroll  px-10 border-2 border-black mt-2 ">
                 <TableWedding
                   valueSelect={valueSelect}
                   data={stepShow.step2}
@@ -1055,9 +1070,7 @@ export default function Home() {
                   {stepShow.step6 && `(${stepShow.step6?.length})`}
                 </div>
 
-                <div
-                  className="max-h-[500px] overflow-scroll
-              px-10 border-2 border-black mt-2 ">
+                <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                   <TableWedding
                     valueSelect={valueSelect}
                     data={stepShow.step6}
@@ -1070,10 +1083,7 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                bước{" "}
-                {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-                  ? "4"
-                  : "3"}{" "}
+                Bước 4:
                 {"Kiểm tra Trực/Tú"}
                 {stepShow.step4 && `(${stepShow.step4?.length})`}
               </div>
@@ -1093,16 +1103,14 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                bước{" "}
+                Bước{" "}
                 {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-                  ? "5"
-                  : "4"}{" "}
+                  ? "5:"
+                  : "4:"}{" "}
                 {"Chọn giờ"}
               </div>
 
-              <div
-                className="max-h-[500px] overflow-scroll
-            px-10 border-2 border-black mt-2 ">
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                 <TableWedding
                   valueSelect={valueSelect}
                   data={stepShow.step5}
@@ -1121,9 +1129,7 @@ export default function Home() {
                   {stepShow.step7 && `(${stepShow.step7?.length})`}
                 </div>
 
-                <div
-                  className="max-h-[500px] overflow-scroll
-              px-10 border-2 border-black mt-2 ">
+                <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                   <TableWedding
                     valueSelect={valueSelect}
                     data={stepShow.step7}
@@ -1131,6 +1137,22 @@ export default function Home() {
                 </div>
               </div>
             )}
+          {stepShow.step8 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Bước 6: Loại bỏ những ngày không có giờ
+                {stepShow.step8 && `(${stepShow.step8?.length})`}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
+                <TableWedding
+                  valueSelect={valueSelect}
+                  data={stepShow.step8}
+                  infoGiaChu={infoGiaChu}></TableWedding>
+              </div>
+            </div>
+          )}
         </>
       )}
       <div style={{ height: 200 }}></div>

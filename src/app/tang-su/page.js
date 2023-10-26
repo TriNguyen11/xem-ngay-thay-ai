@@ -97,6 +97,7 @@ export default function Home() {
     step2: undefined,
     step3: undefined,
     step4: undefined,
+    step8: undefined,
   });
   const [caseShow, setCaseShow] = useState({
     case1: undefined,
@@ -367,6 +368,7 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
+    let arrPerfectDateStep8 = []; // check gio tang su// sang cat
     // Convert  RangeDayInMonthLunar
     // Chon ngay
     // Xac dinh ngay/thang xung toa nha
@@ -426,16 +428,24 @@ export default function Home() {
         }
       }
     });
+    let arrHours = [];
 
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
+      arrHours = CheckTrucXungGioTangSu({
+        ...item,
+        cungNguoiMat: bamCung.bamCungTuoi,
+        chiNamSinh: CHI_NAM[namSinh % 12],
+      });
+      if (arrHours.length !== 0) {
+        arrPerfectDateStep8.push({
+          ...item,
+          gio: arrHours,
+        });
+      }
       arrPerfectDateStep4.push({
         ...item,
-        gio: CheckTrucXungGioTangSu({
-          ...item,
-          cungNguoiMat: bamCung.bamCungTuoi,
-          chiNamSinh: CHI_NAM[namSinh % 12],
-        }),
+        gio: arrHours,
       });
     });
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
@@ -447,6 +457,7 @@ export default function Home() {
       step2: arrPerfectDateStep2,
       step3: arrPerfectDateStep3,
       step4: arrPerfectDateStep4,
+      step8: arrPerfectDateStep8,
     });
     // setDataStep2(arrPerfectDateStep2);
     // setDataStep3(arrPerfectDateStep3);
@@ -518,6 +529,7 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
+    let arrPerfectDateStep8 = []; // sang cat// tang su gio
 
     // Convert  RangeDayInMonthLunar
     // Chon ngay
@@ -578,16 +590,24 @@ export default function Home() {
         }
       }
     });
+    let arrHours = [];
 
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
+      arrHours = CheckTrucXungGioTangSu({
+        ...item,
+        cungNguoiMat: bamCung.bamCungTuoi,
+        chiNamSinh: CHI_NAM[namSinh % 12],
+      });
+      if (arrHours.length !== 0) {
+        arrPerfectDateStep8.push({
+          ...item,
+          gio: arrHours,
+        });
+      }
       arrPerfectDateStep4.push({
         ...item,
-        gio: CheckTrucXungGioTangSu({
-          ...item,
-          cungNguoiMat: bamCung.bamCungTuoi,
-          chiNamSinh: CHI_NAM[namSinh % 12],
-        }),
+        gio: arrHours,
       });
     });
 
@@ -600,6 +620,7 @@ export default function Home() {
       step2: arrPerfectDateStep2,
       step3: arrPerfectDateStep3,
       step4: arrPerfectDateStep4,
+      step8: arrPerfectDateStep8,
     });
   };
   const handleInit = async () => {
@@ -822,6 +843,16 @@ export default function Home() {
                   format={"DD-MM-YYYY"}
                   onChange={(value) => {
                     setDateStart(value);
+                    setStepShow({
+                      step1: undefined,
+                      step2: undefined,
+                      step3: undefined,
+                      step4: undefined,
+                      step5: undefined,
+                      step6: undefined,
+                      step7: undefined,
+                      step8: undefined,
+                    });
                   }}
                 />
                 <DatePicker
@@ -830,6 +861,16 @@ export default function Home() {
                   format={"DD-MM-YYYY"}
                   onChange={(value) => {
                     setDateEnd(value);
+                    setStepShow({
+                      step1: undefined,
+                      step2: undefined,
+                      step3: undefined,
+                      step4: undefined,
+                      step5: undefined,
+                      step6: undefined,
+                      step7: undefined,
+                      step8: undefined,
+                    });
                   }}
                 />
               </div>
@@ -1013,14 +1054,13 @@ export default function Home() {
             )}
           </div>
           {/* Show ket qua */}
-          {stepShow.step4 && (
+          {stepShow.step8?.length !== 0 ? (
             <>
               <div className="text-[24px] font-bold mb-4 text-black">
-                {" "}
-                Tổng cộng có {stepShow.step4?.length} kết quả{" "}
+                Tổng cộng có {stepShow.step8?.length} kết quả{" "}
               </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6 ">
-                {stepShow.step4?.map((item, index) => {
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black pb-6">
+                {stepShow.step8?.map((item, index) => {
                   return (
                     <>
                       <div className="max-h-[500px] overflow-scroll">
@@ -1033,6 +1073,12 @@ export default function Home() {
                     </>
                   );
                 })}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-[24px] font-bold my-4 uppercase text-[red] ">
+                Không tìm thấy ngày giờ nào phù hợp cho công việc đang chọn{" "}
               </div>
             </>
           )}
@@ -1125,6 +1171,22 @@ export default function Home() {
                 <TableTangSu
                   valueSelect={valueSelect}
                   data={stepShow.step4}
+                  infoNguoiMat={infoNguoiMat}></TableTangSu>
+              </div>
+            </div>
+          )}
+          {stepShow.step8 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Bước 3: Loại bỏ những ngày không có giờ
+                {stepShow.step8 && `(${stepShow.step8?.length})`}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
+                <TableTangSu
+                  valueSelect={valueSelect}
+                  data={stepShow.step8}
                   infoNguoiMat={infoNguoiMat}></TableTangSu>
               </div>
             </div>
