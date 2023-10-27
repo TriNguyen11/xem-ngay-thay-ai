@@ -244,19 +244,18 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)
-        // &&
-        // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
         // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
       } else {
-        if (
-          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        ) {
-        } else {
-          arrPerfectDateStep4.push(item);
-        }
+        arrPerfectDateStep4.push(item);
+        // if (
+        //   Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
+        //   !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        // ) {
+        // } else {
+        // }
       }
     });
 
@@ -520,15 +519,19 @@ export default function Home() {
     arrPerfectDateStep3.map((item, ind) => {
       //   !! || 1 trong 2 pham deu` bi
 
-      if (Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)) {
+      if (
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+      ) {
       } else {
-        if (
-          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        ) {
-        } else {
-          arrPerfectDateStep4.push(item);
-        }
+        arrPerfectDateStep4.push(item);
+
+        // if (
+        //   Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
+        //   !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        // ) {
+        // } else {
+        // }
       }
     });
 
@@ -821,15 +824,19 @@ export default function Home() {
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
       //   !! || 1 trong 2 pham deu` bi
-      if (Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)) {
+      if (
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+      ) {
       } else {
-        if (
-          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        ) {
-        } else {
-          arrPerfectDateStep4.push(item);
-        }
+        arrPerfectDateStep4.push(item);
+
+        // if (
+        //   Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
+        //   !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        // ) {
+        // } else {
+        // }
       }
     });
     let arrHours = [];
@@ -1058,19 +1065,19 @@ export default function Home() {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect)
-        // &&
-        // Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
         // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
       } else {
-        if (
-          Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-          !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        ) {
-        } else {
-          arrPerfectDateStep4.push(item);
-        }
+        arrPerfectDateStep4.push(item);
+
+        // if (
+        //   Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
+        //   !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+        // ) {
+        // } else {
+        // }
       }
     });
 
@@ -1171,6 +1178,7 @@ export default function Home() {
   };
 
   useEffect(() => {}, []);
+
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1507,9 +1515,18 @@ export default function Home() {
                           {rangeDayInMonthLunar[year][month][0].daySolar}/
                           {rangeDayInMonthLunar[year][month][0].monthSolar}/
                           {rangeDayInMonthLunar[year][month][0].yearSolar} đến
-                          ngày {rangeDayInMonthLunar[year][month][1].daySolar}/
-                          {rangeDayInMonthLunar[year][month][1].monthSolar}/
-                          {rangeDayInMonthLunar[year][month][1].yearSolar}
+                          ngày{" "}
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].daySolar
+                            : rangeDayInMonthLunar[year][month][0].daySolar}
+                          /
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].monthSolar
+                            : rangeDayInMonthLunar[year][month][0].monthSolar}
+                          /
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].yearSolar
+                            : rangeDayInMonthLunar[year][month][0].yearSolar}
                         </li>
                       );
                     })}
@@ -1672,8 +1689,16 @@ export default function Home() {
             </>
           ) : (
             <>
-              <div className="text-[24px] font-bold my-4 uppercase text-[red] ">
-                Không tìm thấy ngày giờ nào phù hợp cho công việc đang chọn{" "}
+              <div className="text-[24px] font-bold my-4 uppercase text-[red] max-w-2xl text-center ">
+                {new Date(dateStart).getTime() === new Date(dateEnd).getTime()
+                  ? `Ngày ${dateStart.$D}/${dateStart.$D + 1}/${
+                      dateStart.$y
+                    } không phù hợp cho công việc, vui lòng chọn ngày khác!`
+                  : `Từ ngày ${dateStart.$D}/${dateStart.$D + 1}/${
+                      dateStart.$y
+                    } đến ngày  ${dateEnd.$D}/${dateEnd.$D + 1}/${
+                      dateEnd.$y
+                    } không phù hợp cho công việc, vui lòng chọn khoảng khác!`}
               </div>
             </>
           )}
@@ -1709,9 +1734,7 @@ export default function Home() {
                 {"(Tránh bách kỵ)"}
                 {stepShow.step2 && `(${stepShow.step2?.length})`}
               </div>
-              <div
-                className="max-h-[500px] overflow-scroll
-            px-10 border-2 border-black mt-2 ">
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                 <TableShow
                   valueSelect={valueSelect}
                   data={stepShow.step2}
@@ -1730,9 +1753,7 @@ export default function Home() {
                   {stepShow.step6 && `(${stepShow.step6?.length})`}
                 </div>
 
-                <div
-                  className="max-h-[500px] overflow-scroll
-              px-10 border-2 border-black mt-2">
+                <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
                   <TableShow
                     valueSelect={valueSelect}
                     data={stepShow.step6}

@@ -59,7 +59,7 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                       fontSize: 18,
                       fontWeight: "bold",
                     }}>
-                    {Object.keys(ObjectTruc[data.truc].CanLam).includes(
+                    {/* {Object.keys(ObjectTruc[data.truc].CanLam).includes(
                       valueSelect
                     ) &&
                     Object.keys(ObjectTu[data.tu].CanLam).includes(valueSelect)
@@ -71,7 +71,33 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                           valueSelect
                         )
                       ? "Hơi Tốt"
-                      : "Tốt"}
+                      : "Tốt"} */}
+                    {
+                      Object.keys(ObjectTruc[data.truc].CanLam).includes(
+                        valueSelect
+                      )
+                        ? "Rất Tốt"
+                        : Object.keys(ObjectTruc[data.truc].KhongLam).includes(
+                            valueSelect
+                          )
+                        ? "Hơi Tốt"
+                        : Object.keys(ObjectTu[data.tu].CanLam).includes(
+                            valueSelect
+                          )
+                        ? "Rất Tốt"
+                        : "Tốt"
+
+                      // Object.keys(ObjectTu[data.tu].CanLam).includes(valueSelect)
+                      //   ?"Rất Tốt":
+                      // : !Object.keys(ObjectTu[data.tu].CanLam).includes(
+                      //     valueSelect
+                      //   ) &&
+                      //   !Object.keys(ObjectTruc[data.truc].CanLam).includes(
+                      //     valueSelect
+                      //   )
+                      // ? "Hơi Tốt"
+                      // : "Tốt"
+                    }
                     {CheckArrTamHop(
                       data.gio,
                       CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
@@ -339,16 +365,16 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                         )
                           ? "red"
                           : "green",
-                        // textTransform: Object.keys(
-                        //   ObjectTu[data.tu].CanLam
-                        // ).includes(valueSelect)
-                        //   ? "uppercase"
-                        //   : "capitalize",
-                        // fontWeight: Object.keys(
-                        //   ObjectTu[data.tu].CanLam
-                        // ).includes(valueSelect)
-                        //   ? "bold"
-                        //   : "400",
+                        textTransform: Object.keys(
+                          ObjectTu[data.tu].CanLam
+                        ).includes(valueSelect)
+                          ? "uppercase"
+                          : "capitalize",
+                        fontWeight: Object.keys(
+                          ObjectTu[data.tu].CanLam
+                        ).includes(valueSelect)
+                          ? "bold"
+                          : "400",
                       }}>
                       {data.tu}
                     </span>

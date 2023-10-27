@@ -1507,9 +1507,18 @@ export default function Home() {
                           {rangeDayInMonthLunar[year][month][0].daySolar}/
                           {rangeDayInMonthLunar[year][month][0].monthSolar}/
                           {rangeDayInMonthLunar[year][month][0].yearSolar} đến
-                          ngày {rangeDayInMonthLunar[year][month][1].daySolar}/
-                          {rangeDayInMonthLunar[year][month][1].monthSolar}/
-                          {rangeDayInMonthLunar[year][month][1].yearSolar}
+                          ngày{" "}
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].daySolar
+                            : rangeDayInMonthLunar[year][month][0].daySolar}
+                          /
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].monthSolar
+                            : rangeDayInMonthLunar[year][month][0].monthSolar}
+                          /
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].yearSolar
+                            : rangeDayInMonthLunar[year][month][0].yearSolar}
                         </li>
                       );
                     })}
