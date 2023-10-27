@@ -59,45 +59,36 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                       fontSize: 18,
                       fontWeight: "bold",
                     }}>
-                    {/* {Object.keys(ObjectTruc[data.truc].CanLam).includes(
+                    {Object.keys(ObjectTruc[data.truc].KhongLam).includes(
                       valueSelect
-                    ) &&
-                    Object.keys(ObjectTu[data.tu].CanLam).includes(valueSelect)
-                      ? "Rất Tốt"
+                    )
+                      ? "Bình Thường"
+                      : Object.keys(ObjectTu[data.tu].KhongLam).includes(
+                          valueSelect
+                        )
+                      ? "Hơi Tốt"
                       : !Object.keys(ObjectTu[data.tu].CanLam).includes(
                           valueSelect
                         ) &&
                         !Object.keys(ObjectTruc[data.truc].CanLam).includes(
                           valueSelect
                         )
-                      ? "Hơi Tốt"
-                      : "Tốt"} */}
-                    {
-                      Object.keys(ObjectTruc[data.truc].CanLam).includes(
+                      ? "Tốt"
+                      : "Rất Tốt"}
+                    {Object.keys(ObjectTruc[data.truc].CanLam).includes(
+                      valueSelect
+                    ) &&
+                      Object.keys(ObjectTu[data.tu].CanLam).includes(
                         valueSelect
-                      )
-                        ? "Rất Tốt"
-                        : Object.keys(ObjectTruc[data.truc].KhongLam).includes(
-                            valueSelect
-                          )
-                        ? "Hơi Tốt"
-                        : Object.keys(ObjectTu[data.tu].CanLam).includes(
-                            valueSelect
-                          )
-                        ? "Rất Tốt"
-                        : "Tốt"
-
-                      // Object.keys(ObjectTu[data.tu].CanLam).includes(valueSelect)
-                      //   ?"Rất Tốt":
-                      // : !Object.keys(ObjectTu[data.tu].CanLam).includes(
-                      //     valueSelect
-                      //   ) &&
-                      //   !Object.keys(ObjectTruc[data.truc].CanLam).includes(
-                      //     valueSelect
-                      //   )
-                      // ? "Hơi Tốt"
-                      // : "Tốt"
-                    }
+                      ) && (
+                        <StarIcon
+                          style={{
+                            color: "#F9D045",
+                            marginTop: -2,
+                            fontSize: 20,
+                          }}
+                        />
+                      )}
                     {CheckArrTamHop(
                       data.gio,
                       CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
