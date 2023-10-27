@@ -842,6 +842,7 @@ export default function Home() {
     let arrHours = [];
     let gioHoangDaoVar = [];
     // Chon gio
+
     arrPerfectDateStep4.map((item, ind) => {
       arrHours = CheckTrucXungGio(
         valueText,
