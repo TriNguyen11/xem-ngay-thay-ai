@@ -317,7 +317,7 @@ export default function Home() {
     let tuoiChiGiaChu = CHI_NAM[valueAge.year % 12];
     let tuoiCanGiaChu = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
-
+    console.log("normal");
     if (Number(valueAge.month) <= 2) {
       const sunlong = getSunLongitude(
         jdn(
@@ -409,10 +409,10 @@ export default function Home() {
         !TamTai.includes(item.yearLunar) &&
         !hoangOcShow.includes(item.yearLunar) &&
         !CheckTrucXungNgayThangNam(
-          CHI_NAM[Number(valueAge.year) % 12],
+          CHI_NAM[Number(tuoiGiaChu) % 12],
           CHI_NAM[Number(item.yearLunar) % 12]
         ) &&
-        CHI_NAM[Number(valueAge.year) % 12] !==
+        CHI_NAM[Number(tuoiGiaChu) % 12] !==
           CHI_NAM[Number(item.yearLunar) % 12]
         //  &&
         // CheckNguHanhTuongSinh(
@@ -600,6 +600,7 @@ export default function Home() {
     let tuoiChiGiaChu = CHI_NAM[valueAge.year % 12];
     let tuoiCanGiaChu = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
+    console.log("borrow");
 
     let tuoiChiMuon = CHI_NAM[valueAgeBorrow.year % 12];
     let tuoiCanMuon = CAN_NAM[valueAgeBorrow.year % 10];
@@ -688,16 +689,16 @@ export default function Home() {
       isTamTai = CheckTamTai(tuoiChiMuon, item.namChi);
       // isTamTaiNgay = CheckTamTai(tuoiChiGiaChu, item.ngayChi);
 
+      isYearHoangOc = CheckHoangOc(
+        Number(item.yearLunar) - Number(tuoiMuon) + 1
+      );
       if (
-        CheckHoangOcRecommend(Number(item.yearLunar) - Number(tuoiGiaChu) + 1)
+        CheckHoangOcRecommend(Number(item.yearLunar) - Number(tuoiMuon) + 1)
           .length !== 0 &&
         !hoangOcShow.includes(item.yearLunar)
       )
         hoangOcShow.push(item.yearLunar);
 
-      isYearHoangOc = CheckHoangOc(
-        Number(item.yearLunar) - Number(tuoiMuon) + 1
-      );
       isKimLau = CheckKimLau(item.yearLunar, Number(tuoiMuon));
       if (isTamTai && !TamTai.includes(item.yearLunar))
         TamTai.push(item.yearLunar);
@@ -710,6 +711,14 @@ export default function Home() {
     });
 
     if (valueSelect === "dong-tho") handleRecommendYearDongTho(lunarYear);
+    setBonusConditionBuilding({
+      ...bonusConditionBuilding,
+      KimLau,
+      HoangOc,
+      descriptionHoangOc,
+      hoangOcShow,
+      TamTai,
+    });
 
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
@@ -723,7 +732,12 @@ export default function Home() {
         ) &&
         !KimLau.includes(item.yearLunar) &&
         !TamTai.includes(item.yearLunar) &&
-        !hoangOcShow.includes(item.yearLunar)
+        !hoangOcShow.includes(item.yearLunar) &&
+        !CheckTrucXungNgayThangNam(
+          CHI_NAM[Number(tuoiMuon) % 12],
+          CHI_NAM[Number(item.yearLunar) % 12]
+        ) &&
+        CHI_NAM[Number(tuoiMuon) % 12] !== CHI_NAM[Number(item.yearLunar) % 12]
         //  &&
         // CheckNguHanhTuongSinh(
         //   NGU_HANH[valueText],
@@ -877,13 +891,6 @@ export default function Home() {
       ...infoGiaChuBorrow,
       tuoi: tuoiCanMuon + " " + tuoiChiMuon,
       tuoiTuoiMuon: tuoiMuon,
-    });
-    setBonusConditionBuilding({
-      ...bonusConditionBuilding,
-      KimLau,
-      HoangOc,
-      TamTai,
-      descriptionHoangOc,
     });
 
     setTextTrucXungTuoiMuonAndGiaChu(
@@ -1179,7 +1186,7 @@ export default function Home() {
   };
 
   useEffect(() => {}, []);
-
+  console.log(bonusConditionBuilding, "bonusConditionBuilding");
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1573,6 +1580,8 @@ export default function Home() {
                         <TableNamKimLauHoangOcTamTai
                           lunarYearArr={lunarYearArr}
                           infoGiaChu={infoGiaChu}
+                          infoGiaChuBorrow={infoGiaChuBorrow}
+                          isMuonTuoi={isMuonTuoi}
                           bonusConditionBuilding={bonusConditionBuilding}
                         />
                       </div>

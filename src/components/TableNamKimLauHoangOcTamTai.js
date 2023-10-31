@@ -42,8 +42,10 @@ const TableNamKimLauHoangOcTamTai = ({
   toaNha,
   lunarYearArr,
   bonusConditionBuilding,
+  infoGiaChuBorrow,
+  isMuonTuoi,
 }) => {
-  console.log(infoGiaChu, "infoGiaChu");
+  // console.log(isMuonTuoi, infoGiaChuBorrow, "infoGiaChu");
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -108,12 +110,23 @@ const TableNamKimLauHoangOcTamTai = ({
                 let TamTai = bonusConditionBuilding?.TamTai.includes(year);
                 let KimLau = bonusConditionBuilding?.KimLau.includes(year);
                 let XungThaiTue = CheckTrucXungNgayThangNam(
-                  CHI_NAM[Number(infoGiaChu.tuoiGiaChu) % 12],
+                  CHI_NAM[
+                    Number(
+                      isMuonTuoi
+                        ? infoGiaChuBorrow.tuoiTuoiMuon
+                        : infoGiaChu.tuoiGiaChu
+                    ) % 12
+                  ],
                   CHI_NAM[Number(year) % 12]
                 );
                 let ThaiTue =
-                  CHI_NAM[Number(infoGiaChu.tuoiGiaChu) % 12] ===
-                  CHI_NAM[Number(year) % 12];
+                  CHI_NAM[
+                    Number(
+                      isMuonTuoi
+                        ? infoGiaChuBorrow.tuoiTuoiMuon
+                        : infoGiaChu.tuoiGiaChu
+                    ) % 12
+                  ] === CHI_NAM[Number(year) % 12];
                 return (
                   <TableRow
                     style={{
