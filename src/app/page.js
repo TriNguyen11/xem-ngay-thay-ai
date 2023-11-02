@@ -317,7 +317,6 @@ export default function Home() {
     let tuoiChiGiaChu = CHI_NAM[valueAge.year % 12];
     let tuoiCanGiaChu = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
-    console.log("normal");
     if (Number(valueAge.month) <= 2) {
       const sunlong = getSunLongitude(
         jdn(
@@ -600,7 +599,6 @@ export default function Home() {
     let tuoiChiGiaChu = CHI_NAM[valueAge.year % 12];
     let tuoiCanGiaChu = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
-    console.log("borrow");
 
     let tuoiChiMuon = CHI_NAM[valueAgeBorrow.year % 12];
     let tuoiCanMuon = CAN_NAM[valueAgeBorrow.year % 10];
@@ -947,7 +945,6 @@ export default function Home() {
       }
     });
     // return 1;
-    // console.log(ArrHopHoa, "ArrHopHoa");
     return ArrHopHoa;
   };
   const handleHopHoaNgayGio = async (arr, toa) => {
@@ -1170,23 +1167,7 @@ export default function Home() {
     });
     setArrRecommend(arrYearRecommend);
   };
-  const handleInit = async () => {
-    const a = await axios.post("http://localhost:3000/xem-ngay/xay-dung", {
-      valueAge,
-      dateStart,
-      dateEnd,
-      infoGiaChu,
-      valueSelect,
-      toaNha: valueText,
-      isMuonTuoi: isMuonTuoi,
-      valueAgeBorrow,
-    });
-
-    console.log(a, "check a ");
-  };
-
   useEffect(() => {}, []);
-  console.log(bonusConditionBuilding, "bonusConditionBuilding");
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
