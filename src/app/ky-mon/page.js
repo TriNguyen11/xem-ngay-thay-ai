@@ -273,10 +273,7 @@ export default function Home() {
       breakMap2 = false;
       // breakPoint = false;
       arrSortClock.map((item, index) => {
-        if (
-          (titleTrucPhu === "Cầm" || titleTrucPhu === "Nhuế") &&
-          posAnCanGioInit.value === 5
-        ) {
+        if (!Array.isArray(titleTrucPhu) && posAnCanGioInit.value === 5) {
           let value = [arrSortClock[indexPos].name];
           // console.log(item, value, indexPos, "noww Cầm, inti == 5 ");
           if (arrSortClock[indexPos].value === 2) {
@@ -379,12 +376,13 @@ export default function Home() {
         } else {
           if (item.name === canGioAn && !breakMap) {
             // console.log(indexPos, index, "check item");
-            // console.log(item.name, canGioAn, item, "1312312");
             canGioAn = arrSortClock[(index + 1) % arrSortClock.length].name;
             if (item.value === 5 && posAnCanGioInit.value !== 5)
               breakPoint = true;
+            console.log(item.name, canGioAn, item, posAnCanGioInit, "1312312");
 
             if (breakPoint) {
+              console.log("check breakpint trueee");
               arrSortClock[(index + 1) % arrSortClock.length]["arrTinh"] = [
                 titleTrucPhu,
               ];
@@ -403,23 +401,16 @@ export default function Home() {
               });
 
               // Bat Than
-
               arrSortClock[(index + 1) % arrSortClock.length]["BatThan"] =
                 TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]] !== "+"
                   ? BAT_THAN_REVERSE[indexPos]
                   : BAT_THAN[indexPos];
 
               //Bonus TRUC PHU
-
               arrSortClock[(index + 1) % arrSortClock.length]["bonusTrucPhu"] =
                 (
                   Array.isArray(titleTrucPhu) ? titleTrucPhu : [titleTrucPhu]
                 ).map((itemChild) => {
-                  console.log(
-                    itemChild,
-                    arrPosBangTran[index % arrPosBangTran.length] - 1,
-                    123123123
-                  );
                   return CUU_TINH[INDEX_CUU_TINH_BONUS[itemChild] - 1].data[
                     arrPosBangTran[index % arrPosBangTran.length] - 1
                   ]?.name;
@@ -432,13 +423,10 @@ export default function Home() {
 
               // arrSortClock[index]["BatThan"] = BAT_THAN[indexPos];
               console.log(
-                arrPosBangTran[index % arrPosBangTran.length] %
-                  arrPosBangTran.length,
-                (arrPosBangTran[index % arrPosBangTran.length] %
-                  arrPosBangTran.length) -
-                  1,
+                arrSortClock[index],
+                arrPosBangTran[index % arrPosBangTran.length],
                 index,
-                "check index"
+                123123123
               );
               arrSortClock[index]["BatThan"] =
                 TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]] !== "+"
@@ -468,6 +456,7 @@ export default function Home() {
                   return [handleGetStatusCanChi(thienCan, diaChi)];
                 });
               });
+
               arrSortClock[index]["bonusTrucPhu"] = (
                 Array.isArray(titleTrucPhu) ? titleTrucPhu : [titleTrucPhu]
               ).map((itemChild) => {
