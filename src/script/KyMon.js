@@ -68,9 +68,5 @@ export const TinhTuyenArr = (ChieuDiChuyen, valueDiChuyen) => {
   return { arrSort, arrSortClock };
 };
 export const handleGetStatusCanChi = (thienCan, diaChi) => {
-  console.log(
-    PARSE_THIEN_CAN[THIEN_CAN_DI_THEO[thienCan].indexOf(diaChi)],
-    "di theo"
-  );
   return PARSE_THIEN_CAN[THIEN_CAN_DI_THEO[thienCan].indexOf(diaChi)];
 };

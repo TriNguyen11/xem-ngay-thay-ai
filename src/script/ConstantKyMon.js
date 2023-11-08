@@ -371,7 +371,7 @@ export const TUAN_THU_BANG_ELEMENT = {
 // Cửu Tinh
 export const CUU_TINH = [
   {
-    title: "Bông",
+    title: "Bồng",
     value: 1,
     data: [
       {
@@ -755,7 +755,7 @@ export const ARR_CUU_TINH = [
   ["Nhuế", "Cầm"],
   ["Trụ"],
   ["Tâm"],
-  ["Bông"],
+  ["Bồng"],
   ["Nhậm"],
   ["Xung"],
 ];
@@ -776,7 +776,7 @@ export const OBJ_CUU_TINH = {
   Cầm: 3,
   Trụ: 4,
   Tâm: 5,
-  Bông: 6,
+  Bồng: 6,
   Nhậm: 7,
   Xung: 8,
 };
@@ -792,7 +792,7 @@ export const OBJ_BAT_MON = {
   Thương: 8,
 };
 export const INDEX_CUU_TINH_BONUS = {
-  Bông: 1,
+  Bồng: 1,
   Nhuế: 2,
   Xung: 3,
   Phụ: 4,
@@ -1159,24 +1159,24 @@ export const INDEX_BAT_MON_BONUS = {
 };
 //Bát Thần
 export const BAT_THAN = [
-  "Trực phù",
-  "Đằng xà",
-  "Thái âm",
-  "Lục hợp",
-  "Bạch hổ",
-  "Huyền vũ",
-  "Cửu địa",
-  "Cửu thiên",
+  "Trực phù (Mộc)",
+  "Đằng xà (Hoả)",
+  "Thái âm (Kim)",
+  "Lục hợp (Mộc)",
+  "Bạch hổ (Kim)",
+  "Huyền vũ (Thuỷ)",
+  "Cửu địa (Thổ)",
+  "Cửu thiên (Kim)",
 ];
 export const BAT_THAN_REVERSE = [
-  "Trực phù",
-  "Cửu thiên",
-  "Cửu địa",
-  "Huyền vũ",
-  "Bạch hổ",
-  "Lục hợp",
-  "Thái âm",
-  "Đằng xà",
+  "Trực phù (Mộc)",
+  "Cửu thiên (Kim)",
+  "Cửu địa (Thổ)",
+  "Huyền vũ (Thuỷ)",
+  "Bạch hổ (Kim)",
+  "Lục hợp (Mộc)",
+  "Thái âm (Kim)",
+  "Đằng xà (Hoả)",
 ];
 //Không Vong
 export const KHONG_VONG = {
@@ -1374,7 +1374,7 @@ export const PARSE_THIEN_CAN = [
   "Trường Sinh",
   "Mộc dục",
   "Quan đới",
-  "Lân quan",
+  "Lâm quan",
   "Đế vượng",
   "Suy",
   "Bệnh",

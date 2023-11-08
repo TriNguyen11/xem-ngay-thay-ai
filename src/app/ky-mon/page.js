@@ -264,8 +264,8 @@ export default function Home() {
 
     let posSpecial = 2;
     let indexTrucSu = 0;
-    console.log(arrPosBangTran, "v");
-    (titleTrucPhu === "Cầm" && posAnCanGioInit.value === 5
+    console.log(arrPosBangTran, titleTrucPhu, "v");
+    (!Array.isArray(titleTrucPhu) && posAnCanGioInit.value === 5
       ? arrPosBangTranCam
       : arrPosBangTran
     ).map((pos, indexPos) => {
@@ -273,7 +273,10 @@ export default function Home() {
       breakMap2 = false;
       // breakPoint = false;
       arrSortClock.map((item, index) => {
-        if (titleTrucPhu === "Cầm" && posAnCanGioInit.value === 5) {
+        if (
+          (titleTrucPhu === "Cầm" || titleTrucPhu === "Nhuế") &&
+          posAnCanGioInit.value === 5
+        ) {
           let value = [arrSortClock[indexPos].name];
           // console.log(item, value, indexPos, "noww Cầm, inti == 5 ");
           if (arrSortClock[indexPos].value === 2) {
@@ -412,6 +415,11 @@ export default function Home() {
                 (
                   Array.isArray(titleTrucPhu) ? titleTrucPhu : [titleTrucPhu]
                 ).map((itemChild) => {
+                  console.log(
+                    itemChild,
+                    arrPosBangTran[index % arrPosBangTran.length] - 1,
+                    123123123
+                  );
                   return CUU_TINH[INDEX_CUU_TINH_BONUS[itemChild] - 1].data[
                     arrPosBangTran[index % arrPosBangTran.length] - 1
                   ]?.name;
@@ -436,7 +444,13 @@ export default function Home() {
                 TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]] !== "+"
                   ? BAT_THAN_REVERSE[indexPos]
                   : BAT_THAN[indexPos];
-
+              // console.log(
+              //   titleTrucPhu,
+              //   index,
+              //   item,
+              //   canArrDiTheoSort[posCanGio - 1],
+              //   posCanGio
+              // );
               if (
                 !canArrDiTheoSort[posCanGio - 1] &&
                 !Array.isArray(titleTrucPhu)
@@ -451,16 +465,20 @@ export default function Home() {
                 return POS_CUNG_CHI[
                   arrSortClock[index % arrSortClock.length].value - 1
                 ].map((diaChi) => {
-                  console.log(thienCan, diaChi, "thienCan, diaChi");
                   return [handleGetStatusCanChi(thienCan, diaChi)];
                 });
               });
               arrSortClock[index]["bonusTrucPhu"] = (
                 Array.isArray(titleTrucPhu) ? titleTrucPhu : [titleTrucPhu]
               ).map((itemChild) => {
-                console.log(itemChild, "itemChilditemChild");
+                console.log(
+                  itemChild,
+                  arrPosBangTran[index % arrPosBangTran.length] - 1,
+                  arrPosBangTran[index % arrPosBangTran.length] - 1,
+                  123123123
+                );
                 return CUU_TINH[INDEX_CUU_TINH_BONUS[itemChild] - 1].data[
-                  arrPosBangTran[index] - 1
+                  arrPosBangTran[index % arrPosBangTran.length] - 1
                 ]?.name;
               });
             }
@@ -690,7 +708,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="flex flex-col w-full mt-5">
+        {/* <div className="flex flex-col w-full mt-5">
           <div
             style={{
               textTransform: "uppercase",
@@ -750,7 +768,7 @@ export default function Home() {
               }}
             />
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex flex-row justify-center mt-3">
