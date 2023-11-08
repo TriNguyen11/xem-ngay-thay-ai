@@ -52,7 +52,7 @@ export const CHI_NAM_SORTED = [
   "Tuất",
   "Hợi",
 ];
-export const CAN_CHI_XUNG_TUOI_MUON = {
+export const CAN_CHI_XUNG_60_HOA_GIAP = {
   //1
   "Giáp Tý": ["Mậu Ngọ", "Nhâm Ngọ", "Canh Dần", "Canh Thân"],
   "Ất Sửu": ["Kỷ Mùi", "Quý Mùi", "Tân Mão", "Tân Dậu"],
@@ -266,9 +266,9 @@ export const NGU_HANH_EXTENDS = {
   Khôn: "Thổ",
   Càn: "Kim",
 };
-export const NGU_HANH_INT = ["Kim", "Thuỷ", "Hoả", "Thổ", "Mộc"];
+export const NGU_HANH_60_HOA_GIAP_INT = ["Kim", "Thuỷ", "Hoả", "Thổ", "Mộc"];
 
-export const NGU_HANH_CAN_CHI_INT = {
+export const NGU_HANH_CAN_CHI_60_HOA_GIAP_INT = {
   "": "",
   Tý: 0,
   Sửu: 0,
@@ -2661,7 +2661,10 @@ export const MONTHS = [
   "Tháng 11",
   "Tháng 12",
 ];
-
+export const SERVICE_KYMON = {
+  "benh-tat": "Bệnh tật",
+  "tinh-yeu-hon-nhan": "Tình yêu, hôn nhân gia đình",
+};
 export const TOA_NHA = [
   "Tý",
   "Sửu",

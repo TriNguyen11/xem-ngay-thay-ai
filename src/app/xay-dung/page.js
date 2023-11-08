@@ -29,8 +29,8 @@ import {
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
-  NGU_HANH_CAN_CHI_INT,
-  NGU_HANH_INT,
+  NGU_HANH_CAN_CHI_60_HOA_GIAP_INT,
+  NGU_HANH_60_HOA_GIAP_INT,
   NGU_HANH_TUONG_SINH,
   ObjectTruc,
   ObjectTu,
@@ -238,6 +238,7 @@ export default function Home() {
         arrPerfectDateStep3.push(item);
       }
     });
+    console.log(arrPerfectDateStep3, "arrPerfectDateStep3");
 
     // kiem tra truc/tu
     arrPerfectDateStep3.map((item, ind) => {
@@ -1156,9 +1157,9 @@ export default function Home() {
         ) {
           arrYear.push(
             `${i} (${CAN_NAM[Number(i) % 10]} ${CHI_NAM[Number(i) % 12]}) (${
-              NGU_HANH_INT[
-                (NGU_HANH_CAN_CHI_INT[CAN_NAM[Number(i) % 10]] +
-                  NGU_HANH_CAN_CHI_INT[CHI_NAM[Number(i) % 12]] -
+              NGU_HANH_60_HOA_GIAP_INT[
+                (NGU_HANH_CAN_CHI_60_HOA_GIAP_INT[CAN_NAM[Number(i) % 10]] +
+                  NGU_HANH_CAN_CHI_60_HOA_GIAP_INT[CHI_NAM[Number(i) % 12]] -
                   1) %
                   5
               ]
@@ -1186,7 +1187,6 @@ export default function Home() {
   };
 
   useEffect(() => {}, []);
-  console.log(bonusConditionBuilding, "bonusConditionBuilding");
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div

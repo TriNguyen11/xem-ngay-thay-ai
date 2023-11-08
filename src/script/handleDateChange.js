@@ -20,7 +20,7 @@ import {
   BAM_CUNG_NAM,
   BAM_CUNG_NU,
   CAN,
-  CAN_CHI_XUNG_TUOI_MUON,
+  CAN_CHI_XUNG_60_HOA_GIAP,
   CAN_NAM,
   CASE3_TRUNGTANG,
   CASE4_TRUNGTANG,
@@ -651,7 +651,7 @@ export const CheckTrucXungNgayThangNam = (Chi1, Chi2) => {
   if (Chi1) return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
 export const CheckTrucXungTuoiMuon = (CanChi1, CanChi2) => {
-  if (CanChi1) return CAN_CHI_XUNG_TUOI_MUON[CanChi1].includes(CanChi2);
+  if (CanChi1) return CAN_CHI_XUNG_60_HOA_GIAP[CanChi1].includes(CanChi2);
 };
 export const CheckTrucXungTyHoa = (Chi1, Chi2) => {
   if (!CHI_NAM.includes(Chi1)) {
@@ -1040,7 +1040,7 @@ export const getDateByTietKhi = (tiet_khi) => {
   lambda = lambda - Math.PI * 2 * INT(lambda / (Math.PI * 2)); // Normalize to (0, 2*PI)
   return lambda;
 };
-const convertTimeChi = (hours) => {
+export const convertTimeChi = (hours) => {
   if (hours >= 23 || hours < 1) return "Tý";
   if (hours >= 1 && hours < 3) return "Sửu";
   if (hours >= 3 && hours < 5) return "Dần";

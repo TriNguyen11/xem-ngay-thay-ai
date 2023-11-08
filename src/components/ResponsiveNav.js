@@ -45,6 +45,10 @@ const pages = [
     title: "Sang cát",
     href: "sang-cat",
   },
+  {
+    title: "Kỳ môn",
+    href: "ky-mon",
+  },
 ];
 
 function ResponsiveAppBar() {
