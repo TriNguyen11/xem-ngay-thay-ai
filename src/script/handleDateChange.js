@@ -595,23 +595,25 @@ export const ConvertToRangeDayInMonthLunar = (dateArr) => {
   return rangeDayInMonthLunar;
 };
 
-export const getCanChi = async (day, month, year) => {
+export const getCanChi = async (day, month, year, hours) => {
+  console.log(hours, "hourshourshourshourshours");
   const lunar = await AmLich(day, month, year);
   const iTruc = TrucKien(1, month, year);
   const iTinh = Tinh28Tu(year, month);
-  let ngayCan = CAN[canVi(ThienCan(lunar.daysTotalInLunar))];
-  let ngayChi = CHI[chiVi(DiaChi(lunar.daysTotalInLunar))];
+  let ngayCan =
+    CAN[canVi(ThienCan(lunar.daysTotalInLunar + (hours === 23 ? 1 : 0)))];
+  let ngayChi =
+    CHI[chiVi(DiaChi(lunar.daysTotalInLunar + (hours === 23 ? 1 : 0)))];
   let namCan = CAN_NAM[lunar.yearLunar % 10];
   let namChi = CHI_NAM[lunar.yearLunar % 12];
   let thangCan =
     CAN[Math.floor((lunar.yearLunar * 12 + lunar.monthLunar + 3) % 10)];
   let thangChi = CHI[(lunar.monthLunar + 1) % 12];
-  let gioCan = getCanHour0(jdn(day, month, year));
+  let gioCan = getCanHour0(jdn(day + (hours === 23 ? 1 : 0), month, year));
   let arrGioCan = [];
+  console.log(gioCan, "gioCangioCan");
   for (let i = 0; i < 12; i++) {
-    arrGioCan.push(
-      CAN_NAM[(CAN_NAM.indexOf(getCanHour0(jdn(day, month, year))) + i) % 10]
-    );
+    arrGioCan.push(CAN_NAM[(CAN_NAM.indexOf(gioCan) + i) % 10]);
   }
   // console.log(arrGioCan, "varrGioCan");
   let hanhNgay = NGU_HANH[CAN[canVi(ThienCan(lunar.daysTotalInLunar))]];
@@ -620,6 +622,7 @@ export const getCanChi = async (day, month, year) => {
     NGU_HANH[
       CAN[Math.floor((lunar.yearLunar * 12 + lunar.monthLunar + 3) % 10)]
     ];
+  console.log(arrGioCan, "asd");
   return {
     daySolar: day,
     gioCan,
