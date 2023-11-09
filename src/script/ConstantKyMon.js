@@ -497,7 +497,7 @@ export const CUU_TINH = [
     ],
   },
   {
-    title: "Phụ",
+    title: "Phù",
     value: 4,
     data: [
       {
@@ -750,7 +750,7 @@ export const CUU_TINH = [
   },
 ];
 export const ARR_CUU_TINH = [
-  ["Phụ"],
+  ["Phù"],
   ["Anh"],
   ["Nhuế", "Cầm"],
   ["Trụ"],
@@ -770,7 +770,7 @@ export const ARR_BAT_MON = [
   ["Thương"],
 ];
 export const OBJ_CUU_TINH = {
-  Phụ: 1,
+  Phù: 1,
   Anh: 2,
   Nhuế: 3,
   Cầm: 3,
@@ -795,7 +795,7 @@ export const INDEX_CUU_TINH_BONUS = {
   Bồng: 1,
   Nhuế: 2,
   Xung: 3,
-  Phụ: 4,
+  Phù: 4,
   Cầm: 5,
   Tâm: 6,
   Trụ: 7,
@@ -1384,3 +1384,220 @@ export const PARSE_THIEN_CAN = [
   "Thai",
   "Dưỡng",
 ];
+export const PARSE_THIEN_CAN_VIET_TAT = [
+  { value: "Trường Sinh", title: "TS" },
+  { value: "Mộc dục", title: "MD" },
+  { value: "Quan đới", title: "QĐ" },
+  { value: "Lâm quan", title: "LQ" },
+  { value: "Đế vượng", title: "ĐV" },
+];
+export const PARSE_THIEN_CAN_VIET_TAT_V2 = {
+  "Trường Sinh": "TS",
+  "Mộc dục": "MD",
+  "Quan đới": "QĐ",
+  "Lâm quan": "LQ",
+  "Đế vượng": "ĐV",
+  Suy: "Suy",
+  Bệnh: "Bệnh",
+  Tử: "Tử",
+  Mộ: "Mộ",
+  Tuyệt: "Tuyệt",
+  Thai: "Thai",
+  Dưỡng: "Dưỡng",
+};
+
+export const TRAN_81 = {
+  "Mậu/Mậu":
+    "Mậu / Mậu: Phục Vịnh\nLuận hôn nhân Không có động lực\nLuận làm ăn buôn bán: tiền bỏ ra đầu tư gấp đôi, chậm nội bộ",
+  "Mậu/Ất":
+    "Mậu  / Ất: Thanh long hòa hội\nÝ nói cần người hợp tác và nhiều việc tốt. Môn cát thì việc nó mới cát tường.",
+  "Ất/Mậu":
+    "Ất / Mậu: Âm hại dương môn\nÝ nói làm việc gì cũng âm thầm mà làm, không nên công khai, sẽ có lợi cho người nữ và không có lợi cho người nam",
+  "Mậu/Bính":
+    "Mậu / Bính: Thanh long phản thủ\nMọi việc tốt lành, xuất hành tốt, đòi nợ được….\nVì có Bính là lửa, phập phù, loạn nên vẫn hở, lộn xộn cần kiểm soát được nó.",
+  "Bính/Mậu":
+    "Bính / Mậu: Điểu diệt huyệt \nCấu trúc đại cát, đại lợi. Lợi cho hôn nhân gia đình, thăng quan tiến chức, thi cử học hành.",
+  "Mậu/Đinh":
+    "Mậu / Đinh: Thanh long diêu minh \nLàm gì về công danh sự nghiệp cũng có lợi, được người khác giúp đỡ",
+  "Đinh/Mậu":
+    "Đinh / Mậu: Thanh long chuyển quang \nNgười bình dân có niềm vui bình dân\nCon nhà quan sẽ được thăng quan tiến chức",
+  "Mậu/Kỷ":
+    "Mậu / Kỷ: Quý nhân nhập ngục\nTiền bạc của cải nằm trong Mộ, không lôi ra được, tổn hại đến tiền bạc. Mọi việc của mình đều bất lợi, khi xung mộ thì mới thay đổi",
+  "Kỷ/Mậu":
+    "Kỷ / Mậu: Khuyển ngộ thanh long \nNgười có cơ hội mới có quý nhân giúp đỡ\nMôn cát thành hiện thực Môn hung mất thì giờ",
+  "Mậu/Canh":
+    "Mậu / Canh: Trực phù phi cung\nMậu chốn đi nơi khác: ý là không ở nơi nào ổn định mà phải thay đổi\nLuận việc tốt thì không tốt ; Luận việc xấu thì càng xấu\nTrong trận này tốt nhất nên đổi người hợp tác, nên đổi chỗ",
+  "Canh/Mậu":
+    "Canh / Mậu: Thiên ất phục cung \nLàm việc gì cũng không nên\nCó tiểu nhân vong ơn bội nghĩa",
+  "Mậu/Tân":
+    "Mậu / Tân: Thanh long chiết túc \nCông việc sự nghiệp đang khó khăn nên kỵ nhất là động",
+  "Tân/Mậu":
+    "Tân / Mậu: Khổ long bị thượng\nGặp chuyện khó khăn: càng manh động càng bị thương, tiền bạc mất mát.\nCần phải an phận thủ thường: (Ngọa hổ tàng long) trước mắt phải chịu thiệt thòi.",
+  "Mậu/Nhâm":
+    "Mâu / Nhâm: Thanh long nhập thiên lao\nSự việc tự nhiên xuất hiện 1 tình huống thay đổi bất lợi\nThay đổi hao tài, việc riêng tư bất lợi",
+  "Nhâm/Mậu":
+    "Nhâm / Mậu: Tiểu xà hóa long\nGặp việc có quý nhân giúp đỡ, công việc trôi chảy thuận lợi, tương lai sang lạn",
+  "Mậu/Quý":
+    "Mậu / Quý: Thanh long hoa cái\nKhi hợp với tạo thành lực cản cần có nhiều người hợp tác\nNếu luận bệnh không chỉ có 1 chứng bệnh mà có rất nhiều bệnh",
+  "Quý/Mậu": "Quý / Mậu: Thiêu ất hội hợp \nViệc tốt việc xấu luận theo môn",
+  "Ất/Ất":
+    "Ất / Ất: Nhật kỳ phục vịnh\nCần tĩnh không được động: chỉ thích hợp cho việc thủ không thích hợp cho việc tiến.",
+  "Ất/Bính":
+    "Ất / Bính: Kỳ nghi thuận toại\nNếu gặp cát tinh cho biết bản chất tốt, họ xử lý mối quan hệ tốt, thuận lợi cho việc tahwng quan tiến chức.\nNếu gặp hung tinh: bản chất là xấu, tác phong là xấu",
+  "Bính/Ất":
+    "Bính / Ất: Nhật nguyệt bình hành\nNếu được người giúp đỡ thì việc chung và việc riêng đều tốt.",
+  "Ất/Đinh":
+    "Ất / Đinh: Kỳ nghi tương tác\nViệc gì cũng cát, cũng tốt  Nhưng chỉ hôn nhân không tốt.",
+  "Đinh/Ất":
+    "Đinh / Ất: Ngọc nữ kỳ sinh\nMọi việc đều tốt, Luận về hôn nhân thì người vợ thay lòng đổi dạ",
+  "Ất/Kỷ":
+    "Ất / Kỷ: Nhật kỳ nhập mộ \nSự việc không rõ ràng, mông lung, không tì thấy bất cứ 1 hi vọng nào cả",
+  "Kỷ/Ất":
+    "Kỷ / Ất: Địa hộ phùng tinh\nNiềm hi vọng đã hết, không lại được, không thấy được lối thoát, không thấy được ánh sáng.\nGặp trận này thì nên ẩn mình, chủ thoát chứ khồng chủ tiến.",
+  "Ất/Canh":
+    "Ất / Canh: Nhật kỳ bị hình\nBất hòa chủ yếu là tranh giành tài sản và ai cũng có ý đồ riêng.",
+  "Canh/Ất":
+    "Canh / Ất: Thái bạch phùng tinh\nViệc dễ bị cản trở, cho nên làm việc gì không được chủ động.",
+  "Ất/Tân":
+    "Ất / Tân: Thanh long đào tẩu\nChủ yếu người nữ trấn người nam (hôn nhân)\nNô bộc dẫn dắt",
+  "Tân/Ất":
+    "Tân / Ất: Bạch hổ xương cuồng\ndễ nhầm lẫn, gặp nạn, tan cửa nát nhà.",
+  "Ất/Nhâm":
+    "Ất / Nhâm: Nhật kỳ nhập thiên lao\nViệc đang tốt bỗng có sự thay đổi xấu",
+  "Nhâm/Ất": "Nhâm / Ất: Tiểu xà đắc thế\nTrong lo lắng buồn phiền có hi vọng",
+  "Ất/Quý":
+    "Ất / Quý: Nhật kỳ nhập địa võng\nSự việc đó có thay đổi nhỏ thoái, ẩn, tránh nó là tốt nhất\nDo bản thân mình muốn tư lợi nên không tiến hành.",
+  "Quý/Ất":
+    "Quý / Ất: Hoa cái phùng tinh\nCó chí hướng nhưng không làm được, không được thi triển",
+  "Bính/Bính":
+    "Bính / Bính: Nguyệt kỳ bội sư\nLàm việc gì mất việc đó, hao sức, hao lực, mất mát.",
+  "Bính/Đinh":
+    "Bính / Đinh: Tinh kỳ chu tước\nKhi gặp trận này liên quan đến văn thư, giấy tờ tốt, người thường yên bình an lạc.",
+  "Đinh/Bính":
+    "Đinh / Bính: Tinh tùy nguyệt chuyển\nNgười bình thường thì vui hóa buồn, còn quý nhấn xem đó là thường",
+  "Bính/Kỷ": "Bính / Kỷ: Hóa hội nhập hình\nNói 1 đằng làm 1 lẻo",
+  "Kỷ/Bính":
+    "Kỷ / Bính: Hỏa hội địa hộ\nÂn oán bức hại lẫn nhau. Công kích lẫn nhau nên hai bên đều bị tổn thương",
+  "Bính/Canh":
+    "Bính / Canh: Tặc tất khứ\nChỉ việc tốt, xấu cũng đi hết, chảy mất hết",
+  "Canh/Bính":
+    "Canh / Bính: Tặc tất lai\nCái gì cũng đến, trong hung có cát\nPhải chủ động làm trước",
+  "Bính/Tân":
+    "Bính / Tân: Nguyệt kỳ tương hợp\nBàn về việc làm ăn thì thành\nLuận bệnh không phải nghiêm trọng",
+  "Tân/Bính": "Tân / Bính: Can hợp bội sư\nTrong sự hợp tác có phần lộn xộn",
+  "Bính/Nhâm":
+    "Bính / Nhâm: Hỏa nhập thiên lao\nViệc càng đi sâu vào nó càng phiền phức, chủ động nhiều thì thị phi nhiều.",
+  "Nhâm/Bính":
+    "Nhâm / Bính: Thủy xà nhập hỏa\nCàng làm càng lộn xộn, càng hỏng",
+  "Bính/Quý":
+    "Bính / Quý: Nguyệt kỳ địa võng\nBản thân mình muốn quang minh chính đại nhưng phía sau là tiểu nhân phá",
+  "Quý/Bính":
+    "Quý / Bính: Hoa cái bội sư\nDễ xảy ra chuyện phiền phức, Chỉ có người biết dẫn dắt thì mới thay đổi dược cục diện, cần định hướng cho người ta.",
+  "Đinh/Đinh": "Đinh / Đinh: Tinh kỳ phục vịnh\nMọi việc vui vẻ vạn sự như ý",
+  "Đinh/Kỷ":
+    "Đinh / Kỷ: Hỏa nhập càn trần\nViệc mờ ám, việc không công khai, việc gian trá, thù hận\nNguyên nhân xảy ra do người nữ.",
+  "Kỷ/Đinh":
+    "Kỷ / Đinh: Chu tước nhập mộ\nLúc đầu khó khăn nhưng sau đó sáng sủa, nếu kiên trì con đường rộng mở.",
+  "Đinh/Canh":
+    "Đinh / Canh: Tinh kỳ thụ trở\nTất cả việc làm, hành động bị cản trở, phải quay lại",
+  "Canh/Đinh":
+    "Canh / Đinh: Đình đình chi cách\nViệc nam nữ quan hệ bất chính sẽ có sự việc xấu xảy ra (kiện tụng, thị phi)",
+  "Đinh/Tân":
+    "Đinh / Tân: Chu tước nhập ngọc\nViệc đáng làm không làm, việc không đáng thì làm",
+  "Tân/Đinh":
+    "Tân / Đinh: Ngục thần đắc kỳ\nTrong sai lầm có người giúp đỡ. Nếu việc kinh doanh đạt gấp đôi lợi nhuận",
+  "Đinh/Nhâm":
+    "Đinh / Nhâm: Kỳ nghi tương hợp\nCông việc đều có quý nhân giúp đỡ còn kiện tụng phán xét công bằng.",
+  "Nhâm/Đinh":
+    "Nhâm / Đinh: Can hợp xà hình\nLúc đầu xuất hiện việc phiền phức nhưng sau đó lại có cơ hội để giải quyết việc",
+  "Đinh/Quý":
+    "Đinh / Quý: Chu tước đầu giang\nLiên quan đến việc cãi vã thị phi, việc gì cũng không thành.",
+  "Quý/Đinh":
+    "Quý / Đinh: Đằng xà yêu kiêu\nViệc kiện tụng thị phi giống như con rắn lúc nào cũng bám theo",
+  "Kỷ/Kỷ":
+    "Kỷ / Kỷ: Địa hộ phùng quỷ\nKhông thể thấy ánh sáng\nViệc xấu xa, không quang minh chính đại",
+  "Kỷ/Canh":
+    "Kỷ / Canh: Hình cách phản danh\nĐi tới gặp cản trở đi ngược lại, chỉ lo cho lợp ích bản thân cho nên gặp sự cản trở tkhông thể thành công mà phải quay về chỗ cũ.",
+  "Canh/Kỷ":
+    "Canh / Kỷ: Quan phủ hình cách\nLuận việc gì thì việc đó bị tổn thương\nChủ yếu là kiện tụng và thị phi",
+  "Kỷ/Tân":
+    "Kỷ / Tân: Du hồn nhập mộ\nGặp trận này hết sức phải thận trọng có tiểu nhân hãm hại phía sau.",
+  "Tân/Kỷ":
+    "Tân / Kỷ: Nhập ngục tử hình\nSai lầm là do mình tạo nên. Có khó khăn không biết trình bày với ai ",
+  "Kỷ/Nhâm":
+    "Kỷ / Nhâm: Địa võng cao thương\nMuốn thay đổi nhưng không thay đổi được\nGặp những người gian xảo; Tai nan, rủi ro vì tình cảm lăng nhăng.",
+  "Nhâm/Kỷ":
+    "Nhâm / Kỷ: Phản vịnh xà hình\nBản thân mình nghĩ việc đó tốt đẹp nhưng không phải vậy do đó dẫn đến tranh chấp, thị phi, tố cáo.",
+  "Kỷ/Quý":
+    "Kỷ / Quý: Địa hình huyền vũ\nCho biết việc mà mình gặp không phỉa việc tốt đẹp mà do lòng tham bản thân người ta ngấm ngầm thay đổi.",
+  "Quý/Kỷ":
+    "Quý / Kỷ: Hoa cái địa hộ\nViệc mình làm sẽ không thành, không phát triển\nTrốn tánh, trốn nợ, tị nạn là tốt",
+  "Canh/Canh":
+    "Canh / Canh: Thái bạch đồng cung\nMôi trường kinh doanh có tính cạnh tranh; đồng nghiệp bất hòa",
+  "Canh/Tân":
+    "Canh / Tân: Bạch hổ can cách\nPhải bất động, làm việc gì phải hết sức cẩn thận",
+  "Tân/Canh":
+    "Tân / Canh: Bạch hổ xuất lực\nRất nghiêm trọng, phải bình tĩnh, động là đầu rơi máy chảy",
+  "Canh/Nhâm":
+    "Canh / Nhâm: Di đãng cách\nLuận công việc: công việc sẽ bị thay đổi, thay đổi trong phạm vi nhỏ (không được lên chức, vẫy vùng)",
+  "Nhâm/Canh":
+    "Nhâm / Canh: Thái bạch cầm xà (Bát được con rắn)\nBao dung hóa giải, thấu hiểu\nKhi công việc gặp trở ngại thì gặp trận này sẽ được hóa giải.",
+  "Canh/Quý":
+    "Canh / Quý: Đại cách\nNếu là thay đổi công việc là thay đổi lớn mang nghĩa tích cực",
+  "Quý/Canh":
+    "Quý / Canh: Thái bạch nhập võng\nGặp trận này chủ yếu dễn đến bạo lực, tự mình chuốc lấy lỗi lầm cho mình",
+  "Tân/Tân":
+    "Tân / Tân: Phục vịnh thiên đình\nSai lầm theo quán tính, sai càng sai",
+  "Tân/Nhâm":
+    "Tân / Nhâm: Hung xà nhập ngục\nLiên quan đến nam, nữ mà phạm sai lầm, liên quan đến mối quan hệ không được trong sáng.",
+  "Nhâm/Tân":
+    "Nhâm / Tân: Đằng xà tương triền\nĐiều thị phi luôn bám lấy mình, nếu có cát môn thì cũng không được yên ổn.",
+  "Tân/Quý":
+    "Tân / Quý: Thiên lao hoa cái\nDằng co trong thị phi đó, như tấm lưới không dứt\nChủ do mình không sáng suốt mà đi vào sai lầm",
+  "Quý/Tân":
+    "Quý / Tân: Võng cái thiên lao\nKhông muốn đi ra khỏi nhà, do ngượng ngại",
+  "Nhâm/Nhâm":
+    "Nhâm / Nhâm: Thiên ngục tự hình\nViệc nào cũng loạn, ngoài cũng vậy trong cũng vậy, loạn cào cào không quản lý được.",
+  "Nhâm/Quý":
+    "Nhâm / Quý: Ấu nữ gian dâm\nNội bộ có việc xấu mà không dám nói ra bên ngoài",
+  "Quý/Nhâm":
+    "Quý / Nhâm: Phục kiến đằng xà\nNhắc lại chuyện cũ, hoặc thực hiện hóa những việc không bao giờ làm được",
+  "Quý/Quý":
+    "Quý / Quý: Thiên võng tứ trương\nTrận này không được động, động sẽ xảy ra tai họa",
+};
+export const CUU_TINH_MO_TA = {
+  Bồng: "- Hung tinh, + tinh\n- Trộm cướp, đạo tặc, mạo hiểm\n- Nó thể hiện sự di chuyển và thay đổi",
+  Nhuế: "- Hung tinh, - tinh\n- Chỉ ốm đau, bệnh tật, khuyết điểm\n- Chỉ học trò, sự dạy dỗ",
+  Xung: "- Tiểu cát, + tinh tinh\n- Tính chất: Nhanh nhẹn, dứt khoát\n- Chỉ nông nghiệp, quân nhân, võ sỹ",
+  Phù: "- Cát tinh, + tinh tinh\n- Nếu có ĐINH nói năng trình tự rõ ràng, dứt khoát\n- Chỉ văn hoá, giáo dục",
+  Cầm: "- Cát tinh số 1, + tinh\n- Thích hợp cho mọi việc",
+  Tâm: "- Cát tinh, - tinh\n- Có khả năng điều trị bệnh tật, bác sỹ\n- Chỉ năng lực lãnh đạo, cấp trên",
+  Trụ: "- Hung tinh, - tinh\n- Phá cũ xây mới\n- Người có năng lực",
+  Nhậm: "- Cát tinh, + tinh\n- Thật thà, khó thay đổi, khi suy là bảo thủ, cố chấp\n- Chậm, ít (lợi nhuận đất đai)",
+  Anh: "- Tiểu hung, - tinh\n- Thích hợp với việc lập kế hoạch, chủ trương",
+};
+export const BAT_MON_MO_TA = {
+  Hưu: "- Nghỉ ngơi\n- Gia Đình\n- Quý nhân",
+  Tử: "- Chỉ sự chết chóc\n- Đất, mộ\n- Tạo thành sẹo (vết thương không phai)",
+  Thương: "- Chỉ tổn thương\n- Chỉ xe cộ\n- Chỉ người bán hàng",
+  Đỗ: "- Chỉ xây dựng, kỹ thuật\n- Dừng lại, cản trở\n- Bảo mật",
+  Khai: "- Chỉ công việc, sự nghiệp\n- Chỉ công ty, cửa hàng, cửa hiệu\n- Liên quan đến khai mở, sáng lập",
+  Kinh: "- Thị phi, kiện tụng\n- Kinh sợ, lo lắng",
+  Sinh: "- Lợi nhuận\n- Nhà cửa",
+  Cảnh: "- Du lịch, ăn uống\n- Tranh, thư pháp\n- Giấy tờ",
+};
+
+export const BAT_THAN_MO_TA = {
+  "Trực phù (Mộc)":
+    "- Là quý nhân, lãnh đạo\n- Cái gì có trực phù chắc chắn sẽ tốt",
+  "Đằng xà (Hoả)":
+    "- Chỉ bí ẩn, giả tạo, độc mồm độc miệng\n- Nơi nhiều âm khí\n- Hay thay đổi (lắt léo)",
+  "Thái âm (Kim)": "- Tính chất tỉ mỉ, cẩn thận\n- Khó đoán, khó lường",
+  "Lục hợp (Mộc)": "- Hôn nhân, gia đình\n- Môi giới",
+  "Bạch hổ (Kim)":
+    "- Hung thần, thích chiến đấu, đánh nhau\n- Tai nạn giao thông, bệnh tật, chết chóc, độ khó",
+  "Huyền vũ (Thuỷ)": "- Gian trá, trộm vặt, thị phi\n- Chạy trốn.",
+  "Cửu địa (Thổ)": "- Hiền hoà, nhu mì\n- Cất giữ\n- Chậm (buôn bán), ổn định",
+  "Cửu thiên (Kim)":
+    "- Thích hoạt động, nghĩ hơi quá, viển vông\n- Yêu cầu hơi cao\n- Thay đổi",
+};

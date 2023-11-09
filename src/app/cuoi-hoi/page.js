@@ -409,7 +409,6 @@ export default function Home() {
     } else {
       arrPerfectDateStep6 = arrPerfectDateStep3;
     }
-    console.log("123123123");
 
     // kiem tra truc/tu
     arrPerfectDateStep6.map((item, ind) => {

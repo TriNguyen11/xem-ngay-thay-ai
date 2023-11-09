@@ -596,7 +596,6 @@ export const ConvertToRangeDayInMonthLunar = (dateArr) => {
 };
 
 export const getCanChi = async (day, month, year, hours) => {
-  console.log(hours, "hourshourshourshourshours");
   const lunar = await AmLich(day, month, year);
   const iTruc = TrucKien(1, month, year);
   const iTinh = Tinh28Tu(year, month);
@@ -611,7 +610,7 @@ export const getCanChi = async (day, month, year, hours) => {
   let thangChi = CHI[(lunar.monthLunar + 1) % 12];
   let gioCan = getCanHour0(jdn(day + (hours === 23 ? 1 : 0), month, year));
   let arrGioCan = [];
-  console.log(gioCan, "gioCangioCan");
+
   for (let i = 0; i < 12; i++) {
     arrGioCan.push(CAN_NAM[(CAN_NAM.indexOf(gioCan) + i) % 10]);
   }
@@ -622,7 +621,7 @@ export const getCanChi = async (day, month, year, hours) => {
     NGU_HANH[
       CAN[Math.floor((lunar.yearLunar * 12 + lunar.monthLunar + 3) % 10)]
     ];
-  console.log(arrGioCan, "asd");
+
   return {
     daySolar: day,
     gioCan,

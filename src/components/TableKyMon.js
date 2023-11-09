@@ -1,14 +1,12 @@
-import React from "react";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { IconButton } from "@mui/material";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Box, IconButton } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { PARSE_THIEN_CAN_VIET_TAT_V2 } from "@Root/script/ConstantKyMon";
 const COLOR_TABLE_HEADING = [
   "#89ACE7",
   "#E7C967",
@@ -31,7 +29,7 @@ const COLOR_TABLE_BODY = [
   "#EBD284",
   "#E99B8E",
 ];
-const TableKyMon = ({ data }) => {
+const TableKyMon = ({ data, setDetailsBatMon, HDMYA }) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 1000 }} aria-label="simple table">
@@ -50,7 +48,12 @@ const TableKyMon = ({ data }) => {
                       padding: 0,
                       backgroundColor: COLOR_TABLE_BODY[data[index].value - 1],
                     }}>
-                    <ElementOfTable data={data[index]} index={index} />
+                    <ElementOfTable
+                      HDMYA={HDMYA}
+                      data={data[index]}
+                      index={index}
+                      setDetailsBatMon={setDetailsBatMon}
+                    />
                   </TableCell>
                   <TableCell
                     align="center"
@@ -62,7 +65,12 @@ const TableKyMon = ({ data }) => {
                         COLOR_TABLE_BODY[data[index + 1].value - 1],
                       padding: 0,
                     }}>
-                    <ElementOfTable data={data[index + 1]} index={index + 1} />
+                    <ElementOfTable
+                      HDMYA={HDMYA}
+                      data={data[index + 1]}
+                      index={index + 1}
+                      setDetailsBatMon={setDetailsBatMon}
+                    />
                   </TableCell>
                   <TableCell
                     align="center"
@@ -73,48 +81,12 @@ const TableKyMon = ({ data }) => {
                       padding: 0,
                     }}>
                     <ElementOfTable
+                      HDMYA={HDMYA}
+                      setDetailsBatMon={setDetailsBatMon}
                       data={data[index + 2]}
                       index={index + 2}
                       isMid={true}
                     />
-                    {/* 
-                    <div>
-                      <div className="pb-5">{data[index + 2].value}</div>
-                      <div
-                        style={{
-                          color: "red",
-                          position: "relative",
-                        }}>
-                        {data[index + 2].CanDiTheo}
-                        <p className=" absolute -top-4 -right-2">
-                          {data[index + 2]?.StatusCanDiTheo?.toString()}
-                        </p>
-                      </div>
-                      <div
-                        style={{
-                          fontWeight:
-                            data[index + 2].name === "Mậu" ? "bold" : "500",
-                        }}>
-                        {data[index + 2].name}
-                      </div>
-                      <div style={{}}>
-                        Trực sử:{" "}
-                        {data[index + 2]?.arrSu?.map((item) => {
-                          return item;
-                        })}{" "}
-                        - {data[index + 2]?.bonusTrucSu}
-                      </div>
-                      <div style={{}}>
-                        Trực phù: {data[index + 2]?.arrTinh}-{" "}
-                        {data[index + 2]?.bonusTrucPhu}
-                      </div>
-
-                      <div style={{}}>
-                        Bát thần: {data[index + 2]?.BatThan?.toString()}
-                      </div>
-                      <div style={{}}>{data[index + 2]?.KV}</div>
-                      <div style={{}}>{data[index + 2]?.MaTinh}</div>
-                    </div> */}
                   </TableCell>
                 </TableRow>
               );
@@ -126,7 +98,13 @@ const TableKyMon = ({ data }) => {
   );
 };
 
-const ElementOfTable = ({ data, index, isMid }) => {
+const ElementOfTable = ({ data, setDetailsBatMon, HDMYA }) => {
+  // console.log(HDMYA, "HDMYA", data);
+  let HDMYA_Show = [];
+  Object.keys(HDMYA).map((key) => {
+    if (data?.CanDiTheo && data.CanDiTheo.includes(HDMYA[key]))
+      HDMYA_Show.push(key);
+  });
   return (
     <>
       {data?.value !== 5 ? (
@@ -138,7 +116,7 @@ const ElementOfTable = ({ data, index, isMid }) => {
             <div
               style={{
                 border: "1px solid black",
-                height: 50,
+                height: 60,
                 paddingRight: 15,
                 display: "flex",
                 flexDirection: "row",
@@ -155,7 +133,7 @@ const ElementOfTable = ({ data, index, isMid }) => {
               className="text-[25px] font-bold"
               style={{
                 border: "1px solid black",
-                height: 50,
+                height: 60,
                 paddingRight: 15,
                 display: "flex",
                 flexDirection: "row",
@@ -169,7 +147,7 @@ const ElementOfTable = ({ data, index, isMid }) => {
             <div
               style={{
                 border: "1px solid black",
-                height: 50,
+                height: 60,
                 paddingRight: 15,
                 display: "flex",
                 flexDirection: "row",
@@ -181,6 +159,9 @@ const ElementOfTable = ({ data, index, isMid }) => {
                 className="border-[1px] border-black rounded-full"
                 style={{
                   backgroundColor: COLOR_TABLE_HEADING[data?.value - 1],
+                }}
+                onClick={() => {
+                  setDetailsBatMon(data);
                 }}>
                 <IconButton aria-label="info" className="border-black border">
                   <MoreHorizIcon fontSize="small" />
@@ -190,7 +171,7 @@ const ElementOfTable = ({ data, index, isMid }) => {
             <div
               style={{
                 border: "1px solid black",
-                height: 50,
+                height: 60,
                 paddingRight: 10,
                 display: "flex",
                 flexDirection: "row",
@@ -205,13 +186,13 @@ const ElementOfTable = ({ data, index, isMid }) => {
                 flex: 2,
                 textAlign: "center",
               }}>
-              {data?.BatThan}
+              {data?.BatThan || "Trực Phù (Mộc)"}
             </div>
             {data?.MaTinh && (
               <div
                 style={{
                   border: "1px solid black",
-                  height: 50,
+                  height: 60,
                   paddingRight: 15,
                   display: "flex",
                   flexDirection: "row",
@@ -227,7 +208,7 @@ const ElementOfTable = ({ data, index, isMid }) => {
               <div
                 style={{
                   border: "1px solid black",
-                  height: 50,
+                  height: 60,
                   paddingRight: 15,
                   display: "flex",
                   flexDirection: "row",
@@ -239,60 +220,86 @@ const ElementOfTable = ({ data, index, isMid }) => {
               </div>
             )}
           </div>
+          <div className="mb-4 font-bold text-[24px]">
+            {HDMYA_Show.toString()}
+          </div>
           <div className="flex flex-row">
             {/* col 1 */}
             <div className="flex flex-col">
               <div className="min-w-[150px] w-[50%] pb-8">
                 <div style={{}} className="text-xl relative">
-                  {data?.arrSu?.map((item) => {
-                    return item;
-                  })}
+                  {data?.arrSu &&
+                    data?.arrSu?.map((item) => {
+                      return item;
+                    })}
                   <div className="text-sm -mt-2 -top-2 -right-10 absolute  text-[red] w-32">
                     {data?.bonusTrucSu}
                   </div>
                 </div>
               </div>
-              {data?.arrTinh?.map((item, index) => {
-                return (Array.isArray(item) ? item : [item])?.map((child) => {
-                  return (
-                    <div
-                      className={`min-w-[150px] relative text-xl w-[50%] ${
-                        index !== item.length - 1 ? "pb-8" : "pb-2"
-                      }`}>
-                      {" "}
-                      {child}
-                      <span className="text-sm -mt-2 ml-4 absolute  text-[red]">
-                        {data?.bonusTrucPhu[index]}
-                      </span>
-                    </div>
-                  );
-                });
-              })}
+              {data?.arrTinh &&
+                (Array.isArray(data?.arrTinh)
+                  ? data?.arrTinh.includes("Nhuế") ||
+                    data?.arrTinh.includes("Cầm")
+                    ? ["Nhuế", "Cầm"]
+                    : data?.arrTinh
+                  : data?.arrTinh === "Nhuế" || data?.arrTinh === "Cầm"
+                  ? ["Nhuế", "Cầm"]
+                  : [data?.arrTinh]
+                )?.map((item, index) => {
+                  return (Array.isArray(item) ? item : [item])?.map((child) => {
+                    return (
+                      <div
+                        className={`min-w-[150px] relative text-xl w-[50%] ${
+                          index !== item.length - 1 ? "pb-8" : "pb-2"
+                        }`}>
+                        {" "}
+                        {child}
+                        <span className="text-sm -mt-2 ml-4 absolute  text-[red]">
+                          {data?.bonusTrucPhu[index]}
+                        </span>
+                      </div>
+                    );
+                  });
+                })}
             </div>
             {/* col 2 */}
             <div className="flex flex-col">
               <div className="min-w-[150px] w-[50%] pb-8">
-                {data?.CanDiTheo?.map((item, index) => {
-                  return (
-                    <>
-                      <div
-                        style={{}}
-                        className={`text-xl relative ${
-                          index !== data?.CanDiTheo?.length - 1
-                            ? "mb-6"
-                            : "mb-2"
-                        }`}>
-                        {item +
-                          (index !== data?.CanDiTheo.length - 1 ? ", " : " ")}
-                        <div className="text-sm  -top-4 -right-[50px]  absolute  text-[red] min-w-full">
-                          {data?.StatusCanDiTheo[index]
-                            .toString()
-                            .replace(",", ", ")}
+                {data?.CanDiTheo &&
+                  data?.CanDiTheo?.map((item, index) => {
+                    return (
+                      <>
+                        <div
+                          style={{}}
+                          className={`text-xl relative ${
+                            index !== data?.CanDiTheo?.length - 1
+                              ? "mb-6"
+                              : "mb-2"
+                          }`}>
+                          {item +
+                            (index !== data?.CanDiTheo.length - 1 ? " " : " ")}
+                          <div className="text-sm  -top-4 -right-[50px]  absolute  text-[red] min-w-full">
+                            {
+                              data?.StatusCanDiTheo[index].map(
+                                (child, indexChild) => {
+                                  return (
+                                    PARSE_THIEN_CAN_VIET_TAT_V2[child] +
+                                    (indexChild !==
+                                    data?.StatusCanDiTheo[index].length - 1
+                                      ? ", "
+                                      : "")
+                                  );
+                                }
+                              )
+                              // ?.toString()
+                              // .replace(",", ", ")
+                            }
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  );
-                })}
+                      </>
+                    );
+                  })}
               </div>
               <div className={`min-w-[150px] w-[50%]  pb-2 text-xl `}>
                 {" "}

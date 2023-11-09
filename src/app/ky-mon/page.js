@@ -8,14 +8,20 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Switch,
   TextField,
 } from "@mui/material";
-import { DatePicker, TimeField } from "@mui/x-date-pickers";
-import Notify from "@Root/components/Notify";
-import TableShow from "@Root/components/Table";
-import TableResult from "@Root/components/TableResult";
-import { getSunLongitude, jdn, monthDays, TIET } from "@Root/script/AmLich";
+import { TimeField } from "@mui/x-date-pickers";
+import ModalInfoBatMon from "@Root/components/ModalInfoBatMon";
+import TableKyMon from "@Root/components/TableKyMon";
+import { getSunLongitude, jdn } from "@Root/script/AmLich";
+import {
+  CAN_NAM,
+  CHI_NAM,
+  CHI_NAM_SORTED,
+  MONTHS,
+  SERVICE_KYMON,
+  TIETKHI,
+} from "@Root/script/Constant";
 import {
   ARR_BAT_MON,
   ARR_CUU_TINH,
@@ -30,6 +36,7 @@ import {
   MA_TINH,
   OBJ_BAT_MON,
   OBJ_CUU_TINH,
+  PARSE_THIEN_CAN_VIET_TAT,
   PHU_DAU,
   POS_CUNG_CHI,
   SO_TRAN_THUONG_TRUNG_HA,
@@ -38,50 +45,16 @@ import {
   TUAN_THU,
   TUAN_THU_BANG_ELEMENT,
 } from "@Root/script/ConstantKyMon";
-import {
-  CAN_NAM,
-  CHI_NAM,
-  CHI_NAM_SORTED,
-  MONTHS,
-  NGUYET_KY,
-  NGUYET_PHA,
-  ObjectTruc,
-  ObjectTu,
-  SAT_CHU_AM,
-  SAT_CHU_DUONG,
-  SERVICE_CONGVIECDAISU,
-  SERVICE_KYMON,
-  SERVICE_SUCKHOE,
-  TAM_NUONG,
-  THO_TU,
-  TIETKHI,
-  VANG_VONG,
-} from "@Root/script/Constant";
-import {
-  CheckHoangDao,
-  CheckTrucXungGioKhongToa,
-  CheckTrucXungNgayThangNam,
-  CheckTuongXungTuongHaiTuoiKhongToa,
-  convertTimeChi,
-  ConvertToRangeDayInMonthLunar,
-  getCanChi,
-} from "@Root/script/handleDateChange";
+import { convertTimeChi, getCanChi } from "@Root/script/handleDateChange";
+import { handleGetStatusCanChi, TinhTuyenArr } from "@Root/script/KyMon";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
-import { handleGetStatusCanChi, TinhTuyenArr } from "@Root/script/KyMon";
-import TableKyMon from "@Root/components/TableKyMon";
 
 export default function Home() {
   const refNotify = React.useRef();
+  const refModalInfoBatMon = React.useRef(null);
   const [loading, setLoading] = useState(false);
-  const [infoNotify, setInfoNotify] = useState({
-    open: false,
-    description: "",
-    type: "danger",
-  });
-  const [dateStart, setDateStart] = useState();
-  const [dateEnd, setDateEnd] = useState();
   const [infoGiaChu, setInfoGiaChu] = useState({
     name: "",
     tuoi: "",
@@ -101,16 +74,36 @@ export default function Home() {
     month: undefined,
     day: "",
   });
+  const [detailsBatMon, setDetailsBatMon] = useState();
 
   const [valueSelect, setValueSelect] = useState("");
-
   const handleGetPerfectDate = async () => {
     // console.log(valueAge, "valueAge");
-    let tuoiChiGiaChu = CHI_NAM[valueAge.year % 12];
-    let tuoiCanGiaChu = CAN_NAM[valueAge.year % 10];
+    let chiNamXem = CHI_NAM[valueAge.year % 12];
+    let canNamXem = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
 
     const sunlong = getSunLongitude(
+      jdn(
+        Number(valueDate.day),
+        Number(valueDate.month),
+        Number(valueDate.year),
+        valueDate.time?.$H,
+        valueDate.time?.$m,
+        valueDate.time.$s
+      ),
+      7
+    );
+    if (
+      Number(valueAge.month) <= 2 &&
+      sunlongGiaChu <= 20 &&
+      sunlongGiaChu >= 17
+    ) {
+      chiNamXem = CHI_NAM[(valueAge.year - 1) % 12];
+      canNamXem = CAN_NAM[(valueAge.year - 1) % 10];
+      tuoiGiaChu--;
+    }
+    const sunlongGiaChu = getSunLongitude(
       jdn(
         Number(valueAge.day),
         Number(valueAge.month),
@@ -121,22 +114,29 @@ export default function Home() {
       ),
       7
     );
-    console.log(TIETKHI[sunlong], sunlong, "TIET[sunlong]");
-    if (Number(valueAge.month) <= 2 && sunlong <= 20 && sunlong >= 17) {
-      tuoiChiGiaChu = CHI_NAM[(valueAge.year - 1) % 12];
-      tuoiCanGiaChu = CAN_NAM[(valueAge.year - 1) % 10];
-      tuoiGiaChu--;
-    }
-
     // Xac dinh can Chi gia chu
     setLoading(true);
+    console.log(valueDate.time?.$H, "  valueDate.time?.$H,");
     let CanChiNgayThangNamGio = await getCanChi(
+      Number(valueDate.day),
+      Number(valueDate.month),
+      Number(valueDate.year),
+      valueDate.time?.$H,
+      valueDate.time?.$m,
+      valueDate.time.$s
+    );
+    let CanChiNgayThangNamGioGiaChu = await getCanChi(
       Number(valueAge.day),
       Number(valueAge.month),
       Number(valueAge.year),
       valueAge.time?.$H,
       valueAge.time?.$m,
       valueAge.time.$s
+    );
+    console.log(
+      CanChiNgayThangNamGioGiaChu,
+      CanChiNgayThangNamGio,
+      "CanChiNgayThangNamGioGiaChu"
     );
     // xac dinh bang tran final
     const { arrSort, arrSortClock } = TinhTuyenArr(
@@ -156,18 +156,18 @@ export default function Home() {
         TUAN_THU[
           `${
             CanChiNgayThangNamGio.arrGioCan[
-              CHI_NAM_SORTED.indexOf(convertTimeChi(valueAge.time?.$H))
+              CHI_NAM_SORTED.indexOf(convertTimeChi(valueDate.time?.$H))
             ]
-          } ${convertTimeChi(valueAge.time?.$H)}`
+          } ${convertTimeChi(valueDate.time?.$H)}`
         ]
       ];
     let tuanThu =
       TUAN_THU[
         `${
           CanChiNgayThangNamGio.arrGioCan[
-            CHI_NAM_SORTED.indexOf(convertTimeChi(valueAge.time?.$H))
+            CHI_NAM_SORTED.indexOf(convertTimeChi(valueDate.time?.$H))
           ]
-        } ${convertTimeChi(valueAge.time?.$H)}`
+        } ${convertTimeChi(valueDate.time?.$H)}`
       ];
 
     let posTuanThu = arrSort.filter(
@@ -177,9 +177,9 @@ export default function Home() {
           TUAN_THU[
             `${
               CanChiNgayThangNamGio.arrGioCan[
-                CHI_NAM_SORTED.indexOf(convertTimeChi(valueAge.time?.$H))
+                CHI_NAM_SORTED.indexOf(convertTimeChi(valueDate.time?.$H))
               ]
-            } ${convertTimeChi(valueAge.time?.$H)}`
+            } ${convertTimeChi(valueDate.time?.$H)}`
           ]
         ]
     );
@@ -188,13 +188,13 @@ export default function Home() {
     // Xac dinh Truc Phu, Truc Su
     let TrucPhu = CUU_TINH[posTuanThu[0].value - 1];
     let titleTrucPhu = TrucPhu.title;
-    let titleTrucPhuSpecial = TrucPhu.title;
+    let titleTrucPhuSpecial = { title: TrucPhu.title, value: TrucPhu.value };
     let TrucSu = BAT_MON[posTuanThu[0].value - 1];
     let titleTrucSu = TrucSu.title;
 
     const arrPosBangTran = [4, 9, 2, 7, 6, 1, 8, 3];
     const arrPosBangTranCam = [4, 9, 2, 7, 6, 1, 8, 3, 5];
-    console.log(posTuanThu, "v");
+    console.log(posTuanThu, titleTrucPhu, "v");
     // Xac dinh Vi Tri Can Gio trong Bang Tran
     let posCanGio = arrSort.filter(
       (item) => item.name === posTuanThu[0].name
@@ -204,20 +204,17 @@ export default function Home() {
     let breakMap2 = false;
     let breakPoint = false;
 
-    let arrCanPrevious = [];
-    let countStep = 0;
-
     let canArrDiTheoSort = [];
     let breakpointCantheoSort = false;
 
     //Arr Can Di Theo
     let canGioAn =
       CanChiNgayThangNamGio.arrGioCan[
-        CHI_NAM_SORTED.indexOf(convertTimeChi(valueAge.time?.$H))
+        CHI_NAM_SORTED.indexOf(convertTimeChi(valueDate.time?.$H))
       ] === "Giáp"
         ? posTuanThu[0].name
         : CanChiNgayThangNamGio.arrGioCan[
-            CHI_NAM_SORTED.indexOf(convertTimeChi(valueAge.time?.$H))
+            CHI_NAM_SORTED.indexOf(convertTimeChi(valueDate.time?.$H))
           ];
 
     let posAnCanGioInit;
@@ -237,26 +234,27 @@ export default function Home() {
     console.log(chiGioAn, "22");
     if (TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]] === "+") {
       indexGioChiInArrTuanThu =
-        (arrTuanThu.indexOf(convertTimeChi(valueAge.time?.$H)) + posCanGio) %
+        (arrTuanThu.indexOf(convertTimeChi(valueDate.time?.$H)) + posCanGio) %
           9 ===
         0
           ? 9
-          : (arrTuanThu.indexOf(convertTimeChi(valueAge.time?.$H)) +
+          : (arrTuanThu.indexOf(convertTimeChi(valueDate.time?.$H)) +
               posCanGio) %
             9;
     } else {
       indexGioChiInArrTuanThu =
-        (arrTuanThu.indexOf(convertTimeChi(valueAge.time?.$H)) - posCanGio) %
+        (arrTuanThu.indexOf(convertTimeChi(valueDate.time?.$H)) - posCanGio) %
           9 ===
         0
           ? 9
-          : posCanGio - arrTuanThu.indexOf(convertTimeChi(valueAge.time?.$H)) <=
+          : posCanGio -
+              arrTuanThu.indexOf(convertTimeChi(valueDate.time?.$H)) <=
             0
           ? (posCanGio -
-              arrTuanThu.indexOf(convertTimeChi(valueAge.time?.$H)) +
+              arrTuanThu.indexOf(convertTimeChi(valueDate.time?.$H)) +
               9) %
             9
-          : posCanGio - arrTuanThu.indexOf(convertTimeChi(valueAge.time?.$H));
+          : posCanGio - arrTuanThu.indexOf(convertTimeChi(valueDate.time?.$H));
     }
     const indexGioChiInArrTuanThuCopy = indexGioChiInArrTuanThu;
 
@@ -265,7 +263,6 @@ export default function Home() {
 
     let posSpecial = 2;
     let indexTrucSu = 0;
-    console.log(arrPosBangTran, titleTrucPhu, "v");
     (!Array.isArray(titleTrucPhu) && posAnCanGioInit.value === 5
       ? arrPosBangTranCam
       : arrPosBangTran
@@ -273,9 +270,23 @@ export default function Home() {
       breakMap = false;
       breakMap2 = false;
       // breakPoint = false;
+      if (indexPos !== 0) {
+        titleTrucPhuSpecial.value =
+          arrPosBangTran[
+            (arrPosBangTran.indexOf(titleTrucPhuSpecial.value) + 1) %
+              arrPosBangTran.length
+          ];
+      }
       arrSortClock.map((item, index) => {
-        if (!Array.isArray(titleTrucPhu) && posAnCanGioInit.value === 5) {
-          let value = [arrSortClock[indexPos].name];
+        if (
+          !Array.isArray(titleTrucPhu) &&
+          posAnCanGioInit.value === 5 &&
+          breakMap
+        ) {
+          let value;
+          if (item.value === 5) breakPoint = true;
+
+          value = [arrSortClock[indexPos].name];
           // console.log(item, value, indexPos, "noww Cầm, inti == 5 ");
           if (arrSortClock[indexPos].value === 2) {
             value = [
@@ -283,10 +294,7 @@ export default function Home() {
               arrSortClock[indexPos + 1].name,
             ];
           }
-          if (item.value === 5) breakPoint = true;
-
           //Trực phù
-          console.log(posCanGio, "posCanGio");
           arrSortClock[indexPos % arrSortClock.length]["CanDiTheo"] = value;
 
           arrSortClock[indexPos % arrSortClock.length]["StatusCanDiTheo"] =
@@ -294,14 +302,70 @@ export default function Home() {
               return POS_CUNG_CHI[
                 arrSortClock[indexPos % arrSortClock.length].value - 1
               ].map((diaChi) => {
-                console.log(thienCan, diaChi, "thienCan, diaChi");
                 return [handleGetStatusCanChi(thienCan, diaChi)];
               });
             });
 
+          if (
+            titleTrucPhuSpecial.value === item.value &&
+            titleTrucPhu !== "Cầm" &&
+            titleTrucPhu !== "Nhuế"
+          ) {
+            value = [item.name];
+            // console.log(index, titleTrucPhuSpecial, item, "noww Cầm, inti == 5 ");
+            if (
+              arrSortClock[titleTrucPhuSpecial.value % arrSortClock.length]
+                .value === 2
+            ) {
+              value = [
+                arrSortClock[titleTrucPhuSpecial.value % arrSortClock.length]
+                  .name,
+                arrSortClock[
+                  (titleTrucPhuSpecial.value + 1) % arrSortClock.length
+                ].name,
+              ];
+              if (arrSortClock[indexPos].value === 2) {
+                value = [
+                  arrSortClock[indexPos].name,
+                  arrSortClock[indexPos + 1].name,
+                ];
+              }
+            }
+            console.log(
+              breakPoint,
+              value,
+              indexPos,
+              indexPos + (breakPoint ? 3 : 2),
+              arrSortClock[(indexPos + (breakPoint ? 3 : 2)) % 9],
+              "titleTrucPhuSpecial"
+            );
+            arrSortClock[(indexPos + (breakPoint ? 3 : 2)) % 9]["CanDiTheo"] =
+              value;
+
+            arrSortClock[(indexPos + (breakPoint ? 3 : 2)) % 9][
+              "StatusCanDiTheo"
+            ] = value.map((thienCan) => {
+              return POS_CUNG_CHI[
+                arrSortClock[(indexPos + (breakPoint ? 3 : 2)) % 9].value - 1
+              ].map((diaChi) => {
+                return [handleGetStatusCanChi(thienCan, diaChi)];
+              });
+            });
+          }
+
           arrSortClock[
             (posSpecial + (breakPoint ? 1 : 0)) % arrSortClock.length
-          ]["arrTinh"] = [titleTrucPhuSpecial];
+          ]["arrTinh"] = (
+            Array.isArray(titleTrucPhuSpecial.title)
+              ? titleTrucPhuSpecial.title.includes("Nhuế") ||
+                titleTrucPhuSpecial.title.includes("Cầm")
+                ? ["Nhuế", "Cầm"]
+                : titleTrucPhuSpecial.title
+              : titleTrucPhuSpecial.title === "Nhuế" ||
+                titleTrucPhuSpecial.title === "Cầm"
+              ? ["Nhuế", "Cầm"]
+              : [titleTrucPhuSpecial.title]
+          )[titleTrucPhuSpecial.title];
 
           arrSortClock[
             (posSpecial + (breakPoint ? 1 : 0)) % arrSortClock.length
@@ -309,13 +373,12 @@ export default function Home() {
             TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]] !== "+"
               ? BAT_THAN_REVERSE[index % BAT_THAN.length]
               : BAT_THAN[index % BAT_THAN.length];
-
           arrSortClock[
             (posSpecial + (breakPoint ? 1 : 0)) % arrSortClock.length
           ]["bonusTrucPhu"] = (
-            Array.isArray(titleTrucPhuSpecial)
-              ? titleTrucPhuSpecial
-              : [titleTrucPhuSpecial]
+            Array.isArray(titleTrucPhuSpecial.title)
+              ? titleTrucPhuSpecial.title
+              : [titleTrucPhuSpecial.title]
           ).map((itemChild) => {
             {
               return CUU_TINH[INDEX_CUU_TINH_BONUS[itemChild] - 1].data[
@@ -364,14 +427,15 @@ export default function Home() {
 
           // indexGioChiInArrTuanThu = (indexTrucSu + index) % 9;
 
-          titleTrucPhuSpecial =
+          titleTrucPhuSpecial.title =
             ARR_CUU_TINH[
               OBJ_CUU_TINH[
-                Array.isArray(titleTrucPhuSpecial)
-                  ? titleTrucPhuSpecial[0]
-                  : titleTrucPhuSpecial
+                Array.isArray(titleTrucPhuSpecial.title)
+                  ? titleTrucPhuSpecial.title[0]
+                  : titleTrucPhuSpecial.title
               ] % ARR_CUU_TINH.length
             ];
+
           posSpecial++;
           breakMap = true;
         } else {
@@ -380,13 +444,20 @@ export default function Home() {
             canGioAn = arrSortClock[(index + 1) % arrSortClock.length].name;
             if (item.value === 5 && posAnCanGioInit.value !== 5)
               breakPoint = true;
-            console.log(item.name, canGioAn, item, posAnCanGioInit, "1312312");
+            // console.log(item.name, canGioAn, item, posAnCanGioInit, "1312312");
 
             if (breakPoint) {
               console.log("check breakpint trueee");
-              arrSortClock[(index + 1) % arrSortClock.length]["arrTinh"] = [
-                titleTrucPhu,
-              ];
+              arrSortClock[(index + 1) % arrSortClock.length]["arrTinh"] =
+                Array.isArray(titleTrucPhu)
+                  ? titleTrucPhu.includes("Nhuế") ||
+                    titleTrucPhu.includes("Cầm")
+                    ? ["Nhuế", "Cầm"]
+                    : titleTrucPhu
+                  : titleTrucPhu === "Nhuế" || titleTrucPhu === "Cầm"
+                  ? ["Nhuế", "Cầm"]
+                  : [titleTrucPhu];
+
               // status Can Di Theo && Can Di Theo
               arrSortClock[(index + 1) % arrSortClock.length]["CanDiTheo"] =
                 canArrDiTheoSort[posCanGio - 1];
@@ -396,7 +467,7 @@ export default function Home() {
                 return POS_CUNG_CHI[
                   arrSortClock[(index + 1) % arrSortClock.length].value - 1
                 ].map((diaChi) => {
-                  console.log(thienCan, diaChi, "thienCan, diaChi");
+                  // console.log(thienCan, diaChi, "thienCan, diaChi");
                   return [handleGetStatusCanChi(thienCan, diaChi)];
                 });
               });
@@ -410,7 +481,14 @@ export default function Home() {
               //Bonus TRUC PHU
               arrSortClock[(index + 1) % arrSortClock.length]["bonusTrucPhu"] =
                 (
-                  Array.isArray(titleTrucPhu) ? titleTrucPhu : [titleTrucPhu]
+                  Array.isArray(titleTrucPhu)
+                    ? titleTrucPhu.includes("Nhuế") ||
+                      titleTrucPhu.includes("Cầm")
+                      ? ["Nhuế", "Cầm"]
+                      : titleTrucPhu
+                    : titleTrucPhu === "Nhuế" || titleTrucPhu === "Cầm"
+                    ? ["Nhuế", "Cầm"]
+                    : [titleTrucPhu]
                 ).map((itemChild) => {
                   return CUU_TINH[INDEX_CUU_TINH_BONUS[itemChild] - 1].data[
                     arrPosBangTran[index % arrPosBangTran.length] - 1
@@ -418,17 +496,14 @@ export default function Home() {
                 });
             } else {
               // if (titleTrucPhu === "Nhuế") titleTrucPhu = ["Nhuế", "Cầm"];
-              arrSortClock[index]["arrTinh"] =
-                titleTrucPhu === "Nhuế" ? titleTrucPhu : [titleTrucPhu];
+              arrSortClock[index]["arrTinh"] = Array.isArray(titleTrucPhu)
+                ? titleTrucPhu.includes("Nhuế") || titleTrucPhu.includes("Cầm")
+                  ? ["Nhuế", "Cầm"]
+                  : titleTrucPhu
+                : titleTrucPhu === "Nhuế" || titleTrucPhu === "Cầm"
+                ? ["Nhuế", "Cầm"]
+                : [titleTrucPhu];
               // Bat Than
-
-              // arrSortClock[index]["BatThan"] = BAT_THAN[indexPos];
-              console.log(
-                arrSortClock[index],
-                arrPosBangTran[index % arrPosBangTran.length],
-                index,
-                123123123
-              );
               arrSortClock[index]["BatThan"] =
                 TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]] !== "+"
                   ? BAT_THAN_REVERSE[indexPos]
@@ -459,14 +534,15 @@ export default function Home() {
               });
 
               arrSortClock[index]["bonusTrucPhu"] = (
-                Array.isArray(titleTrucPhu) ? titleTrucPhu : [titleTrucPhu]
+                Array.isArray(titleTrucPhu)
+                  ? titleTrucPhu.includes("Nhuế") ||
+                    titleTrucPhu.includes("Cầm")
+                    ? ["Nhuế", "Cầm"]
+                    : titleTrucPhu
+                  : titleTrucPhu === "Nhuế" || titleTrucPhu === "Cầm"
+                  ? ["Nhuế", "Cầm"]
+                  : [titleTrucPhu]
               ).map((itemChild) => {
-                console.log(
-                  itemChild,
-                  arrPosBangTran[index % arrPosBangTran.length] - 1,
-                  arrPosBangTran[index % arrPosBangTran.length] - 1,
-                  123123123
-                );
                 return CUU_TINH[INDEX_CUU_TINH_BONUS[itemChild] - 1].data[
                   arrPosBangTran[index % arrPosBangTran.length] - 1
                 ]?.name;
@@ -485,7 +561,6 @@ export default function Home() {
                 (arrPosBangTran.indexOf(posCanGio) + 1) % arrPosBangTran.length
               ];
             breakMap = true;
-            countStep++;
           }
           if (item.value === indexGioChiInArrTuanThu && !breakMap2) {
             // console.log(index, titleTrucSu, chiGioAn, "indexindex");
@@ -536,7 +611,7 @@ export default function Home() {
           arrSortClock[index % arrSortClock.length]["KV"] = "KV";
         }
         // Mã Tinh
-        if (MA_TINH[convertTimeChi(valueAge.time?.$H)] === item.value) {
+        if (MA_TINH[convertTimeChi(valueDate.time?.$H)] === item.value) {
           arrSortClock[index % arrSortClock.length]["MaTinh"] = "Mã";
         }
       });
@@ -544,20 +619,18 @@ export default function Home() {
       // arrSort[1]["CanDiTheo"] =
       //
     });
-    console.log(indexGioChiInArrTuanThuCopy, "indexGioChiInArrTuanThu afterr");
-    console.log(indexGioChiInArrTuanThu, 121212);
 
-    console.log(arrSortClock, "arrSort");
     setInfoGiaChu({
       ...infoGiaChu,
       ...CanChiNgayThangNamGio,
-      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
+      giaChu: CanChiNgayThangNamGioGiaChu,
+      tuoi: canNamXem + " " + chiNamXem,
       tuoiGiaChu: tuoiGiaChu,
       gioCan:
         CanChiNgayThangNamGio.arrGioCan[
-          CHI_NAM_SORTED.indexOf(convertTimeChi(valueAge.time?.$H))
+          CHI_NAM_SORTED.indexOf(convertTimeChi(valueDate.time?.$H))
         ],
-      gioChi: convertTimeChi(valueAge.time?.$H),
+      gioChi: convertTimeChi(valueDate.time?.$H),
 
       tietKhi: TIETKHI[sunlong],
       tranTietKhi: TRAN_TIET_KHI[TIETKHI[sunlong]],
@@ -572,6 +645,7 @@ export default function Home() {
       posAnCanGioInit,
     });
   };
+  console.log(infoGiaChu, "detailsBatMon");
 
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
@@ -627,7 +701,7 @@ export default function Home() {
             </Select>
           </FormControl>
         </div>
-
+        {/* Thong tin nguoi xem */}
         <div className="text-black font-sans font-bold">
           <div>NHÂN {">"} THÔNG TIN NGƯỜI XEM</div>
           <div>
@@ -698,7 +772,8 @@ export default function Home() {
             />
           </div>
         </div>
-        {/* <div className="flex flex-col w-full mt-5">
+        {/* Thoi gian xem */}
+        <div className="flex flex-col w-full mt-5">
           <div
             style={{
               textTransform: "uppercase",
@@ -716,7 +791,7 @@ export default function Home() {
               variant="standard"
               style={{ marginBottom: 20, marginLeft: 20 }}
               onChange={(e) => {
-                setValueAge({ ...valueDate, day: e.target.value });
+                setValueDate({ ...valueDate, day: e.target.value });
               }}
             />
             <FormControl fullWidth style={{ marginLeft: 20, width: 200 }}>
@@ -726,7 +801,7 @@ export default function Home() {
                 id="demo-simple-select"
                 label="Tháng"
                 onChange={(e) => {
-                  setValueAge({ ...valueDate, month: e.target.value });
+                  setValueDate({ ...valueDate, month: e.target.value });
                 }}>
                 {MONTHS.map((key, inex) => {
                   return (
@@ -745,7 +820,7 @@ export default function Home() {
               variant="standard"
               style={{ marginBottom: 20, marginLeft: 20 }}
               onChange={(e) => {
-                setValueAge({ ...valueDate, year: e.target.value });
+                setValueDate({ ...valueDate, year: e.target.value });
               }}
             />
             <TimeField
@@ -754,11 +829,11 @@ export default function Home() {
               value={valueDate.time}
               style={{ marginLeft: 20 }}
               onChange={(e) => {
-                setValueAge({ ...valueDate, time: e });
+                setValueDate({ ...valueDate, time: e });
               }}
             />
           </div>
-        </div> */}
+        </div>
       </div>
 
       <div className="flex flex-row justify-center mt-3">
@@ -799,8 +874,30 @@ export default function Home() {
             {infoGiaChu.tuoi.length !== 0 && (
               <>
                 <div className="text-black mb-2 font-bold text-lg">
-                  Tên Người Xem: {infoGiaChu.name}
-                  <div>Tuổi: {infoGiaChu.tuoi}</div>{" "}
+                  <div className="uppercase text-[24px] text-[red]">
+                    {" "}
+                    Thông tin người xem
+                  </div>
+                  Họ tên: {infoGiaChu.name}
+                  <div>
+                    Tuổi : {infoGiaChu.giaChu.namCan} {infoGiaChu.giaChu.namChi}
+                  </div>{" "}
+                  <div>
+                    Dương Lịch: {infoGiaChu.giaChu.daySolar}/
+                    {infoGiaChu.giaChu.monthSolar}/{infoGiaChu.giaChu.yearSolar}
+                  </div>{" "}
+                  <div>
+                    Âm lịch: {infoGiaChu.giaChu.dayLunar} /{" "}
+                    {infoGiaChu.giaChu.monthLunar} /{" "}
+                    {infoGiaChu.giaChu.yearLunar} ({infoGiaChu.giaChu.ngayCan}{" "}
+                    {infoGiaChu.giaChu.ngayChi} / {infoGiaChu.giaChu.thangCan}{" "}
+                    {infoGiaChu.giaChu.thangChi} / {infoGiaChu.giaChu.namCan}{" "}
+                    {infoGiaChu.giaChu.namChi})
+                  </div>{" "}
+                  <div className="mt-4 uppercase text-[24px] text-[red]">
+                    {" "}
+                    Thông tin ngày xem:
+                  </div>
                   <div>
                     Dương Lịch: {infoGiaChu.daySolar}/{infoGiaChu.monthSolar}/
                     {infoGiaChu.yearSolar}
@@ -835,10 +932,6 @@ export default function Home() {
                       ]}
                   </div>{" "}
                   <div>
-                    Bảng Trận
-                    <TableKyMon data={infoGiaChu.bangTranSorted} />
-                  </div>
-                  <div>
                     Giờ: {infoGiaChu.gioCan} {infoGiaChu.gioChi} -{" "}
                     {infoGiaChu.tuanThu} - {infoGiaChu.bangCo}
                   </div>{" "}
@@ -859,6 +952,67 @@ export default function Home() {
                     })}
                   </div>{" "}
                   <div>Mã Tinh: {MA_TINH[infoGiaChu?.gioChi]}</div>{" "}
+                  <div>
+                    Bảng Trận
+                    <TableKyMon
+                      data={infoGiaChu.bangTranSorted}
+                      setDetailsBatMon={(value) => {
+                        refModalInfoBatMon.current.OpenModal();
+                        setDetailsBatMon(value);
+                      }}
+                      HDMYA={{
+                        H:
+                          infoGiaChu.gioCan === "Giáp"
+                            ? BANG_CO[
+                                TUAN_THU[
+                                  `${infoGiaChu.ngayCan} ${infoGiaChu.gioChi}`
+                                ]
+                              ]
+                            : infoGiaChu.gioCan,
+                        D:
+                          infoGiaChu.ngayCan === "Giáp"
+                            ? BANG_CO[
+                                TUAN_THU[
+                                  `${infoGiaChu.ngayCan} ${infoGiaChu.ngayChi}`
+                                ]
+                              ]
+                            : infoGiaChu.ngayCan,
+                        M:
+                          infoGiaChu.thangCan === "Giáp"
+                            ? BANG_CO[
+                                TUAN_THU[
+                                  `${infoGiaChu.thangCan} ${infoGiaChu.thangChi}`
+                                ]
+                              ]
+                            : infoGiaChu.thangCan,
+                        Y:
+                          infoGiaChu.namCan === "Giáp"
+                            ? BANG_CO[
+                                TUAN_THU[
+                                  `${infoGiaChu.namCan} ${infoGiaChu.namChi}`
+                                ]
+                              ]
+                            : infoGiaChu.namCan,
+                        A:
+                          infoGiaChu.giaChu.namCan === "Giáp"
+                            ? BANG_CO[
+                                TUAN_THU[
+                                  `${infoGiaChu.giaChu.namCan} ${infoGiaChu.giaChu.namChi}`
+                                ]
+                              ]
+                            : infoGiaChu.giaChu.namCan,
+                      }}
+                    />
+                  </div>
+                  <div className=" flex flex-row w-full justify-start flex-wrap my-4">
+                    {PARSE_THIEN_CAN_VIET_TAT.map((item) => {
+                      return (
+                        <div className="w-[30%]">
+                          {item.title}: {item.value}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </>
             )}
@@ -866,6 +1020,7 @@ export default function Home() {
         </>
       )}
       <div style={{ height: 200 }}></div>
+      <ModalInfoBatMon data={detailsBatMon} ref={refModalInfoBatMon} />
     </div>
   );
 }
