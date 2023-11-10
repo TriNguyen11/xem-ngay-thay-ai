@@ -331,14 +331,7 @@ const Home = () => {
                 ];
               }
             }
-            console.log(
-              breakPoint,
-              value,
-              indexPos,
-              indexPos + (breakPoint ? 3 : 2),
-              arrSortClock[(indexPos + (breakPoint ? 3 : 2)) % 9],
-              "titleTrucPhuSpecial"
-            );
+
             arrSortClock[(indexPos + (breakPoint ? 3 : 2)) % 9]["CanDiTheo"] =
               value;
 
@@ -401,8 +394,8 @@ const Home = () => {
             // );
             //Trực sử
             if (titleTrucSu === "Trung" && !Array.isArray(titleTrucSu)) {
-              console.log(true, titleTrucSu, titleTrucSu);
-              console.log(index);
+              // console.log(true, titleTrucSu, titleTrucSu);
+              // console.log(index);
               titleTrucSu = "Tử";
             }
             arrSortClock[index]["arrSu"] = [titleTrucSu];
@@ -645,7 +638,6 @@ const Home = () => {
       posAnCanGioInit,
     });
   };
-  console.log(infoGiaChu, "detailsBatMon");
 
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">

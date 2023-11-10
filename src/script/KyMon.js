@@ -3,7 +3,6 @@ import { PARSE_THIEN_CAN, THIEN_CAN_DI_THEO } from "./ConstantKyMon";
 const arrPos = [4, 9, 2, 3, 5, 7, 8, 1, 6];
 const arrPosClock = [4, 9, 2, 5, 7, 6, 1, 8, 3];
 export const TinhTuyenArr = (ChieuDiChuyen, valueDiChuyen) => {
-  console.log(ChieuDiChuyen, valueDiChuyen, "valueDiChuyen");
   const arrCungCan = [
     {
       value: 1,
