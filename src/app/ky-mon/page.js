@@ -51,7 +51,7 @@ import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
 
-export default function Home() {
+const Home = () => {
   const refNotify = React.useRef();
   const refModalInfoBatMon = React.useRef(null);
   const [loading, setLoading] = useState(false);
@@ -1005,9 +1005,9 @@ export default function Home() {
                     />
                   </div>
                   <div className=" flex flex-row w-full justify-start flex-wrap my-4">
-                    {PARSE_THIEN_CAN_VIET_TAT.map((item) => {
+                    {PARSE_THIEN_CAN_VIET_TAT.map((item, index) => {
                       return (
-                        <div className="w-[30%]">
+                        <div key={index} className="w-[30%]">
                           {item.title}: {item.value}
                         </div>
                       );
@@ -1023,18 +1023,5 @@ export default function Home() {
       <ModalInfoBatMon data={detailsBatMon} ref={refModalInfoBatMon} />
     </div>
   );
-}
-async function enumerateDaysBetweenDates(startDate, endDate) {
-  let date = [];
-  while (moment(startDate) <= moment(endDate)) {
-    date.push(
-      await getCanChi(
-        moment(startDate).date(),
-        moment(startDate).month() + 1,
-        moment(startDate).year()
-      )
-    );
-    startDate = moment(startDate).add(1, "days").format("YYYY-MM-DD");
-  }
-  return date;
-}
+};
+export default React.memo(Home);

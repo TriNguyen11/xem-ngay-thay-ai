@@ -45,6 +45,7 @@ const ModalInfoBatMon = React.forwardRef(({ data }, ref) => {
   }, [open]);
   console.log(data, "data");
   let navbar = [];
+  let navbarDetails = [];
   const Data_navbar = [];
 
   if (data) {
@@ -52,6 +53,12 @@ const ModalInfoBatMon = React.forwardRef(({ data }, ref) => {
       ...data.arrTinh,
       data.arrSu,
       data.BatThan ? data.BatThan : "Trực phù (Mộc)",
+    ];
+
+    navbarDetails = [
+      ...data.bonusTrucPhu,
+      data.bonusTrucSu,
+      // data.BatThan ? data.BatThan : "Trực phù (Mộc)",
     ];
     data.arrTinh.map((item) => {
       Data_navbar.push(CUU_TINH_MO_TA[item]);
@@ -99,7 +106,7 @@ const ModalInfoBatMon = React.forwardRef(({ data }, ref) => {
                   fontWeight: value === index ? "bold" : "400",
                   border: 1,
                 }}
-                className="text-[red] px-5 py-5  text-sm">
+                className="text-[red] px-5 py-5  text-base">
                 {item}
               </Button>
             );
@@ -121,15 +128,23 @@ const ModalInfoBatMon = React.forwardRef(({ data }, ref) => {
                 ItemSplit = item?.split("\n");
               }
               console.log(index);
-              return ItemSplit?.map((child, indChild) => {
-                console.log(indChild, "indChild");
-                return <div>{child}</div>;
-              });
+              return (
+                <div className="text-lg">
+                  <div className="text-[red] font-bold text-2xl mb-4">
+                    {navbarDetails[value]}
+                  </div>
+
+                  {ItemSplit?.map((child, indChild) => {
+                    console.log(indChild, "indChild");
+                    return <div>{child}</div>;
+                  })}
+                </div>
+              );
             })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} className="text-[red]">
+          <Button onClick={handleClose} className="text-[red] text-md">
             Huỷ
           </Button>
         </DialogActions>

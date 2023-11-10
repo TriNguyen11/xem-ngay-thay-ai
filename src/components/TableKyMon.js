@@ -32,68 +32,74 @@ const COLOR_TABLE_BODY = [
 const TableKyMon = ({ data, setDetailsBatMon, HDMYA }) => {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-        <TableBody>
-          {data?.map((cell, index) => {
-            if (index % 3 == 0) {
-              // console.log(cell, index, "index");
-              return (
-                <TableRow
-                  className="flex flex-row justify-between"
-                  style={{ border: "1px solid lightgray" }}>
-                  <TableCell
-                    align="center"
-                    style={{
-                      width: `${100 / 3}%`,
-                      padding: 0,
-                      backgroundColor: COLOR_TABLE_BODY[data[index].value - 1],
-                    }}>
-                    <ElementOfTable
-                      HDMYA={HDMYA}
-                      data={data[index]}
-                      index={index}
-                      setDetailsBatMon={setDetailsBatMon}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    style={{
-                      width: `${100 / 3}%`,
-                      borderLeft: "1px solid black",
-                      borderRight: "1px solid black",
-                      backgroundColor:
-                        COLOR_TABLE_BODY[data[index + 1].value - 1],
-                      padding: 0,
-                    }}>
-                    <ElementOfTable
-                      HDMYA={HDMYA}
-                      data={data[index + 1]}
-                      index={index + 1}
-                      setDetailsBatMon={setDetailsBatMon}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    style={{
-                      width: `${100 / 3}%`,
-                      backgroundColor:
-                        COLOR_TABLE_BODY[data[index + 2].value - 1],
-                      padding: 0,
-                    }}>
-                    <ElementOfTable
-                      HDMYA={HDMYA}
-                      setDetailsBatMon={setDetailsBatMon}
-                      data={data[index + 2]}
-                      index={index + 2}
-                      isMid={true}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            }
-          })}
-        </TableBody>
-      </Table>
+      {typeof window !== "undefined" && (
+        <Table
+          sx={{ minWidth: window.innerWidth * 0.9 }}
+          aria-label="simple table">
+          <TableBody>
+            {data?.map((cell, index) => {
+              if (index % 3 == 0) {
+                // console.log(cell, index, "index");
+                return (
+                  <TableRow
+                    key={index}
+                    className="flex flex-row justify-between"
+                    style={{ border: "1px solid lightgray" }}>
+                    <TableCell
+                      align="center"
+                      style={{
+                        width: `${100 / 3}%`,
+                        padding: 0,
+                        backgroundColor:
+                          COLOR_TABLE_BODY[data[index].value - 1],
+                      }}>
+                      <ElementOfTable
+                        HDMYA={HDMYA}
+                        data={data[index]}
+                        index={index}
+                        setDetailsBatMon={setDetailsBatMon}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{
+                        width: `${100 / 3}%`,
+                        borderLeft: "1px solid black",
+                        borderRight: "1px solid black",
+                        backgroundColor:
+                          COLOR_TABLE_BODY[data[index + 1].value - 1],
+                        padding: 0,
+                      }}>
+                      <ElementOfTable
+                        HDMYA={HDMYA}
+                        data={data[index + 1]}
+                        index={index + 1}
+                        setDetailsBatMon={setDetailsBatMon}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{
+                        width: `${100 / 3}%`,
+                        backgroundColor:
+                          COLOR_TABLE_BODY[data[index + 2].value - 1],
+                        padding: 0,
+                      }}>
+                      <ElementOfTable
+                        HDMYA={HDMYA}
+                        setDetailsBatMon={setDetailsBatMon}
+                        data={data[index + 2]}
+                        index={index + 2}
+                        isMid={true}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              }
+            })}
+          </TableBody>
+        </Table>
+      )}
     </TableContainer>
   );
 };
@@ -105,24 +111,28 @@ const ElementOfTable = ({ data, setDetailsBatMon, HDMYA }) => {
     if (data?.CanDiTheo && data.CanDiTheo.includes(HDMYA[key]))
       HDMYA_Show.push(key);
   });
+
   return (
     <>
       {data?.value !== 5 ? (
         <div className="flex flex-col justify-between w-full" style={{}}>
           <div
-            className="flex flex-row items-center mb-10 justify-center w-full"
+            className="flex flex-row items-center mb-4 w-full flex-wrap"
             style={{}}>
             {/* Icon */}
             <div
               style={{
-                border: "1px solid black",
+                borderRight: "1px solid black",
+                borderBottom: "1px solid black",
+
                 height: 60,
-                paddingRight: 15,
+
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                paddingLeft: 15,
+                justifyContent: "center",
                 backgroundColor: COLOR_TABLE_HEADING[data?.value - 1],
+                width: "15%",
                 // flex: 1,
               }}>
               <img src={`/Que${data?.value}.png`} className="w-8 h-8"></img>
@@ -132,27 +142,33 @@ const ElementOfTable = ({ data, setDetailsBatMon, HDMYA }) => {
             <div
               className="text-[25px] font-bold"
               style={{
-                border: "1px solid black",
+                borderRight: "1px solid black",
+                borderBottom: "1px solid black",
+
                 height: 60,
-                paddingRight: 15,
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                paddingLeft: 15,
+                justifyContent: "center",
                 backgroundColor: COLOR_TABLE_HEADING[data?.value - 1],
+                width: "15%",
               }}>
               {data?.value}
             </div>
             {/* details  icon */}
             <div
               style={{
-                border: "1px solid black",
+                borderRight: "1px solid black",
+                borderBottom: "1px solid black",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
                 height: 60,
-                paddingRight: 15,
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                paddingLeft: 15,
+                width: "20%",
+
                 backgroundColor: COLOR_TABLE_HEADING[data?.value - 1],
               }}>
               <div
@@ -170,14 +186,13 @@ const ElementOfTable = ({ data, setDetailsBatMon, HDMYA }) => {
             </div>
             <div
               style={{
-                border: "1px solid black",
                 height: 60,
-                paddingRight: 10,
+
+                borderBottom: "1px solid black",
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
-                paddingLeft: 10,
                 flexWrap: "wrap",
                 width: 130,
                 backgroundColor: COLOR_TABLE_HEADING[data?.value - 1],
@@ -185,20 +200,25 @@ const ElementOfTable = ({ data, setDetailsBatMon, HDMYA }) => {
                 fontWeight: "bold",
                 flex: 2,
                 textAlign: "center",
+                width: "50%",
               }}>
               {data?.BatThan || "Trực Phù (Mộc)"}
             </div>
+
             {data?.MaTinh && (
               <div
                 style={{
-                  border: "1px solid black",
+                  borderRight: "1px solid black",
+                  borderBottom: "1px solid black",
                   height: 60,
-                  paddingRight: 15,
+
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  paddingLeft: 15,
-
+                  width: "50%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                   backgroundColor: COLOR_TABLE_HEADING[data?.value - 1],
                 }}>
                 {data?.MaTinh}
@@ -207,19 +227,23 @@ const ElementOfTable = ({ data, setDetailsBatMon, HDMYA }) => {
             {data?.KV && (
               <div
                 style={{
-                  border: "1px solid black",
+                  borderRight: "1px solid black",
+                  borderBottom: "1px solid black",
                   height: 60,
-                  paddingRight: 15,
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  paddingLeft: 15,
+                  width: "50%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                   backgroundColor: COLOR_TABLE_HEADING[data?.value - 1],
                 }}>
                 {data?.KV}
               </div>
             )}
           </div>
+
           <div className="mb-4 font-bold text-[24px]">
             {HDMYA_Show.toString()}
           </div>
@@ -250,6 +274,7 @@ const ElementOfTable = ({ data, setDetailsBatMon, HDMYA }) => {
                   return (Array.isArray(item) ? item : [item])?.map((child) => {
                     return (
                       <div
+                        key={index}
                         className={`min-w-[150px] relative text-xl w-[50%] ${
                           index !== item.length - 1 ? "pb-8" : "pb-2"
                         }`}>
