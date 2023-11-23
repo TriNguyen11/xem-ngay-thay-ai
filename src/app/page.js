@@ -188,16 +188,16 @@ export default function Home() {
     let monthInYear = {};
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
-      if (
-        !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
-        !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
-        !CheckTrucXungHinhHaiChi(
-          item.thangChi,
-          CHI_NAM[Number(tuoiGiaChu) % 12]
-        )
-      ) {
-        arrPerfectDateStep1.push(item);
-      }
+      // if (
+      //   !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
+      //   !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
+      //   !CheckTrucXungHinhHaiChi(
+      //     item.thangChi,
+      //     CHI_NAM[Number(tuoiGiaChu) % 12]
+      //   )
+      // ) {
+      //   arrPerfectDateStep1.push(item);
+      // }
       if (
         !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
         !CheckTrucXungHinhHaiChi(
@@ -219,7 +219,7 @@ export default function Home() {
       }
     });
     // kiem tra truc/tu
-    arrPerfectDateStep1.map((item, ind) => {
+    dateArrNgayLoaiThang.map((item, ind) => {
       if (
         //   !! || 1 trong 2 pham deu` bi
         //
@@ -253,7 +253,8 @@ export default function Home() {
           item.ngayChi
         ) &&
         // tranh trung xung hai tuoi gia chu
-        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi)
+        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi) &&
+        !CheckTrucXungNgayThangNam(valueText, item.ngayChi)
       ) {
         arrPerfectDateStep3.push(item);
       }
@@ -475,17 +476,6 @@ export default function Home() {
     let monthInYear = {};
     // Xac dinh KimLau, HoangOc,TamTai
     dateArr.map((item, index) => {
-      if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
-        monthInYear[item.yearLunar] = {};
-      }
-      if (!Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
-      }
-
       if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
 
       isTamTai = CheckTamTai(tuoiChiGiaChu, item.namChi);
@@ -534,6 +524,27 @@ export default function Home() {
       ) {
         dateArrNgayLoaiThang.push(item);
         arrPerfectDateStep1.push(item);
+      }
+      if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
+        monthInYear[item.yearLunar] = {};
+      }
+      if (
+        !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar) &&
+        !KimLau.includes(item.yearLunar) &&
+        !TamTai.includes(item.yearLunar) &&
+        !hoangOcShow.includes(item.yearLunar) &&
+        !CheckTrucXungNgayThangNam(
+          CHI_NAM[Number(tuoiGiaChu) % 12],
+          CHI_NAM[Number(item.yearLunar) % 12]
+        ) &&
+        CHI_NAM[Number(tuoiGiaChu) % 12] !==
+          CHI_NAM[Number(item.yearLunar) % 12]
+      ) {
+        monthInYear[item.yearLunar][item.monthLunar] = {
+          month: item.monthLunar,
+          canMonth: item.thangCan,
+          chiMonth: item.thangChi,
+        };
       }
     });
 
@@ -881,17 +892,6 @@ export default function Home() {
 
     // Xac dinh KimLau, HoangOc,TamTai
     dateArr.map((item, index) => {
-      if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
-        monthInYear[item.yearLunar] = {};
-      }
-      if (!Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
-      }
-
       if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
 
       isTamTai = CheckTamTai(tuoiChiMuon, item.namChi);
@@ -942,13 +942,30 @@ export default function Home() {
         ) &&
         CHI_NAM[Number(tuoiMuon) % 12] !==
           CHI_NAM[Number(item.yearLunar) % 12] &&
-        !CheckTrucXungHinhHaiChi(
-          item.thangChi,
-          CHI_NAM[Number(tuoiGiaChu) % 12]
-        )
+        !CheckTrucXungHinhHaiChi(item.thangChi, CHI_NAM[Number(tuoiMuon) % 12])
       ) {
         dateArrNgayLoaiThang.push(item);
         arrPerfectDateStep1.push(item);
+      }
+      if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
+        monthInYear[item.yearLunar] = {};
+      }
+      if (
+        !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar) &&
+        !KimLau.includes(item.yearLunar) &&
+        !TamTai.includes(item.yearLunar) &&
+        !hoangOcShow.includes(item.yearLunar) &&
+        !CheckTrucXungNgayThangNam(
+          CHI_NAM[Number(tuoiMuon) % 12],
+          CHI_NAM[Number(item.yearLunar) % 12]
+        ) &&
+        CHI_NAM[Number(tuoiMuon) % 12] !== CHI_NAM[Number(item.yearLunar) % 12]
+      ) {
+        monthInYear[item.yearLunar][item.monthLunar] = {
+          month: item.monthLunar,
+          canMonth: item.thangCan,
+          chiMonth: item.thangChi,
+        };
       }
     });
 
@@ -989,7 +1006,7 @@ export default function Home() {
           item.ngayChi
         ) &&
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
-        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi)
+        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiMuon % 12], item.ngayChi)
       ) {
         arrPerfectDateStep4.push(item);
       }
@@ -1985,17 +2002,19 @@ export default function Home() {
             </>
           ) : (
             <>
-              <div className="text-[24px] font-bold my-4 uppercase text-[red] max-w-2xl text-center ">
-                {new Date(dateStart).getTime() === new Date(dateEnd).getTime()
-                  ? `Ngày ${dateStart?.$D}/${dateStart?.$D + 1}/${
-                      dateStart.$y
-                    } không phù hợp cho công việc, vui lòng chọn ngày khác!`
-                  : `Từ ngày ${dateStart?.$D}/${dateStart?.$D + 1}/${
-                      dateStart.$y
-                    } đến ngày  ${dateEnd.$D}/${dateEnd.$D + 1}/${
-                      dateEnd.$y
-                    } không phù hợp cho công việc, vui lòng chọn khoảng khác!`}
-              </div>
+              {dateStart?.$D && dateEnd?.$D && (
+                <div className="text-[24px] font-bold my-4 uppercase text-[red] max-w-2xl text-center ">
+                  {new Date(dateStart).getTime() === new Date(dateEnd).getTime()
+                    ? `Ngày ${dateStart?.$D}/${dateStart?.$D + 1}/${
+                        dateStart.$y
+                      } không phù hợp cho công việc, vui lòng chọn ngày khác!`
+                    : `Từ ngày ${dateStart?.$D}/${dateStart?.$D + 1}/${
+                        dateStart.$y
+                      } đến ngày  ${dateEnd.$D}/${dateEnd.$D + 1}/${
+                        dateEnd.$y
+                      } không phù hợp cho công việc, vui lòng chọn khoảng khác!`}
+                </div>
+              )}
             </>
           )}
           {arrMonthInYear && (
@@ -2064,7 +2083,8 @@ export default function Home() {
                   data={stepShow.step2}
                   infoGiaChu={infoGiaChu}
                   valueSelect={valueSelect}
-                  checkTrungXungHaiTuoi={true}></TableTrucXungNgayThang>
+                  checkTrungXungHaiTuoi={true}
+                  toaNha={valueText}></TableTrucXungNgayThang>
               </div>
             </div>
           )}
