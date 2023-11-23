@@ -117,6 +117,28 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                 if (CheckTrucXungNgayThangNam(toaNha, date.thangChi))
                   backky = " Xung toạ";
                 if (
+                  CheckDaiLoi(
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Đại lợi nữ";
+                if (
+                  CheckTieuLoi(
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Tiểu lợi nữ";
+                if (
+                  CheckCongCo(
+                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
+                    date.monthLunar
+                  )
+                )
+                  backky = "Công cô nữ";
+
+                if (
                   CheckTrucXungTyHoa(
                     CHI_NAM[Number(infoGiaChu?.namSinhNam) % 12],
                     date.thangChi
@@ -145,27 +167,7 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                   )
                 )
                   backky = "Phu chủ nữ";
-                if (
-                  CheckDaiLoi(
-                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Đại lợi nữ";
-                if (
-                  CheckTieuLoi(
-                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Tiểu lợi nữ";
-                if (
-                  CheckCongCo(
-                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
-                    date.monthLunar
-                  )
-                )
-                  backky = "Công cô nữ";
+
                 if (
                   CheckNhacThan(
                     CHI_NAM[infoGiaChu?.namSinhNu % 12],

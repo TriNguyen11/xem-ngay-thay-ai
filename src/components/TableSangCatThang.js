@@ -7,37 +7,22 @@ import {
   TableRow,
 } from "@mui/material";
 import { isLeapYearLunar } from "@Root/script/AmLich";
+import { CHI_NAM } from "@Root/script/Constant";
 import {
-  CHI,
-  CHI_NAM,
-  CHI_NAM_SORTED,
-  COLOR_TEXT_NGU_HANH,
-  GIO_DIA_CHI,
-  NGU_HANH,
-  ObjectTruc,
-  ObjectTu,
-} from "@Root/script/Constant";
-import {
-  CheckCongCo,
-  CheckDaiLoi,
-  CheckKimLau,
-  CheckNhacThan,
-  CheckNhiHop,
-  CheckPhuChu,
-  CheckTamHop,
-  CheckThaiTueHinh,
-  CheckThaiTueTrucXungHinh,
-  CheckTheChu,
-  CheckTieuLoi,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTyHoa,
 } from "@Root/script/handleDateChange";
-import moment from "moment";
 import { memo } from "react";
-import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
-const TableSangCatThang = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
+const TableSangCatThang = ({
+  data,
+  infoNguoiMat,
+  valueSelect,
+  toaNha,
+  title,
+  textXungToa = "Xung toạ mộ",
+  showFull = false,
+}) => {
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -76,11 +61,12 @@ const TableSangCatThang = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
               {data &&
                 Object.keys(data).map((year, index) => {
                   if (
-                    !CheckTrucXungHinhHaiChi(
+                    (!CheckTrucXungHinhHaiChi(
                       CHI_NAM[Number(year) % 12],
                       CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
                     ) &&
-                    !isLeapYearLunar(year)
+                      !isLeapYearLunar(year)) ||
+                    showFull === true
                   ) {
                     return Object.keys(data[year]).map((month, indMonth) => {
                       let xungThang = "";
@@ -98,7 +84,7 @@ const TableSangCatThang = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                           toaNha
                         )
                       )
-                        xungThang = "Xung toạ mộ";
+                        xungThang = textXungToa;
 
                       return (
                         <TableRow

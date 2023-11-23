@@ -6,13 +6,15 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { monthDays } from "@Root/script/AmLich";
+import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CHI,
   CHI_NAM,
   CHI_NAM_SORTED,
   COLOR_TEXT_NGU_HANH,
   GIO_DIA_CHI,
+  HOANG_VU_TU_QUY,
+  KHONG_PHONG,
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
@@ -20,36 +22,31 @@ import {
   ObjectTu,
   SAT_CHU_AM,
   SAT_CHU_DUONG,
+  TAM_NUONG,
   THO_TU,
+  VANG_VONG,
 } from "@Root/script/Constant";
 import {
-  CheckCase4TrungTang,
-  CheckCase5TrungTang,
-  CheckCongCo,
-  CheckDaiLoi,
-  CheckGioKiepSat,
-  CheckKyChonCat,
-  CheckNgayGioHaKhoi,
-  CheckNgayGioThienTac,
-  CheckNgayTrungNhat,
-  CheckNguHanhTuongSinh,
-  CheckNhacThan,
+  CheckDaiBai,
+  CheckDuongCong,
   CheckNhiHop,
-  CheckPhuChu,
   CheckTamHop,
-  CheckTheChu,
-  CheckTieuLoi,
-  CheckTrucXungHinhHaiChi,
+  CheckTamTai,
+  CheckThienTaiDiaHoa,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTyHoa,
-  CheckTrungTang,
+  CheckTuongXungTuongHaiTuoi,
+  GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
-const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
-  // console.log(infoNguoiMat, "infoNguoiMat");
+const TableShow = ({
+  data,
+  infoGiaChu,
+  valueSelect,
+  checkTrungXungHaiTuoi = false,
+}) => {
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -131,78 +128,106 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
             <TableBody>
               {data?.map((date, index) => {
                 let backky = "";
-                // 1.
-                if (CheckTrucXungNgayThangNam(toaNha, date.ngayChi))
-                  backky = "Xung Toạ";
 
-                // if (
-                //   !CheckNguHanhTuongSinh(
-                //     NGU_HANH[toaNha],
-                //     NGU_HANH[date.ngayCan]
-                //   )
-                // )
-                //   backky = "Ngũ hành tương khắc Toạ";
-                // 2.
+                // Dai bai
                 if (
-                  CheckTrucXungHinhHaiChi(
-                    CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
-                    date.ngayChi
+                  CheckDaiBai(
+                    date.namCan,
+                    date.monthLunar,
+                    date.ngayCan + " " + date.ngayChi
                   )
                 )
-                  backky = "Trùng, Xung, Hình, Hại tuổi mất";
-
+                  backky = "Đại bại";
+                // Duong Cong
+                if (CheckDuongCong(date.monthLunar, date.dayLunar))
+                  backky = "Dương Công";
+                // hoang vu tu quy
+                if (
+                  HOANG_VU_TU_QUY[
+                    GetHoangVuTuQuy(
+                      getSunLongitude(
+                        jdn(
+                          Number(date.daySolar),
+                          Number(date.monthSolar),
+                          Number(date.yearSolar)
+                        ),
+                        7
+                      )
+                    )
+                  ] === date.ngayChi
+                )
+                  backky = "Hoang vu tứ quý";
+                // khong phong
+                if (
+                  KHONG_PHONG[
+                    GetHoangVuTuQuy(
+                      getSunLongitude(
+                        jdn(
+                          Number(date.daySolar),
+                          Number(date.monthSolar),
+                          Number(date.yearSolar)
+                        ),
+                        7
+                      )
+                    )
+                  ].includes(date.ngayChi)
+                )
+                  backky = "Không phòng";
+                if (CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar))
+                  backky = "Thiên Tai Địa Hoạ";
+                // if(CheckTamTai(tuoiChiGiaChu, date.namChi)) backky="Tam Tai"
                 if (date.dayLunar === 1) backky = "Mùng 1";
                 if (date.dayLunar === 15) backky = "Rằm";
                 if (
                   monthDays(date.yearLunar, date.monthLunar) === date.dayLunar
                 )
                   backky = "Cuối tháng ";
+                if (
+                  infoGiaChu?.tuoiGiaChu &&
+                  CheckTamTai(
+                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                    date.ngayChi
+                  )
+                )
+                  backky = "Tam Tai Ngày";
                 if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
-
+                if (TAM_NUONG.includes(date.dayLunar)) backky = "Tam Nương";
                 if (THO_TU[date.monthLunar - 1] === date.ngayChi)
                   backky = "Thọ Tử";
                 if (SAT_CHU_AM[date.monthLunar - 1] === date.ngayChi)
                   backky = "Sát chủ âm";
                 if (SAT_CHU_DUONG[date.monthLunar - 1] === date.ngayChi)
                   backky = "Sát chủ dương";
-                // VANG_VONG[item.monthLunar - 1] !== item.ngayChi &&
+                if (VANG_VONG[date.monthLunar - 1] === date.ngayChi)
+                  backky = "Vãng vong";
                 if (NGUYET_PHA[date.monthLunar - 1] === date.ngayChi)
                   backky = "Nguyệt Phá";
-                //Trung Phuc
+                // Trung xung hai tuoi
                 if (
-                  CheckCase5TrungTang(
-                    date.monthLunar,
-                    date.ngayCan,
+                  CheckTuongXungTuongHaiTuoi(
+                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
                     date.ngayChi
-                  ).length !== 0
+                  ) &&
+                  checkTrungXungHaiTuoi
                 )
-                  backky = "Trùng Phục";
-                // than Trung
+                  backky = "Trùng, Xung, Hại tuổi";
+
                 if (
-                  CheckCase4TrungTang(
-                    date.monthLunar,
-                    date.ngayCan,
+                  CheckTrucXungNgayThangNam(
+                    CHI_NAM[Number(date.yearLunar) % 12],
                     date.ngayChi
-                  ).length !== 0
+                  )
                 )
-                  backky = " Thần Trùng";
-                // Trung Nhat
-                if (CheckNgayTrungNhat(date.ngayChi)) backky = "Trùng Nhật";
-                // Ha Khoi
-                if (CheckNgayGioHaKhoi(date.monthLunar, date.ngayChi))
-                  backky = "Hà Khôi";
-                // Thien Tac
-                if (CheckNgayGioThienTac(date.monthLunar, date.ngayChi))
-                  backky = "Thiên Tặc";
-                //Trung tang
-                if (CheckTrungTang(date.monthLunar, date.ngayCan))
-                  backky = "Trùng tang";
-                // kiep sat
-                if (CheckGioKiepSat(infoNguoiMat?.namSinh, date.ngayChi))
-                  backky = "Kiếp sát";
-                // Ky chon cat
-                if (CheckKyChonCat(date.monthLunar, date.dayLunar))
-                  backky = "Kỵ Chôn cất";
+                  backky = "Tuế Phá";
+                if (
+                  CheckTrucXungNgayThangNam(
+                    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
+                    date.ngayChi
+                  )
+                ) {
+                  backky = "Đại Hao";
+                }
+
                 return (
                   <TableRow
                     style={{
@@ -242,7 +267,7 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                     <TableCell
                       style={{
                         textAlign: "center",
-                        color: COLOR_TEXT_NGU_HANH[date.hanhNgay],
+                        color: COLOR_TEXT_NGU_HANH[date.hanhThang],
                       }}>
                       {date.thangCan} {date.thangChi} ({date.hanhThang})
                     </TableCell>
@@ -276,20 +301,20 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                       <span
                         style={{
                           color: Object.keys(
-                            ObjectTu[date.tu].KhongLam
+                            ObjectTu[date.tu]?.KhongLam
                           ).includes(valueSelect)
                             ? "red"
                             : "green",
-                          textTransform: Object.keys(
-                            ObjectTu[date.tu].CanLam
-                          ).includes(valueSelect)
-                            ? "uppercase"
-                            : "capitalize",
-                          fontWeight: Object.keys(
-                            ObjectTu[date.tu].CanLam
-                          ).includes(valueSelect)
-                            ? "bold"
-                            : "400",
+                          // textTransform: Object.keys(
+                          //   ObjectTu[date.tu]?.CanLam
+                          // ).includes(valueSelect)
+                          //   ? "uppercase"
+                          //   : "capitalize",
+                          // fontWeight: Object.keys(
+                          //   ObjectTu[date.tu]?.CanLam
+                          // ).includes(valueSelect)
+                          //   ? "bold"
+                          //   : "400",
                         }}>
                         {date.tu}
                       </span>
@@ -340,31 +365,17 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                         ] +
                                         ")" +
                                         (CheckTamHop(
-                                          CHI_NAM[infoNguoiMat?.namSinh % 12],
+                                          CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
                                           itemGio
                                         )
-                                          ? "(Tam Hợp Nam), "
-                                          : CheckTamHop(
-                                              CHI_NAM[
-                                                infoNguoiMat?.namSinh % 12
-                                              ],
-                                              itemGio
-                                            )
-                                          ? "(Tam Hợp Nữ),"
+                                          ? "(Tam Hợp), "
                                           : CheckNhiHop(
                                               CHI_NAM[
-                                                infoNguoiMat?.namSinh % 12
+                                                infoGiaChu?.tuoiGiaChu % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nam), "
-                                          : CheckNhiHop(
-                                              CHI_NAM[
-                                                infoNguoiMat?.namSinh % 12
-                                              ],
-                                              itemGio
-                                            )
-                                          ? "(Nhị Hợp Nữ), "
+                                          ? "(Nhị Hợp), "
                                           : "")}
                                     </span>
                                   );
@@ -413,31 +424,17 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                         ] +
                                         ") " +
                                         (CheckTamHop(
-                                          CHI_NAM[infoNguoiMat?.namSinh % 12],
+                                          CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
                                           itemGio
                                         )
-                                          ? "(Tam Hợp Nam), "
-                                          : CheckTamHop(
-                                              CHI_NAM[
-                                                infoNguoiMat?.namSinh % 12
-                                              ],
-                                              itemGio
-                                            )
-                                          ? "(Tam Hợp Nữ),"
+                                          ? "(Tam Hợp), "
                                           : CheckNhiHop(
                                               CHI_NAM[
-                                                infoNguoiMat?.namSinh % 12
+                                                infoGiaChu?.tuoiGiaChu % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nam), "
-                                          : CheckNhiHop(
-                                              CHI_NAM[
-                                                infoNguoiMat?.namSinh % 12
-                                              ],
-                                              itemGio
-                                            )
-                                          ? "(Nhị Hợp Nữ), "
+                                          ? "(Nhị Hợp), "
                                           : "")}
                                     </span>
                                   );
@@ -534,4 +531,4 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
     </Box>
   );
 };
-export default memo(TableSangCatNgay);
+export default memo(TableShow);

@@ -28,10 +28,10 @@ import {
 import { memo, useState } from "react";
 import { DefineHacDaoHoangDao } from "@Root/script/calculatorCalender";
 import { chiVi, DiaChi } from "@Root/script/AmLich";
-
+import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
+import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
   const [checked, setChecked] = useState(false);
-
   return (
     <Collapse
       in={checked}
@@ -59,6 +59,15 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                       fontSize: 18,
                       fontWeight: "bold",
                     }}>
+                    <span className="mr-2">
+                      {data.isTruongHop2BonusHoaHop === false ? (
+                        <CachedOutlinedIcon />
+                      ) : data.isTruongHop2BonusHoaHop === true ? (
+                        <SwapHorizOutlinedIcon />
+                      ) : (
+                        <></>
+                      )}
+                    </span>
                     {Object.keys(ObjectTruc[data.truc].KhongLam).includes(
                       valueSelect
                     )
@@ -261,7 +270,10 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                       minWidth: 50,
                       fontSize: 16,
                     }}>
-                    Giờ
+                    Giờ (
+                    {data?.titleCheckGioNgayThang &&
+                      data?.titleCheckGioNgayThang?.toString()}
+                    ){" "}
                   </TableCell>
                   <TableCell
                     style={{
@@ -271,44 +283,59 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                     }}>
                     {data &&
                       data?.gio?.map((itemGio, index) => {
-                        return (
-                          <div
-                            key={Math.random()}
-                            style={{
-                              marginRight: 5,
-                              color:
-                                COLOR_TEXT_NGU_HANH[
-                                  NGU_HANH[
-                                    data.arrGioCan[
-                                      CHI_NAM_SORTED.indexOf(itemGio)
+                        if (
+                          (Array.isArray(data?.arrHoursOke) &&
+                            data?.arrHoursOke?.includes(itemGio)) ||
+                          data.arrHoursOke === undefined
+                        )
+                          return (
+                            <div
+                              key={Math.random()}
+                              style={{
+                                marginRight: 5,
+                                color:
+                                  COLOR_TEXT_NGU_HANH[
+                                    NGU_HANH[
+                                      data.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ]
                                     ]
+                                  ],
+                              }}>
+                              {data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)] +
+                                " " +
+                                itemGio +
+                                " (" +
+                                GIO_DIA_CHI[CHI.indexOf(itemGio)] +
+                                ") " +
+                                "(" +
+                                NGU_HANH[
+                                  data.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
                                   ]
-                                ],
-                            }}>
-                            {data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)] +
-                              " " +
-                              itemGio +
-                              " (" +
-                              GIO_DIA_CHI[CHI.indexOf(itemGio)] +
-                              ") " +
-                              "(" +
-                              NGU_HANH[
-                                data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
-                              ] +
-                              ")" +
-                              (CheckTamHop(
-                                CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                                itemGio
-                              )
-                                ? "(Tam Hợp) "
-                                : CheckNhiHop(
-                                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                                    itemGio
-                                  )
-                                ? "(Nhị Hợp) "
-                                : "")}
-                          </div>
-                        );
+                                ] +
+                                ")" +
+                                (CheckTamHop(
+                                  CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                  itemGio
+                                )
+                                  ? "(Tam Hợp) "
+                                  : CheckNhiHop(
+                                      CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                      itemGio
+                                    )
+                                  ? "(Nhị Hợp) "
+                                  : "")}
+                              {Array.isArray(data?.arrHoursOke) &&
+                                data?.arrHoursOke?.includes(itemGio) &&
+                                data?.titleCheckGioNgayThang &&
+                                "(" +
+                                  data?.titleCheckGioNgayThang[
+                                    data?.arrHoursOke?.indexOf(itemGio)
+                                  ] +
+                                  ")"}{" "}
+                            </div>
+                          );
                       })}
                   </TableCell>
                 </TableRow>

@@ -282,14 +282,14 @@ const TableShow = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                 //Thien tai dia hoa
                 if (CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar))
                   backky = "Thiên tai địa hoạ";
-                if (
-                  toaNha &&
-                  !CheckNguHanhTuongSinh(
-                    NGU_HANH[toaNha],
-                    NGU_HANH[date.ngayCan]
-                  )
-                )
-                  backky = "Ngũ hành tương khắc";
+                // if (
+                //   toaNha &&
+                //   !CheckNguHanhTuongSinh(
+                //     NGU_HANH[toaNha],
+                //     NGU_HANH[date.ngayCan]
+                //   )
+                // )
+                //   backky = "Ngũ hành tương khắc";
                 return (
                   <TableRow
                     style={{

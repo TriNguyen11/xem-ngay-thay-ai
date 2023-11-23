@@ -1007,7 +1007,7 @@ export const GetHoangVuTuQuy = (NumberTietKhi) => {
 };
 
 export const CheckDuongCong = (mLunar, dLunar) => {
-  return DUONG_CONG[mLunar - 1].includes(dLunar);
+  return DUONG_CONG[(mLunar - 1) % DUONG_CONG.length].includes(dLunar);
 };
 export const CheckKhongPhong = (ChiTuoi, ChiNam) => {
   return TAM_TAI[ChiTuoi].includes(ChiNam);
