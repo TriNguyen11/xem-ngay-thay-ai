@@ -1987,10 +1987,10 @@ export default function Home() {
             <>
               <div className="text-[24px] font-bold my-4 uppercase text-[red] max-w-2xl text-center ">
                 {new Date(dateStart).getTime() === new Date(dateEnd).getTime()
-                  ? `Ngày ${dateStart.$D}/${dateStart.$D + 1}/${
+                  ? `Ngày ${dateStart?.$D}/${dateStart?.$D + 1}/${
                       dateStart.$y
                     } không phù hợp cho công việc, vui lòng chọn ngày khác!`
-                  : `Từ ngày ${dateStart.$D}/${dateStart.$D + 1}/${
+                  : `Từ ngày ${dateStart?.$D}/${dateStart?.$D + 1}/${
                       dateStart.$y
                     } đến ngày  ${dateEnd.$D}/${dateEnd.$D + 1}/${
                       dateEnd.$y

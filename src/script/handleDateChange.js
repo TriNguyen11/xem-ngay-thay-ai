@@ -650,6 +650,7 @@ export const CheckTrucXungNgayThangNam = (Chi1, Chi2) => {
   if (!CHI_NAM.includes(Chi1)) {
     return false;
   }
+  // console.log(Chi1, TRUC_XUNG_HAI[Chi1][0], Chi2);
   if (Chi1) return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
 export const CheckTrucXungTuoiMuon = (CanChi1, CanChi2) => {

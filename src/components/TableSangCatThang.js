@@ -41,7 +41,7 @@ const TableSangCatThang = ({
                     textAlign: "center",
                     minWidth: 50,
                   }}>
-                  Tháng / Năm
+                  Tháng / Năm (Âm lịch)
                 </TableCell>
                 <TableCell
                   style={{

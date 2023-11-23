@@ -17,6 +17,7 @@ import TableResult from "@Root/components/TableResult";
 import TableWedding from "@Root/components/TableWedding";
 import TableWeddingNam from "@Root/components/TableWeddingNam";
 import TableWeddingThang from "@Root/components/TableWeddingThang";
+import TableWeddingThangNew from "@Root/components/TableWeddingThangNew";
 import TableWeddingTrucTu from "@Root/components/TableWeddingTrucTu";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
@@ -219,7 +220,7 @@ export default function Home() {
         if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
         if (
           // !CheckTrucXungNgayThangNam(toaNha, item.ngayChi) &&
-          // !CheckTrucXungNgayThangNam(toaNha, item.thangChi) &&
+          !CheckTrucXungNgayThangNam(toaNha, item.thangChi) &&
           // CheckNguHanhTuongSinh(
           //   NGU_HANH[toaNha],
           //   NGU_HANH[dateArr[index].ngayCan]
@@ -257,12 +258,35 @@ export default function Home() {
           monthInYear[item.yearLunar] = {};
         }
         if (
-          !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)
+          !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar) &&
+          CheckKimLau(item.yearLunar, namSinhNu).length === 0 &&
+          !CheckTrucXungNgayThangNam(
+            CHI_NAM[Number(item.yearLunar) % 12],
+            CHI_NAM[Number(namSinhNu) % 12]
+          ) &&
+          CHI_NAM[Number(item.yearLunar) % 12] !==
+            CHI_NAM[Number(namSinhNu) % 12] &&
+          !CheckThaiTueHinh(
+            CHI_NAM[Number(item.yearLunar) % 12],
+            CHI_NAM[Number(namSinhNu) % 12]
+          ) &&
+          //Nam
+          !CheckTrucXungNgayThangNam(
+            CHI_NAM[Number(item.yearLunar) % 12],
+            CHI_NAM[Number(namSinhNam) % 12]
+          ) &&
+          CHI_NAM[Number(item.yearLunar) % 12] !==
+            CHI_NAM[Number(namSinhNam) % 12] &&
+          !CheckThaiTueHinh(
+            CHI_NAM[Number(item.yearLunar) % 12],
+            CHI_NAM[Number(namSinhNam) % 12]
+          )
         ) {
           monthInYear[item.yearLunar][item.monthLunar] = {
             month: item.monthLunar,
             canMonth: item.thangCan,
             chiMonth: item.thangChi,
+            isLeap: item.isLeap,
           };
         }
       });
@@ -419,11 +443,14 @@ export default function Home() {
       valueSelect === "ngay-dam-ngo" ||
       valueSelect === "ngay-lai-mat"
     ) {
-      arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep4);
+      arrPerfectDateStep6 = await handleHopHoaNgayThang(
+        arrPerfectDateStep4,
+        toaNha
+      );
     } else {
       arrPerfectDateStep6 = arrPerfectDateStep4;
     }
-
+    console.log(arrPerfectDateStep6.length, "arrPerfectDateStep6");
     // Chon gio
     arrPerfectDateStep6.map((item, ind) => {
       let combineThienCanNgayThang = CombineThienCan(
@@ -444,8 +471,8 @@ export default function Home() {
       let gioHoangDaoVar = CheckHoangDao(item.ngayChi);
       let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
       let arrHoursOke = [];
-      let titleCheckGioNgayThang = "";
-      if (combineThienCanNgayThang.length !== 0) {
+      let titleCheckGioNgayThang = [];
+      if (combineThienCanNgayThang.length !== 0 && toaNha) {
         if (CheckNguHanhTuongKhac(NGU_HANH[toaNha], NGU_HANH[item.ngayCan])) {
           arrHours.map((hour, index) => {
             let combineThienCanGioNgay = CombineThienCan(
@@ -465,7 +492,8 @@ export default function Home() {
               combineThienCanGioNgay !== ""
             ) {
               isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-              titleCheckGioNgayThang = "HD";
+              titleCheckGioNgayThang.push("HD");
+
               arrHoursOke.push(hour);
             }
 
@@ -478,7 +506,8 @@ export default function Home() {
               combineThienCanGioThang !== ""
             ) {
               isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-              titleCheckGioNgayThang = "HM";
+              titleCheckGioNgayThang.push("HM");
+
               arrHoursOke.push(hour);
             }
             if (
@@ -494,7 +523,7 @@ export default function Home() {
               combineThienCanGioThang !== ""
             ) {
               isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-              titleCheckGioNgayThang = "HDM";
+              titleCheckGioNgayThang.push("HDM");
               arrHoursOke.push(hour);
             }
           });
@@ -586,7 +615,6 @@ export default function Home() {
         item.thangCan,
         item.ngayCan
       );
-
       if (combineThienCanNgayThang.length !== 0) {
         if (
           !CheckNguHanhTuongKhacKhauQuyet(
@@ -598,13 +626,19 @@ export default function Home() {
             combineThienCanNgayThang
           )
         ) {
-          if (
-            !CheckNguHanhTuongKhac(
+          if (!CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanNgayThang)) {
+            console.log(
+              combineThienCanNgayThang,
               NGU_HANH[valueText],
-              combineThienCanNgayThang
-            )
-          )
+              CheckNguHanhTuongKhac(
+                NGU_HANH[valueText],
+                combineThienCanNgayThang
+              ),
+              "combineThienCanNgayThang"
+            );
+
             ArrHopHoa.push(item);
+          }
         } else {
           ArrHopHoa.push(item);
         }
@@ -1099,17 +1133,19 @@ export default function Home() {
             </>
           ) : (
             <>
-              <div className="text-[24px] font-bold my-4 uppercase text-[red] max-w-2xl text-center ">
-                {new Date(dateStart).getTime() === new Date(dateEnd).getTime()
-                  ? `Ngày ${dateStart.$D}/${dateStart.$D + 1}/${
-                      dateStart.$y
-                    } không phù hợp cho công việc, vui lòng chọn ngày khác!`
-                  : `Từ ngày ${dateStart.$D}/${dateStart.$D + 1}/${
-                      dateStart.$y
-                    } đến ngày  ${dateEnd.$D}/${dateEnd.$D + 1}/${
-                      dateEnd.$y
-                    } không phù hợp cho công việc, vui lòng chọn khoảng khác!`}
-              </div>
+              {dateStart?.$D && dateEnd?.$D && (
+                <div className="text-[24px] font-bold my-4 uppercase text-[red] max-w-2xl text-center ">
+                  {new Date(dateStart).getTime() === new Date(dateEnd).getTime()
+                    ? `Ngày ${dateStart?.$D}/${dateStart?.$M + 1}/${
+                        dateStart?.$y
+                      } không phù hợp cho công việc, vui lòng chọn ngày khác!`
+                    : `Từ ngày ${dateStart?.$D}/${dateStart?.$M + 1}/${
+                        dateStart?.$y
+                      } đến ngày  ${dateEnd?.$D}/${dateEnd?.$M + 1}/${
+                        dateEnd?.$y
+                      } không phù hợp cho công việc, vui lòng chọn khoảng khác!`}
+                </div>
+              )}
             </>
           )}
           {lunarYearArr && (
@@ -1130,20 +1166,25 @@ export default function Home() {
               </div>
             </div>
           )}
-          {stepShow.step1 && (
+          {arrMonthInYear && (
             <div className="">
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Bước 2: Xét Tháng
-                {stepShow.step1 && `(${stepShow.step1?.length})`}
+                {/* {stepShow.step1 && `(${stepShow.step1?.length})`} */}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableWeddingThang
+                {/* <TableWeddingThang
                   data={stepShow.step1}
                   toaNha={valueText.namToa || valueText.nuToa}
                   infoGiaChu={infoGiaChu}
-                  valueSelect={valueSelect}></TableWeddingThang>
+                  valueSelect={valueSelect}></TableWeddingThang> */}
+                <TableWeddingThangNew
+                  data={arrMonthInYear}
+                  toaNha={valueText.namToa || valueText.nuToa}
+                  infoGiaChu={infoGiaChu}
+                  valueSelect={valueSelect}></TableWeddingThangNew>
               </div>
             </div>
           )}
@@ -1213,7 +1254,8 @@ export default function Home() {
                 {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
                   ? "5:"
                   : "4:"}{" "}
-                {"Chọn giờ"}
+                {"Chọn giờ "}
+                {stepShow.step5 && `(${stepShow.step5?.length})`}
               </div>
 
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">

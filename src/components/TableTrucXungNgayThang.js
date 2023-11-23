@@ -41,11 +41,12 @@ import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
-const TableShow = ({
+const TableTrucXungNgayThang = ({
   data,
   infoGiaChu,
   valueSelect,
   checkTrungXungHaiTuoi = false,
+  toaNha,
 }) => {
   return (
     <Box sx={{ overflow: "auto" }}>
@@ -226,6 +227,9 @@ const TableShow = ({
                   )
                 ) {
                   backky = "Đại Hao";
+                }
+                if (CheckTrucXungNgayThangNam(toaNha, date.ngayChi)) {
+                  backky = "Xung toạ";
                 }
 
                 return (
@@ -531,4 +535,4 @@ const TableShow = ({
     </Box>
   );
 };
-export default memo(TableShow);
+export default memo(TableTrucXungNgayThang);

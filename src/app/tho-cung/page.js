@@ -152,9 +152,9 @@ export default function Home() {
     // Convert  RangeDayInMonthLunar
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Xac dinh ngay/thang xung toa nha
+    console.log(valueText, "valueText");
     dateArr.map((item, index) => {
       if (
-        !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
         !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
         !CheckTrucXungHinhHaiChi(
           item.thangChi,
@@ -172,6 +172,7 @@ export default function Home() {
       ) {
         dateArrNgayLoaiThang.push(item);
       }
+
       if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
         monthInYear[item.yearLunar] = {};
       }
@@ -184,6 +185,7 @@ export default function Home() {
       }
     });
 
+    // console.log(arrPerfectDateStep1, "valueSelect");
     dateArrNgayLoaiThang.map((item, ind) => {
       if (
         //   !! || 1 trong 2 pham deu` bi
@@ -197,6 +199,7 @@ export default function Home() {
       }
     });
 
+    // console.log(arrPerfectDateStep4, "arrPerfectDateStep4");
     // Tranh Bach ky
     arrPerfectDateStep4.map((item, index) => {
       if (
@@ -219,7 +222,8 @@ export default function Home() {
           item.ngayChi
         ) &&
         // tranh trung xung hai tuoi gia chu
-        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi)
+        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi) &&
+        !CheckTrucXungNgayThangNam(valueText, item.ngayChi)
       ) {
         arrPerfectDateStep2.push(item);
       }
@@ -236,7 +240,7 @@ export default function Home() {
     let titleCheckGioNgayThang = [];
 
     // Chon gio
-    arrPerfectDateStep4.map((item, ind) => {
+    arrPerfectDateStep6.map((item, ind) => {
       isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
       arrHoursOke = [];
       titleCheckGioNgayThang = [];
@@ -644,7 +648,7 @@ export default function Home() {
             style={{
               width: window.innerWidth * 0.9,
             }}>
-            {/* {rangeDayInMonthLunar &&
+            {rangeDayInMonthLunar &&
               Object.keys(rangeDayInMonthLunar).map((year) => {
                 return (
                   <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
@@ -675,7 +679,7 @@ export default function Home() {
                     })}
                   </ul>
                 );
-              })} */}
+              })}
           </div>
           {/* Nhan</> */}
           <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>
@@ -726,17 +730,19 @@ export default function Home() {
             </>
           ) : (
             <>
-              <div className="text-[24px] font-bold my-4 uppercase text-[red] max-w-2xl text-center ">
-                {new Date(dateStart).getTime() === new Date(dateEnd).getTime()
-                  ? `Ngày ${dateStart.$D}/${dateStart.$D + 1}/${
-                      dateStart.$y
-                    } không phù hợp cho công việc, vui lòng chọn ngày khác!`
-                  : `Từ ngày ${dateStart.$D}/${dateStart.$D + 1}/${
-                      dateStart.$y
-                    } đến ngày  ${dateEnd.$D}/${dateEnd.$D + 1}/${
-                      dateEnd.$y
-                    } không phù hợp cho công việc, vui lòng chọn khoảng khác!`}
-              </div>
+              {dateStart?.$D && dateEnd?.$D && (
+                <div className="text-[24px] font-bold my-4 uppercase text-[red] max-w-2xl text-center ">
+                  {new Date(dateStart).getTime() === new Date(dateEnd).getTime()
+                    ? `Ngày ${dateStart?.$D}/${dateStart?.$D + 1}/${
+                        dateStart.$y
+                      } không phù hợp cho công việc, vui lòng chọn ngày khác!`
+                    : `Từ ngày ${dateStart?.$D}/${dateStart?.$D + 1}/${
+                        dateStart.$y
+                      } đến ngày  ${dateEnd.$D}/${dateEnd.$D + 1}/${
+                        dateEnd.$y
+                      } không phù hợp cho công việc, vui lòng chọn khoảng khác!`}
+                </div>
+              )}
             </>
           )}
           {arrMonthInYear && (
@@ -788,7 +794,8 @@ export default function Home() {
                   data={stepShow.step4}
                   infoGiaChu={infoGiaChu}
                   valueSelect={valueSelect}
-                  checkTrungXungHaiTuoi={true}></TableTrucXungNgayThang>
+                  checkTrungXungHaiTuoi={true}
+                  toaNha={valueText}></TableTrucXungNgayThang>
               </div>
             </div>
           )}

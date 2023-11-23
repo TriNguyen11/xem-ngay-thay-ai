@@ -54,7 +54,7 @@ import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
-const TableShow = ({ data, infoGiaChu, valueSelect, toaNha }) => {
+const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -282,14 +282,8 @@ const TableShow = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                 //Thien tai dia hoa
                 if (CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar))
                   backky = "Thiên tai địa hoạ";
-                // if (
-                //   toaNha &&
-                //   !CheckNguHanhTuongSinh(
-                //     NGU_HANH[toaNha],
-                //     NGU_HANH[date.ngayCan]
-                //   )
-                // )
-                //   backky = "Ngũ hành tương khắc";
+                if (CheckTrucXungNgayThangNam(toaNha, date.ngayChi))
+                  backky = "Xung toạ";
                 return (
                   <TableRow
                     style={{
@@ -621,4 +615,4 @@ const TableShow = ({ data, infoGiaChu, valueSelect, toaNha }) => {
     </Box>
   );
 };
-export default memo(TableShow);
+export default memo(TableWedding);
