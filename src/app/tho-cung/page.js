@@ -256,90 +256,74 @@ export default function Home() {
         item.monthLunar
       );
 
-      if (combineThienCanNgayThang.length !== 0) {
-        if (
-          CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
-        ) {
-          arrHours.map((hour, index) => {
-            let combineThienCanGioNgay = CombineThienCan(
-              item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-              item.ngayCan
-            );
-            let combineThienCanGioThang = CombineThienCan(
-              item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-              item.thangCan
-            );
-            if (
-              CheckNguHanhTuongKhac(
-                NGU_HANH[valueText],
-                combineThienCanGioNgay
-              ) === false &&
-              combineThienCanGioThang === "" &&
-              combineThienCanGioNgay !== ""
-            ) {
-              isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-              titleCheckGioNgayThang.push("HD");
-              arrHoursOke.push(hour);
-            }
-
-            if (
-              CheckNguHanhTuongKhac(
-                NGU_HANH[valueText],
-                combineThienCanGioThang
-              ) === false &&
-              combineThienCanGioNgay === "" &&
-              combineThienCanGioThang !== ""
-            ) {
-              isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-              titleCheckGioNgayThang.push("HM");
-              arrHoursOke.push(hour);
-            }
-            if (
-              CheckNguHanhTuongKhac(
-                NGU_HANH[valueText],
-                combineThienCanGioNgay
-              ) === false &&
-              CheckNguHanhTuongKhac(
-                NGU_HANH[valueText],
-                combineThienCanGioThang
-              ) === false &&
-              combineThienCanGioNgay !== "" &&
-              combineThienCanGioThang !== ""
-            ) {
-              isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-              titleCheckGioNgayThang.push("HDM");
-              arrHoursOke.push(hour);
-            }
-          });
-          if (isCheckGioNgayThangWhileCanNgayKhacToaNha) {
-            arrPerfectDateStep5.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: true,
-              titleCheckGioNgayThang,
-              arrHoursOke,
-            });
-            if (arrHours.length !== 0) {
-              arrPerfectDateStep8.push({
-                ...item,
-                gio: arrHours,
-                isTruongHop2BonusHoaHop: true,
-                titleCheckGioNgayThang,
-                arrHoursOke,
-              });
-            }
+      // if (combineThienCanNgayThang.length !== 0) {
+      if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
+        arrHours.map((hour, index) => {
+          let combineThienCanGioNgay = CombineThienCan(
+            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+            item.ngayCan
+          );
+          let combineThienCanGioThang = CombineThienCan(
+            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+            item.thangCan
+          );
+          if (
+            CheckNguHanhTuongKhac(
+              NGU_HANH[valueText],
+              combineThienCanGioNgay
+            ) === false &&
+            combineThienCanGioThang === "" &&
+            combineThienCanGioNgay !== ""
+          ) {
+            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+            titleCheckGioNgayThang.push("HD");
+            arrHoursOke.push(hour);
           }
-        } else {
+
+          if (
+            CheckNguHanhTuongKhac(
+              NGU_HANH[valueText],
+              combineThienCanGioThang
+            ) === false &&
+            combineThienCanGioNgay === "" &&
+            combineThienCanGioThang !== ""
+          ) {
+            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+            titleCheckGioNgayThang.push("HM");
+            arrHoursOke.push(hour);
+          }
+          if (
+            CheckNguHanhTuongKhac(
+              NGU_HANH[valueText],
+              combineThienCanGioNgay
+            ) === false &&
+            CheckNguHanhTuongKhac(
+              NGU_HANH[valueText],
+              combineThienCanGioThang
+            ) === false &&
+            combineThienCanGioNgay !== "" &&
+            combineThienCanGioThang !== ""
+          ) {
+            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+            titleCheckGioNgayThang.push("HDM");
+            arrHoursOke.push(hour);
+          }
+        });
+        if (isCheckGioNgayThangWhileCanNgayKhacToaNha) {
           arrPerfectDateStep5.push({
             ...item,
             gio: arrHours,
-            isTruongHop2BonusHoaHop: false,
+            isTruongHop2BonusHoaHop: true,
+            titleCheckGioNgayThang,
+            arrHoursOke,
           });
           if (arrHours.length !== 0) {
             arrPerfectDateStep8.push({
               ...item,
               gio: arrHours,
-              isTruongHop2BonusHoaHop: false,
+              isTruongHop2BonusHoaHop: true,
+              titleCheckGioNgayThang,
+              arrHoursOke,
             });
           }
         }
@@ -347,16 +331,30 @@ export default function Home() {
         arrPerfectDateStep5.push({
           ...item,
           gio: arrHours,
-          isTruongHop2BonusHoaHop: undefined,
+          isTruongHop2BonusHoaHop: false,
         });
         if (arrHours.length !== 0) {
           arrPerfectDateStep8.push({
             ...item,
             gio: arrHours,
-            isTruongHop2BonusHoaHop: undefined,
+            isTruongHop2BonusHoaHop: false,
           });
         }
       }
+      // } else {
+      //   arrPerfectDateStep5.push({
+      //     ...item,
+      //     gio: arrHours,
+      //     isTruongHop2BonusHoaHop: undefined,
+      //   });
+      //   if (arrHours.length !== 0) {
+      //     arrPerfectDateStep8.push({
+      //       ...item,
+      //       gio: arrHours,
+      //       isTruongHop2BonusHoaHop: undefined,
+      //     });
+      //   }
+      // }
     });
 
     // console.log(arrPerfectDateStep5, "length arr 5");
