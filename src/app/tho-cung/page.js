@@ -258,6 +258,7 @@ export default function Home() {
 
       // if (combineThienCanNgayThang.length !== 0) {
       if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
+        // if (combineThienCanNgayThang.length !== 0) {
         arrHours.map((hour, index) => {
           let combineThienCanGioNgay = CombineThienCan(
             item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
@@ -328,17 +329,35 @@ export default function Home() {
           }
         }
       } else {
-        arrPerfectDateStep5.push({
-          ...item,
-          gio: arrHours,
-          isTruongHop2BonusHoaHop: false,
-        });
-        if (arrHours.length !== 0) {
-          arrPerfectDateStep8.push({
+        // ty hoa
+        if (NGU_HANH[valueText] === NGU_HANH[item.ngayCan]) {
+          arrPerfectDateStep5.push({
+            ...item,
+            gio: arrHours,
+            isTruongHop2BonusHoaHop: undefined,
+          });
+          if (arrHours.length !== 0) {
+            arrPerfectDateStep8.push({
+              ...item,
+              gio: arrHours,
+              isTruongHop2BonusHoaHop: undefined,
+            });
+          }
+        }
+        // tuong sinh
+        else {
+          arrPerfectDateStep5.push({
             ...item,
             gio: arrHours,
             isTruongHop2BonusHoaHop: false,
           });
+          if (arrHours.length !== 0) {
+            arrPerfectDateStep8.push({
+              ...item,
+              gio: arrHours,
+              isTruongHop2BonusHoaHop: false,
+            });
+          }
         }
       }
       // } else {

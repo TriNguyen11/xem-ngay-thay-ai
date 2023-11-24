@@ -209,7 +209,7 @@ export default function Home() {
     let arrPerfectDateStep8 = []; // cuoi hoi gio
     let toaNha = valueText.namToa || valueText.nuToa || "";
     let monthInYear = {};
-
+    console.log(toaNha, "toaNha");
     // Xac dinh ngay/thang xung toa nxha
     // if (toaNha?.length !== 0)
     if (
@@ -474,6 +474,7 @@ export default function Home() {
       let titleCheckGioNgayThang = [];
       // if (combineThienCanNgayThang.length !== 0 && toaNha) {
       if (CheckNguHanhTuongKhac(NGU_HANH[toaNha], NGU_HANH[item.ngayCan])) {
+        // if (combineThienCanNgayThang.length !== 0) {
         arrHours.map((hour, index) => {
           let combineThienCanGioNgay = CombineThienCan(
             item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
@@ -491,7 +492,6 @@ export default function Home() {
           ) {
             isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
             titleCheckGioNgayThang.push("HD");
-
             arrHoursOke.push(hour);
           }
 
@@ -503,7 +503,6 @@ export default function Home() {
           ) {
             isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
             titleCheckGioNgayThang.push("HM");
-
             arrHoursOke.push(hour);
           }
           if (
@@ -523,7 +522,6 @@ export default function Home() {
           arrPerfectDateStep5.push({
             ...item,
             gio: arrHours,
-            gioHoangDao: gioHoangDaoVar,
             isTruongHop2BonusHoaHop: true,
             titleCheckGioNgayThang,
             arrHoursOke,
@@ -532,7 +530,6 @@ export default function Home() {
             arrPerfectDateStep8.push({
               ...item,
               gio: arrHours,
-              gioHoangDao: gioHoangDaoVar,
               isTruongHop2BonusHoaHop: true,
               titleCheckGioNgayThang,
               arrHoursOke,
@@ -540,19 +537,36 @@ export default function Home() {
           }
         }
       } else {
-        arrPerfectDateStep5.push({
-          ...item,
-          gio: arrHours,
-          gioHoangDao: gioHoangDaoVar,
-          isTruongHop2BonusHoaHop: false,
-        });
-        if (arrHours.length !== 0) {
-          arrPerfectDateStep8.push({
+        // ty hoa
+        console.log(NGU_HANH[toaNha], toaNha, NGU_HANH[item.ngayCan]);
+        if (NGU_HANH[toaNha] === NGU_HANH[item.ngayCan]) {
+          arrPerfectDateStep5.push({
             ...item,
             gio: arrHours,
-            gioHoangDao: gioHoangDaoVar,
+            isTruongHop2BonusHoaHop: undefined,
+          });
+          if (arrHours.length !== 0) {
+            arrPerfectDateStep8.push({
+              ...item,
+              gio: arrHours,
+              isTruongHop2BonusHoaHop: undefined,
+            });
+          }
+        }
+        // tuong sinh
+        else {
+          arrPerfectDateStep5.push({
+            ...item,
+            gio: arrHours,
             isTruongHop2BonusHoaHop: false,
           });
+          if (arrHours.length !== 0) {
+            arrPerfectDateStep8.push({
+              ...item,
+              gio: arrHours,
+              isTruongHop2BonusHoaHop: false,
+            });
+          }
         }
       }
       // } else {
