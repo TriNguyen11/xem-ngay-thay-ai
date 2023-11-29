@@ -71,12 +71,19 @@ const TableSangCatThang = ({
                     return Object.keys(data[year]).map((month, indMonth) => {
                       let xungThang = "";
                       if (
+                        data[year][month]?.isLeap &&
+                        window.location.pathname.indexOf("tho-cung") !== -1
+                      )
+                        xungThang = "Tháng nhuận";
+
+                      if (
                         CheckTrucXungHinhHaiChi(
                           data[year][month].chiMonth,
                           CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
                         )
                       )
-                        xungThang = "Xung, Trực, Hình, Hại";
+                        // xungThang = "Xung, Trực, Hình, Hại";
+                        xungThang = "Xung, Trực";
 
                       if (
                         CheckTrucXungNgayThangNam(
@@ -98,7 +105,8 @@ const TableSangCatThang = ({
                             style={{
                               textAlign: "center",
                             }}>
-                            {month} / {year}
+                            {data[year][month].month} / {year}
+                            {data[year][month]?.isLeap ? " (Nhuận)" : ""}
                           </TableCell>
                           <TableCell
                             style={{
@@ -110,6 +118,7 @@ const TableSangCatThang = ({
                           <TableCell
                             style={{
                               textAlign: "center",
+                              color: "red",
                             }}>
                             {xungThang}
                           </TableCell>

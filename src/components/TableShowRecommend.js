@@ -31,7 +31,7 @@ import {
   CheckTieuLoi,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTyHoa,
+  CheckTrucXungChi,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";

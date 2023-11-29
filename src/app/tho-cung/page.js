@@ -15,6 +15,7 @@ import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
 import TableShow from "@Root/components/Table";
 import TableResult from "@Root/components/TableResult";
+import TableResultStepFinal from "@Root/components/TableResultStepFinal";
 import TableSangCatThang from "@Root/components/TableSangCatThang";
 import TableSangCatTrucTu from "@Root/components/TableSangCatTrucTu";
 import TableTrucXungNgayThang from "@Root/components/TableTrucXungNgayThang";
@@ -45,6 +46,7 @@ import {
   CheckNguHanhTuongKhac,
   CheckNguHanhTuongKhacKhauQuyet,
   CheckNguHanhTuongSinh,
+  CheckSinhXuat,
   CheckTrucXungGio,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
@@ -152,8 +154,18 @@ export default function Home() {
     // Convert  RangeDayInMonthLunar
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
     // Xac dinh ngay/thang xung toa nha
-    console.log(valueText, "valueText");
+
+    let checkLeapMonth = false;
     dateArr.map((item, index) => {
+      // checkLeapMonth=false
+      if (
+        index < dateArr.length &&
+        dateArr[index - 1] !== undefined &&
+        item.yearLunar !== dateArr[index - 1].yearLunar
+      ) {
+        checkLeapMonth = false;
+      }
+
       if (
         !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
         !CheckTrucXungHinhHaiChi(
@@ -176,16 +188,32 @@ export default function Home() {
       if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
         monthInYear[item.yearLunar] = {};
       }
-      if (!Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
+      if (
+        !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar) ||
+        item.isLeap
+      ) {
+        if (item.isLeap) {
+          checkLeapMonth = true;
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+            isLeap: item.isLeap,
+          };
+        } else {
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+          };
+        }
       }
     });
 
-    // console.log(arrPerfectDateStep1, "valueSelect");
     dateArrNgayLoaiThang.map((item, ind) => {
       if (
         //   !! || 1 trong 2 pham deu` bi
@@ -224,18 +252,25 @@ export default function Home() {
         // tranh trung xung hai tuoi gia chu
         !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi) &&
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi)
+        //  &&
+        // Sinh Xuat
+        // !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
         arrPerfectDateStep2.push(item);
       }
     });
 
     // Xet them hop hoa
-    arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep2);
+    arrPerfectDateStep6 = await handleHopHoaNgayThang(
+      arrPerfectDateStep2,
+      valueText
+    );
 
     //Tranh tuong xung tuong hai
 
     let arrHours = [];
     let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
+    let isCheckSinhCanChi = undefined;
     let arrHoursOke = [];
     let titleCheckGioNgayThang = [];
 
@@ -255,11 +290,17 @@ export default function Home() {
         CHI_NAM[tuoiGiaChu % 12],
         item.monthLunar
       );
-
       // if (combineThienCanNgayThang.length !== 0) {
       if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
         // if (combineThienCanNgayThang.length !== 0) {
+
         arrHours.map((hour, index) => {
+          // if (
+          //   CheckSinhXuat(
+          //     NGU_HANH[valueText],
+          //     NGU_HANH[item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)]]
+          //   ) === false
+          // ) {
           let combineThienCanGioNgay = CombineThienCan(
             item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
             item.ngayCan
@@ -268,13 +309,50 @@ export default function Home() {
             item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
             item.thangCan
           );
+          let combineThienCanGioNam = CombineThienCan(
+            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+            item.namCan
+          );
           if (
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[hour],
+              combineThienCanGioNam
+            ) &&
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[item.namChi],
+              combineThienCanGioNam
+            ) &&
+            CheckNguHanhTuongKhac(
+              NGU_HANH[valueText],
+              combineThienCanGioNam
+            ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioNam) &&
+            combineThienCanGioNgay === "" &&
+            combineThienCanGioThang === "" &&
+            combineThienCanGioNam !== ""
+          ) {
+            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+            titleCheckGioNgayThang.push("HY");
+            arrHoursOke.push(hour);
+          }
+
+          if (
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[hour],
+              combineThienCanGioNgay
+            ) &&
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[item.ngayChi],
+              combineThienCanGioNgay
+            ) &&
             CheckNguHanhTuongKhac(
               NGU_HANH[valueText],
               combineThienCanGioNgay
             ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioNgay) &&
+            combineThienCanGioNgay !== "" &&
             combineThienCanGioThang === "" &&
-            combineThienCanGioNgay !== ""
+            combineThienCanGioNam === ""
           ) {
             isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
             titleCheckGioNgayThang.push("HD");
@@ -282,33 +360,63 @@ export default function Home() {
           }
 
           if (
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[hour],
+              combineThienCanGioThang
+            ) &&
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[item.thangChi],
+              combineThienCanGioThang
+            ) &&
             CheckNguHanhTuongKhac(
               NGU_HANH[valueText],
               combineThienCanGioThang
             ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioThang) &&
             combineThienCanGioNgay === "" &&
-            combineThienCanGioThang !== ""
+            combineThienCanGioThang !== "" &&
+            combineThienCanGioNam === ""
           ) {
             isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
             titleCheckGioNgayThang.push("HM");
             arrHoursOke.push(hour);
           }
           if (
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[hour],
+              combineThienCanGioThang
+            ) &&
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[item.thangChi],
+              combineThienCanGioThang
+            ) &&
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[hour],
+              combineThienCanGioNgay
+            ) &&
+            !CheckNguHanhTuongKhacKhauQuyet(
+              NGU_HANH[item.ngayChi],
+              combineThienCanGioNgay
+            ) &&
             CheckNguHanhTuongKhac(
               NGU_HANH[valueText],
               combineThienCanGioNgay
             ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioNgay) &&
             CheckNguHanhTuongKhac(
               NGU_HANH[valueText],
               combineThienCanGioThang
             ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioThang) &&
             combineThienCanGioNgay !== "" &&
-            combineThienCanGioThang !== ""
+            combineThienCanGioThang !== "" &&
+            combineThienCanGioNam === ""
           ) {
             isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
             titleCheckGioNgayThang.push("HDM");
             arrHoursOke.push(hour);
           }
+          // }
         });
         if (isCheckGioNgayThangWhileCanNgayKhacToaNha) {
           arrPerfectDateStep5.push({
@@ -402,9 +510,14 @@ export default function Home() {
         item.thangCan,
         item.ngayCan
       );
+      let combineThienCanNgayNam = CombineThienCan(item.namCan, item.ngayCan);
 
-      if (combineThienCanNgayThang.length !== 0) {
+      if (
+        combineThienCanNgayThang.length !== 0 ||
+        combineThienCanNgayNam.length !== 0
+      ) {
         if (
+          // ngay Thang
           !CheckNguHanhTuongKhacKhauQuyet(
             NGU_HANH[item.thangChi],
             combineThienCanNgayThang
@@ -412,16 +525,22 @@ export default function Home() {
           !CheckNguHanhTuongKhacKhauQuyet(
             NGU_HANH[item.ngayChi],
             combineThienCanNgayThang
-          )
+          ) &&
+          !CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanNgayThang) &&
+          CheckSinhXuat(NGU_HANH[toa], combineThienCanNgayThang) === false &&
+          // ngay Nam
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[item.namChi],
+            combineThienCanNgayNam
+          ) &&
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[item.ngayChi],
+            combineThienCanNgayNam
+          ) &&
+          !CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanNgayNam) &&
+          CheckSinhXuat(NGU_HANH[toa], combineThienCanNgayNam) === false
         ) {
-          if (
-            !CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanNgayThang
-            )
-          )
-            ArrHopHoa.push(item);
-        } else {
+          console.log(12312312);
           ArrHopHoa.push(item);
         }
       } else {
@@ -665,7 +784,7 @@ export default function Home() {
             style={{
               width: window.innerWidth * 0.9,
             }}>
-            {rangeDayInMonthLunar &&
+            {/* {rangeDayInMonthLunar &&
               Object.keys(rangeDayInMonthLunar).map((year) => {
                 return (
                   <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
@@ -696,7 +815,7 @@ export default function Home() {
                     })}
                   </ul>
                 );
-              })}
+              })} */}
           </div>
           {/* Nhan</> */}
           <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>
@@ -738,7 +857,8 @@ export default function Home() {
                         <TableResult
                           data={item}
                           infoGiaChu={infoGiaChu}
-                          valueSelect={valueSelect}></TableResult>
+                          valueSelect={valueSelect}
+                          toaNha={valueText}></TableResult>
                       </div>
                     </>
                   );
@@ -863,7 +983,8 @@ export default function Home() {
                 <TableShow
                   valueSelect={valueSelect}
                   data={stepShow.step7}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  infoGiaChu={infoGiaChu}
+                  toaNha={valueText}></TableShow>
               </div>
             </div>
           )}
@@ -876,10 +997,10 @@ export default function Home() {
                 {stepShow.step8 && `(${stepShow.step8?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
+                <TableResultStepFinal
                   valueSelect={valueSelect}
                   data={stepShow.step8}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  infoGiaChu={infoGiaChu}></TableResultStepFinal>
               </div>
             </div>
           )}

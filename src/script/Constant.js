@@ -181,13 +181,22 @@ export const GIO_SAT_CHU = [
 ];
 
 export const NGU_HANH_TUONG_SINH = {
-  Kim: ["Thuỷ", "Kim", "Thổ"],
+  Kim: ["Thổ", "Kim", "Thuỷ"],
   Mộc: ["Thuỷ", "Mộc", "Hoả"],
   Thổ: ["Hoả", "Thổ", "Kim"],
   Thuỷ: ["Kim", "Thuỷ", "Mộc"],
   Hoả: ["Mộc", "Hoả", "Thổ"],
   "": [""],
 };
+export const NGU_HANH_SINH_XUAT = {
+  Kim: ["Thuỷ"],
+  Mộc: ["Hoả"],
+  Thổ: ["Kim"],
+  Thuỷ: ["Mộc"],
+  Hoả: ["Thổ"],
+  "": [""],
+};
+
 export const NGU_HANH_TUONG_KHAC = {
   Kim: ["Mộc", "Hoả"],
   Mộc: ["Thổ", "Kim"],

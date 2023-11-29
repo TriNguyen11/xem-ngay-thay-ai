@@ -56,6 +56,7 @@ import {
   CheckNguHanhTuongKhac,
   CheckNguHanhTuongKhacKhauQuyet,
   CheckNguHanhTuongSinh,
+  CheckSinhXuat,
   CheckTamTai,
   CheckThienTaiDiaHoa,
   CheckTrucXungGio,
@@ -186,18 +187,10 @@ export default function Home() {
 
     let dateArrNgayLoaiThang = []; // dateArrNgayLoaiThang
     let monthInYear = {};
+    let checkLeapMonth = false;
+
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
-      // if (
-      //   !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
-      //   !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
-      //   !CheckTrucXungHinhHaiChi(
-      //     item.thangChi,
-      //     CHI_NAM[Number(tuoiGiaChu) % 12]
-      //   )
-      // ) {
-      //   arrPerfectDateStep1.push(item);
-      // }
       if (
         !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
         !CheckTrucXungHinhHaiChi(
@@ -210,12 +203,38 @@ export default function Home() {
       if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
         monthInYear[item.yearLunar] = {};
       }
-      if (!Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
+
+      if (
+        index < dateArr.length &&
+        dateArr[index + 1] !== undefined &&
+        item.yearLunar !== dateArr[index + 1].yearLunar
+      ) {
+        checkLeapMonth = false;
+      }
+
+      if (
+        !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar) ||
+        item.isLeap
+      ) {
+        if (item.isLeap) {
+          checkLeapMonth = true;
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+            isLeap: item.isLeap,
+          };
+        } else {
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+          };
+        }
       }
     });
     // kiem tra truc/tu
@@ -254,7 +273,9 @@ export default function Home() {
         ) &&
         // tranh trung xung hai tuoi gia chu
         !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi) &&
-        !CheckTrucXungNgayThangNam(valueText, item.ngayChi)
+        !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
+        // Sinh Xuat
+        !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
         arrPerfectDateStep3.push(item);
       }
@@ -505,6 +526,7 @@ export default function Home() {
     });
 
     if (valueSelect === "dong-tho") handleRecommendYearDongTho(lunarYear);
+    let checkLeapMonth = false;
 
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
@@ -531,6 +553,14 @@ export default function Home() {
         monthInYear[item.yearLunar] = {};
       }
       if (
+        index < dateArr.length &&
+        dateArr[index - 1] !== undefined &&
+        item.yearLunar !== dateArr[index - 1].yearLunar
+      ) {
+        checkLeapMonth = false;
+      }
+
+      if (
         !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar) &&
         !KimLau.includes(item.yearLunar) &&
         !TamTai.includes(item.yearLunar) &&
@@ -542,11 +572,25 @@ export default function Home() {
         CHI_NAM[Number(tuoiGiaChu) % 12] !==
           CHI_NAM[Number(item.yearLunar) % 12]
       ) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
+        if (item.isLeap) {
+          checkLeapMonth = true;
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+            isLeap: item.isLeap,
+          };
+        } else {
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+          };
+        }
       }
     });
 
@@ -589,7 +633,9 @@ export default function Home() {
         ) &&
         // tranh trung xung hai tuoi gia chu
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
-        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi)
+        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi) &&
+        // Sinh Xuat
+        !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
         arrPerfectDateStep4.push(item);
       }
@@ -1025,7 +1071,9 @@ export default function Home() {
           item.ngayChi
         ) &&
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
-        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiMuon % 12], item.ngayChi)
+        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiMuon % 12], item.ngayChi) &&
+        // Sinh Xuat
+        !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
         arrPerfectDateStep4.push(item);
       }
@@ -1511,7 +1559,7 @@ export default function Home() {
     });
     setArrRecommend(arrYearRecommend);
   };
-  console.log(arrMonthInYear, "val");
+
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1848,7 +1896,7 @@ export default function Home() {
             style={{
               width: window.innerWidth * 0.9,
             }}>
-            {rangeDayInMonthLunar &&
+            {/* {rangeDayInMonthLunar &&
               Object.keys(rangeDayInMonthLunar).map((year) => {
                 return (
                   <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
@@ -1879,7 +1927,7 @@ export default function Home() {
                     })}
                   </ul>
                 );
-              })}
+              })} */}
           </div>
           {/* Nhan */}
           <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>

@@ -46,7 +46,7 @@ import {
   CheckThienTaiDiaHoa,
   CheckTieuLoi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTyHoa,
+  CheckTrucXungChi,
   CheckTuongXungTuongHaiTuoiMonth,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";

@@ -30,6 +30,7 @@ import {
   CheckDaiBai,
   CheckDuongCong,
   CheckNhiHop,
+  CheckSinhXuat,
   CheckTamHop,
   CheckTamTai,
   CheckThienTaiDiaHoa,
@@ -128,7 +129,7 @@ const TableTrucXungNgayThang = ({
             </TableHead>
             <TableBody>
               {data?.map((date, index) => {
-                let backky = "";
+                let backky = [];
 
                 // Dai bai
                 if (
@@ -138,10 +139,10 @@ const TableTrucXungNgayThang = ({
                     date.ngayCan + " " + date.ngayChi
                   )
                 )
-                  backky = "Đại bại";
+                  backky.push("Đại bại");
                 // Duong Cong
                 if (CheckDuongCong(date.monthLunar, date.dayLunar))
-                  backky = "Dương Công";
+                  backky.push("Dương Công");
                 // hoang vu tu quy
                 if (
                   HOANG_VU_TU_QUY[
@@ -157,7 +158,7 @@ const TableTrucXungNgayThang = ({
                     )
                   ] === date.ngayChi
                 )
-                  backky = "Hoang vu tứ quý";
+                  backky.push("Hoang vu tứ quý");
                 // khong phong
                 if (
                   KHONG_PHONG[
@@ -173,16 +174,16 @@ const TableTrucXungNgayThang = ({
                     )
                   ].includes(date.ngayChi)
                 )
-                  backky = "Không phòng";
+                  backky.push("Không phòng");
                 if (CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar))
-                  backky = "Thiên Tai Địa Hoạ";
+                  backky.push("Thiên Tai Địa Hoạ");
                 // if(CheckTamTai(tuoiChiGiaChu, date.namChi)) backky="Tam Tai"
-                if (date.dayLunar === 1) backky = "Mùng 1";
-                if (date.dayLunar === 15) backky = "Rằm";
+                if (date.dayLunar === 1) backky.push("Mùng 1");
+                if (date.dayLunar === 15) backky.push("Rằm");
                 if (
                   monthDays(date.yearLunar, date.monthLunar) === date.dayLunar
                 )
-                  backky = "Cuối tháng ";
+                  backky.push("Cuối tháng ");
                 if (
                   infoGiaChu?.tuoiGiaChu &&
                   CheckTamTai(
@@ -190,19 +191,19 @@ const TableTrucXungNgayThang = ({
                     date.ngayChi
                   )
                 )
-                  backky = "Tam Tai Ngày";
-                if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
-                if (TAM_NUONG.includes(date.dayLunar)) backky = "Tam Nương";
+                  backky.push("Tam Tai Ngày");
+                if (NGUYET_KY.includes(date.dayLunar)) backky.push("Nguyệt kỵ");
+                if (TAM_NUONG.includes(date.dayLunar)) backky.push("Tam Nương");
                 if (THO_TU[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Thọ Tử";
+                  backky.push("Thọ Tử");
                 if (SAT_CHU_AM[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Sát chủ âm";
+                  backky.push("Sát chủ âm");
                 if (SAT_CHU_DUONG[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Sát chủ dương";
+                  backky.push("Sát chủ dương");
                 if (VANG_VONG[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Vãng vong";
+                  backky.push("Vãng vong");
                 if (NGUYET_PHA[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Nguyệt Phá";
+                  backky.push("Nguyệt Phá");
                 // Trung xung hai tuoi
                 if (
                   CheckTuongXungTuongHaiTuoi(
@@ -211,7 +212,7 @@ const TableTrucXungNgayThang = ({
                   ) &&
                   checkTrungXungHaiTuoi
                 )
-                  backky = "Trùng, Xung, Hại tuổi";
+                  backky.push("Trùng, Xung tuổi");
 
                 if (
                   CheckTrucXungNgayThangNam(
@@ -219,19 +220,21 @@ const TableTrucXungNgayThang = ({
                     date.ngayChi
                   )
                 )
-                  backky = "Tuế Phá";
+                  backky.push("Tuế Phá");
                 if (
                   CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
                     date.ngayChi
                   )
                 ) {
-                  backky = "Đại Hao";
+                  backky.push("Đại Hao");
                 }
                 if (CheckTrucXungNgayThangNam(toaNha, date.ngayChi)) {
-                  backky = "Xung toạ";
+                  backky.push("Xung toạ");
                 }
-
+                if (CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[date.ngayCan])) {
+                  backky.push("Sinh xuất");
+                }
                 return (
                   <TableRow
                     style={{
@@ -256,7 +259,11 @@ const TableTrucXungNgayThang = ({
                         textAlign: "center",
                       }}>
                       {date.dayLunar} - {date.monthLunar}- {date.yearLunar}{" "}
-                      {backky.length !== 0 ? "(" + backky + ")" : ""}
+                      <div>
+                        {backky.length !== 0
+                          ? "(" + backky.toString().replaceAll(",", ", ") + ")"
+                          : ""}
+                      </div>
                     </TableCell>
                     <TableCell
                       style={{

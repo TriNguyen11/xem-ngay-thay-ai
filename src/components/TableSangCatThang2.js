@@ -31,7 +31,7 @@ import {
   CheckTieuLoi,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTyHoa,
+  CheckTrucXungChi,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
@@ -90,7 +90,8 @@ const TableWeddingThang2 = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                           CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
                         )
                       )
-                        xungThang = "Xung, Trực, Hình, Hại";
+                        // xungThang = "Xung, Trực, Hình, Hại";
+                        xungThang = "Xung, Trực";
 
                       if (
                         CheckTrucXungNgayThangNam(

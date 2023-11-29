@@ -26,7 +26,7 @@ import {
   CheckTheChu,
   CheckTieuLoi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTyHoa,
+  CheckTrucXungChi,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
@@ -139,14 +139,14 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                   backky = "Công cô nữ";
 
                 if (
-                  CheckTrucXungTyHoa(
+                  CheckTrucXungChi(
                     CHI_NAM[Number(infoGiaChu?.namSinhNam) % 12],
                     date.thangChi
                   )
                 )
                   backky = "Xung, Trùng tuổi Nam";
                 if (
-                  CheckTrucXungTyHoa(
+                  CheckTrucXungChi(
                     CHI_NAM[Number(infoGiaChu?.namSinhNu) % 12],
                     date.thangChi
                   )

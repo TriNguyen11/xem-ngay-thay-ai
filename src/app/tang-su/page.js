@@ -148,12 +148,7 @@ export default function Home() {
         tuoiNguoiMat--;
       }
     }
-    let bamCung = CalcuBamCungNam(
-      tuoiNguoiMat,
-      Number(valueAge.dead_month),
-      Number(valueAge.dead_day),
-      valueAge.dead_time?.$H
-    );
+
     let momentAmLich = moment(
       `${valueAge.dead_day}/${valueAge.dead_month}/${valueAge.dead_year}`,
       "DD/MM/YYYY"
@@ -163,7 +158,12 @@ export default function Home() {
       momentAmLich.month() + 1,
       momentAmLich.year()
     );
-
+    let bamCung = CalcuBamCungNam(
+      tuoiNguoiMat,
+      Number(lichAm.monthLunar),
+      Number(lichAm.dayLunar),
+      valueAge.dead_time?.$H
+    );
     // Case 1
     let countCase1 = CountStatusTrungTang({
       ...bamCung,
@@ -198,7 +198,22 @@ export default function Home() {
       lichAm.ngayChi
     );
 
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setInfoNguoiMat({
+      ...bamCung,
+      tuoiNguoiMat,
+      namMat,
+      namSinh,
+      duongLich: {
+        day: valueAge.day,
+        month: valueAge.month,
+        year: valueAge.year,
+      },
+      amLich: {
+        day: lichAm.dayLunar,
+        month: lichAm.monthLunar,
+        year: lichAm.yearLunar,
+      },
+    });
     setCaseShow({
       case1: countCase1,
       case2: case2Text,
@@ -246,12 +261,6 @@ export default function Home() {
       }
     }
 
-    let bamCung = CalcuBamCungNu(
-      tuoiNguoiMat,
-      Number(valueAge.dead_month),
-      Number(valueAge.dead_day),
-      valueAge.dead_time?.$H
-    );
     let momentAmLich = moment(
       `${valueAge.dead_day}/${valueAge.dead_month}/${valueAge.dead_year}`,
       "DD/MM/YYYY"
@@ -261,7 +270,12 @@ export default function Home() {
       momentAmLich.month() + 1,
       momentAmLich.year()
     );
-
+    let bamCung = CalcuBamCungNu(
+      tuoiNguoiMat,
+      Number(lichAm.monthLunar),
+      Number(lichAm.dayLunar),
+      valueAge.dead_time?.$H
+    );
     console.log(namMat, "namMat");
 
     let countCase1 = CountStatusTrungTang({
@@ -294,7 +308,22 @@ export default function Home() {
       lichAm.ngayCan,
       lichAm.ngayChi
     );
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setInfoNguoiMat({
+      ...bamCung,
+      tuoiNguoiMat,
+      namMat,
+      namSinh,
+      duongLich: {
+        day: lichAm.daySolar,
+        month: lichAm.monthSolar,
+        year: lichAm.yearSolar,
+      },
+      amLich: {
+        day: lichAm.dayLunar,
+        month: lichAm.monthLunar,
+        year: lichAm.yearLunar,
+      },
+    });
 
     setCaseShow({
       case1: countCase1,
@@ -623,19 +652,7 @@ export default function Home() {
       step8: arrPerfectDateStep8,
     });
   };
-  const handleInit = async () => {
-    console.log(valueAge, "valueAge");
-    const a = await axios.post("http://localhost:3000/xem-ngay/tang-su", {
-      dateStart,
-      dateEnd,
-      infoGiaChu,
-      valueSelect,
-      valueAge,
-    });
-
-    console.log(a, "check a ");
-  };
-
+  console.log(infoNguoiMat, "infoNguoiMat");
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -959,7 +976,7 @@ export default function Home() {
               })}
           </div>
           {/*info show  Nhan*/}
-          <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>
+          <div style={{ marginTop: 30 }}>
             {infoNguoiMat && (
               <>
                 <div className="text-black mb-2 font-bold text-lg">
@@ -968,6 +985,13 @@ export default function Home() {
                     Tuổi: {infoNguoiMat.tuoiNguoiMat} -{" "}
                     {CAN_NAM[infoNguoiMat.namSinh % 10]}{" "}
                     {CHI_NAM[infoNguoiMat.namSinh % 12]}
+                  </div>{" "}
+                  <div>
+                    Thời gian mất: {infoNguoiMat?.duongLich.day}/
+                    {infoNguoiMat?.duongLich.month}/
+                    {infoNguoiMat?.duongLich.year} - ÂL:{" "}
+                    {infoNguoiMat?.amLich.day}/{infoNguoiMat?.amLich.month}/
+                    {infoNguoiMat?.amLich.year}
                   </div>{" "}
                   <div
                     style={{

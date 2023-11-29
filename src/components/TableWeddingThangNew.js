@@ -17,7 +17,7 @@ import {
   CheckTieuLoi,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTyHoa,
+  CheckTrucXungChi,
 } from "@Root/script/handleDateChange";
 import { memo } from "react";
 
@@ -68,6 +68,7 @@ const TableWeddingThangNew = ({
                 Object.keys(data).map((year, index) => {
                   return Object.keys(data[year]).map((month, indMonth) => {
                     let backky = "";
+                    if (data[year][month]?.isLeap) backky = "Tháng nhuận";
 
                     if (
                       CheckDaiLoi(
@@ -96,7 +97,7 @@ const TableWeddingThangNew = ({
                       backky = "Công cô nữ";
 
                     if (
-                      CheckTrucXungTyHoa(
+                      CheckTrucXungChi(
                         CHI_NAM[Number(infoGiaChu?.namSinhNam) % 12],
                         data[year][month].chiMonth
                         // date.thangChi
@@ -104,7 +105,7 @@ const TableWeddingThangNew = ({
                     )
                       backky = "Xung, Trùng tuổi Nam";
                     if (
-                      CheckTrucXungTyHoa(
+                      CheckTrucXungChi(
                         CHI_NAM[Number(infoGiaChu?.namSinhNu) % 12],
                         data[year][month].chiMonth
                         // date.thangChi
@@ -160,7 +161,8 @@ const TableWeddingThangNew = ({
                           style={{
                             textAlign: "center",
                           }}>
-                          {month} / {year}
+                          {data[year][month].month} / {year}
+                          {data[year][month]?.isLeap ? " (Nhuận)" : ""}
                         </TableCell>
                         <TableCell
                           style={{

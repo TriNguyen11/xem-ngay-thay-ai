@@ -29,18 +29,21 @@ import {
 import {
   CheckDaiBai,
   CheckDuongCong,
+  CheckNguHanhTuongKhac,
   CheckNhiHop,
+  CheckSinhXuat,
   CheckTamHop,
   CheckTamTai,
   CheckThienTaiDiaHoa,
   CheckTrucXungNgayThangNam,
+  CombineThienCan,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
-const TableShow = ({ data, infoGiaChu, valueSelect }) => {
+const TableShow = ({ data, infoGiaChu, valueSelect, toaNha }) => {
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -121,7 +124,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
             </TableHead>
             <TableBody>
               {data?.map((date, index) => {
-                let backky = "";
+                let backky = [];
                 // Dai bai
                 if (
                   CheckDaiBai(
@@ -130,10 +133,10 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                     date.ngayCan + " " + date.ngayChi
                   )
                 )
-                  backky = "Đại bại";
+                  backky.push("Đại bại");
                 // Duong Cong
                 if (CheckDuongCong(date.monthLunar, date.dayLunar))
-                  backky = "Dương Công";
+                  backky.push("Dương Công");
                 // hoang vu tu quy
                 if (
                   HOANG_VU_TU_QUY[
@@ -149,7 +152,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                     )
                   ] === date.ngayChi
                 )
-                  backky = "Hoang vu tứ quý";
+                  backky.push("Hoang vu tứ quý");
                 // khong phong
                 if (
                   KHONG_PHONG[
@@ -165,16 +168,16 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                     )
                   ].includes(date.ngayChi)
                 )
-                  backky = "Không phòng";
+                  backky.push("Không phòng");
                 if (CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar))
-                  backky = "Thien Tai Dia Hoa";
+                  backky.push("Thien Tai Dia Hoa");
                 // if(CheckTamTai(tuoiChiGiaChu, date.namChi)) backky="Tam Tai"
-                if (date.dayLunar === 1) backky = "Mùng 1";
-                if (date.dayLunar === 15) backky = "Rằm";
+                if (date.dayLunar === 1) backky.push("Mùng 1");
+                if (date.dayLunar === 15) backky.push("Rằm");
                 if (
                   monthDays(date.yearLunar, date.monthLunar) === date.dayLunar
                 )
-                  backky = "Cuối tháng ";
+                  backky.push("Cuối tháng ");
                 if (
                   infoGiaChu?.tuoiGiaChu &&
                   CheckTamTai(
@@ -182,33 +185,33 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                     date.ngayChi
                   )
                 )
-                  backky = "Tam Tai Ngày";
-                if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
-                if (TAM_NUONG.includes(date.dayLunar)) backky = "Tam Nương";
+                  backky.push("Tam Tai Ngày");
+                if (NGUYET_KY.includes(date.dayLunar)) backky.push("Nguyệt kỵ");
+                if (TAM_NUONG.includes(date.dayLunar)) backky.push("Tam Nương");
                 if (THO_TU[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Thọ Tử";
+                  backky.push("Thọ Tử");
                 if (SAT_CHU_AM[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Sát chủ âm";
+                  backky.push("Sát chủ âm");
                 if (SAT_CHU_DUONG[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Sát chủ dương";
+                  backky.push("Sát chủ dương");
                 if (VANG_VONG[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Vãng vong";
+                  backky.push("Vãng vong");
                 if (NGUYET_PHA[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Nguyệt Phá";
+                  backky.push("Nguyệt Phá");
                 if (
                   CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(date.yearLunar) % 12],
                     date.ngayChi
                   )
                 )
-                  backky = "Tuế Phá";
+                  backky.push("Tuế Phá");
                 if (
                   CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
                     date.ngayChi
                   )
                 ) {
-                  backky = "Đại Hao";
+                  backky.push("Đại Hao");
                 }
 
                 return (
@@ -235,7 +238,7 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                         textAlign: "center",
                       }}>
                       {date.dayLunar} - {date.monthLunar}- {date.yearLunar}{" "}
-                      {backky.length !== 0 ? "(" + backky + ")" : ""}
+                      {backky.length !== 0 ? "(" + backky.toString() + ")" : ""}
                     </TableCell>
                     <TableCell
                       style={{
@@ -314,6 +317,47 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-row text-center my-1">
                               {date.gio?.map((itemGio, index) => {
+                                let timeErr = "";
+                                let combineThienCanGioNgay = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.ngayCan
+                                );
+                                let combineThienCanGioThang = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.thangCan
+                                );
+                                let combineThienCanGioNam = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.namCan
+                                );
+
+                                if (
+                                  combineThienCanGioNam === "" &&
+                                  combineThienCanGioThang === "" &&
+                                  combineThienCanGioNgay === "" &&
+                                  date.isTruongHop2BonusHoaHop === true
+                                ) {
+                                  timeErr = "Không hợp hoá";
+                                }
+                                if (
+                                  CheckSinhXuat(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ]
+                                    ]
+                                  ) === true &&
+                                  date.isTruongHop2BonusHoaHop === true
+                                ) {
+                                  timeErr = "Sinh Xuất";
+                                }
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
                                   CHI_NAM_SORTED.indexOf(itemGio) < 9
@@ -360,6 +404,8 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                                             )
                                           ? "(Nhị Hợp), "
                                           : "")}
+                                      {timeErr.length !== 0 &&
+                                        " (" + timeErr + ")"}
                                     </span>
                                   );
                               })}
@@ -373,6 +419,56 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-row text-center my-1">
                               {date.gio?.map((itemGio, index) => {
+                                let timeErr = "";
+                                let combineThienCanGioNgay = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.ngayCan
+                                );
+                                let combineThienCanGioThang = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.thangCan
+                                );
+                                let combineThienCanGioNam = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.namCan
+                                );
+
+                                if (
+                                  combineThienCanGioNam === "" &&
+                                  combineThienCanGioThang === "" &&
+                                  combineThienCanGioNgay === "" &&
+                                  date.isTruongHop2BonusHoaHop === true
+                                ) {
+                                  // console.log(
+                                  //   date,
+                                  //   itemGio,
+                                  //   date.arrGioCan[
+                                  //     CHI_NAM_SORTED.indexOf(itemGio)
+                                  //   ]
+                                  // );
+
+                                  timeErr = "Không hợp hoá";
+                                }
+                                if (
+                                  CheckSinhXuat(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ]
+                                    ]
+                                  ) === true &&
+                                  date.isTruongHop2BonusHoaHop === true
+                                ) {
+                                  timeErr = "Sinh Xuất";
+                                }
+
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
                                   CHI_NAM_SORTED.indexOf(itemGio) >= 9
@@ -419,6 +515,8 @@ const TableShow = ({ data, infoGiaChu, valueSelect }) => {
                                             )
                                           ? "(Nhị Hợp), "
                                           : "")}
+                                      {timeErr.length !== 0 &&
+                                        " (" + timeErr + ")"}
                                     </span>
                                   );
                               })}

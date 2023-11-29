@@ -22,16 +22,37 @@ import StarIcon from "@mui/icons-material/Star";
 import {
   CheckArrNhiHop,
   CheckArrTamHop,
+  CheckNguHanhTuongKhac,
   CheckNhiHop,
+  CheckSinhHanh,
+  CheckSinhXuat,
   CheckTamHop,
+  CheckTySinh,
 } from "@Root/script/handleDateChange";
 import { memo, useState } from "react";
 import { DefineHacDaoHoangDao } from "@Root/script/calculatorCalender";
 import { chiVi, DiaChi } from "@Root/script/AmLich";
 import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
-const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import EastOutlinedIcon from "@mui/icons-material/EastOutlined";
+const TableResult = ({
+  data,
+  infoGiaChu,
+  valueSelect,
+  description,
+  toaNha,
+}) => {
   const [checked, setChecked] = useState(false);
+  // console.log(
+  //   data,
+  //   toaNha,
+  //   NGU_HANH[data.ngayCan],
+  //   CheckSinhHanh(toaNha, NGU_HANH[data.ngayCan]),
+  //   CheckSinhXuat(toaNha, NGU_HANH[data.ngayCan]),
+  //   "data"
+  // );
   return (
     <Collapse
       in={checked}
@@ -61,9 +82,46 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                     }}>
                     <span className="mr-2">
                       {data.isTruongHop2BonusHoaHop === false ? (
-                        <CachedOutlinedIcon />
+                        CheckSinhHanh(
+                          NGU_HANH[toaNha],
+                          NGU_HANH[data.ngayCan]
+                        ) ? (
+                          <EastOutlinedIcon />
+                        ) : CheckSinhXuat(
+                            NGU_HANH[toaNha],
+                            NGU_HANH[data.ngayCan]
+                          ) ? (
+                          <EastOutlinedIcon
+                            style={{
+                              transform: "rotate(180deg)",
+                            }}
+                          />
+                        ) : (
+                          <></>
+                        )
                       ) : data.isTruongHop2BonusHoaHop === true ? (
                         <SwapHorizOutlinedIcon />
+                      ) : (
+                        <></>
+                      )}
+                      {CheckSinhHanh(
+                        NGU_HANH[data.ngayCan],
+                        NGU_HANH[data.ngayChi]
+                      ) ||
+                      CheckSinhHanh(
+                        NGU_HANH[data.ngayChi],
+                        NGU_HANH[data.ngayCan]
+                      ) ? (
+                        <EventAvailableIcon />
+                      ) : CheckNguHanhTuongKhac(
+                          NGU_HANH[data.ngayCan],
+                          NGU_HANH[data.ngayChi]
+                        ) ||
+                        CheckNguHanhTuongKhac(
+                          NGU_HANH[data.ngayChi],
+                          NGU_HANH[data.ngayCan]
+                        ) ? (
+                        <CalendarTodayIcon />
                       ) : (
                         <></>
                       )}
@@ -270,10 +328,7 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                       minWidth: 50,
                       fontSize: 16,
                     }}>
-                    Giờ (
-                    {data?.titleCheckGioNgayThang &&
-                      data?.titleCheckGioNgayThang?.toString()}
-                    ){" "}
+                    Giờ
                   </TableCell>
                   <TableCell
                     style={{
@@ -334,6 +389,40 @@ const TableResult = ({ data, infoGiaChu, valueSelect, description }) => {
                                     data?.arrHoursOke?.indexOf(itemGio)
                                   ] +
                                   ")"}{" "}
+                              {CheckSinhHanh(
+                                NGU_HANH[toaNha],
+                                NGU_HANH[
+                                  data.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ]
+                                ]
+                              ) ? (
+                                <EastOutlinedIcon />
+                              ) : CheckSinhXuat(
+                                  NGU_HANH[toaNha],
+                                  NGU_HANH[
+                                    data.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ]
+                                  ]
+                                ) ? (
+                                <EastOutlinedIcon
+                                  style={{
+                                    transform: "rotate(180deg)",
+                                  }}
+                                />
+                              ) : CheckNguHanhTuongKhac(
+                                  NGU_HANH[toaNha],
+                                  NGU_HANH[
+                                    data.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ]
+                                  ]
+                                ) ? (
+                                <SwapHorizOutlinedIcon />
+                              ) : (
+                                <></>
+                              )}
                             </div>
                           );
                       })}

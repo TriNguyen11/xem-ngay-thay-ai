@@ -13,6 +13,7 @@ import {
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
 import TableResult from "@Root/components/TableResult";
+import TableResultStepFinal from "@Root/components/TableResultStepFinal";
 import TableSangCatNam from "@Root/components/TableSangCatNam";
 import TableSangCatNgay from "@Root/components/TableSangCatNgay";
 import TableSangCatThang from "@Root/components/TableSangCatThang";
@@ -53,6 +54,7 @@ import {
   CheckNguHanhTuongKhac,
   CheckNguHanhTuongKhacKhauQuyet,
   CheckNguHanhTuongSinh,
+  CheckSinhXuat,
   CheckTrucXungGioTangSu,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
@@ -291,6 +293,9 @@ export default function Home() {
         !CheckGioKiepSat(namSinh, item.ngayChi) &&
         //Ky chon cat
         !CheckKyChonCat(item.monthLunar, item.dayLunar)
+        // &&
+        // Sinh Xuat
+        // !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
         arrPerfectDateStep4.push(item);
       }
@@ -300,7 +305,8 @@ export default function Home() {
       arrPerfectDateStep4,
       valueText
     );
-
+    console.log(arrPerfectDateStep4.length, "4");
+    console.log(arrPerfectDateStep6.length, "6");
     let arrHours = [];
     let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
     let arrHoursOke = [];
@@ -323,7 +329,14 @@ export default function Home() {
       // if (combineThienCanNgayThang.length !== 0) {
       if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
         // if (combineThienCanNgayThang.length !== 0) {
+
         arrHours.map((hour, index) => {
+          // if (
+          //   CheckSinhXuat(
+          //     NGU_HANH[valueText],
+          //     NGU_HANH[item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)]]
+          //   ) === false
+          // ) {
           let combineThienCanGioNgay = CombineThienCan(
             item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
             item.ngayCan
@@ -332,13 +345,34 @@ export default function Home() {
             item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
             item.thangCan
           );
+          let combineThienCanGioNam = CombineThienCan(
+            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+            item.namCan
+          );
+          if (
+            CheckNguHanhTuongKhac(
+              NGU_HANH[valueText],
+              combineThienCanGioNam
+            ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioNam) &&
+            combineThienCanGioNgay === "" &&
+            combineThienCanGioThang === "" &&
+            combineThienCanGioNam !== ""
+          ) {
+            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+            titleCheckGioNgayThang.push("HY");
+            arrHoursOke.push(hour);
+          }
+
           if (
             CheckNguHanhTuongKhac(
               NGU_HANH[valueText],
               combineThienCanGioNgay
             ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioNgay) &&
+            combineThienCanGioNgay !== "" &&
             combineThienCanGioThang === "" &&
-            combineThienCanGioNgay !== ""
+            combineThienCanGioNam === ""
           ) {
             isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
             titleCheckGioNgayThang.push("HD");
@@ -350,8 +384,10 @@ export default function Home() {
               NGU_HANH[valueText],
               combineThienCanGioThang
             ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioThang) &&
             combineThienCanGioNgay === "" &&
-            combineThienCanGioThang !== ""
+            combineThienCanGioThang !== "" &&
+            combineThienCanGioNam === ""
           ) {
             isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
             titleCheckGioNgayThang.push("HM");
@@ -362,18 +398,23 @@ export default function Home() {
               NGU_HANH[valueText],
               combineThienCanGioNgay
             ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioNgay) &&
             CheckNguHanhTuongKhac(
               NGU_HANH[valueText],
               combineThienCanGioThang
             ) === false &&
+            !CheckSinhXuat(NGU_HANH[valueText], combineThienCanGioThang) &&
             combineThienCanGioNgay !== "" &&
-            combineThienCanGioThang !== ""
+            combineThienCanGioThang !== "" &&
+            combineThienCanGioNam === ""
           ) {
             isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
             titleCheckGioNgayThang.push("HDM");
             arrHoursOke.push(hour);
           }
+          // }
         });
+
         if (isCheckGioNgayThangWhileCanNgayKhacToaNha) {
           arrPerfectDateStep5.push({
             ...item,
@@ -449,7 +490,9 @@ export default function Home() {
       //   gio: arrHours,
       // });
     });
-
+    arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
+    console.log(arrPerfectDateStep4.length, "422");
+    console.log(arrPerfectDateStep6.length, "622");
     setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
     setYearArr({ lunar: lunarYear, solar: solarYear });
     setArrMonthInYear(monthInYear);
@@ -459,8 +502,8 @@ export default function Home() {
       step1: dateArr,
       step2: arrPerfectDateStep2,
       step3: arrPerfectDateStep3,
-      step4: arrPerfectDateStep5,
-      // step5: arrPerfectDateStep5,
+      step4: arrPerfectDateStep4,
+      step5: arrPerfectDateStep5,
       step6: arrPerfectDateStep6,
       step7: arrPerfectDateStep7,
       step8: arrPerfectDateStep8,
@@ -764,7 +807,7 @@ export default function Home() {
             style={{
               width: window.innerWidth * 0.9,
             }}>
-            {rangeDayInMonthLunar &&
+            {/* {rangeDayInMonthLunar &&
               Object.keys(rangeDayInMonthLunar).map((year) => {
                 return (
                   <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
@@ -795,7 +838,7 @@ export default function Home() {
                     })}
                   </ul>
                 );
-              })}
+              })} */}
           </div>
 
           {/* Nhan */}
@@ -843,7 +886,8 @@ export default function Home() {
                           data={item}
                           infoGiaChu={infoGiaChu}
                           description="sang-cat"
-                          valueSelect={valueSelect}></TableResult>
+                          valueSelect={valueSelect}
+                          toaNha={valueText}></TableResult>
                       </div>
                     </>
                   );
@@ -934,12 +978,30 @@ export default function Home() {
               </div>
             </div>
           )}
-          {stepShow.step6 && (
+          {stepShow.step4 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Xét thêm hợp hoá
+                {stepShow.step4 && `(${stepShow.step4?.length})`}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
+                <TableSangCatNgay
+                  valueSelect={valueSelect}
+                  data={stepShow.step4}
+                  infoNguoiMat={infoNguoiMat}
+                  toaNha={valueText}></TableSangCatNgay>
+              </div>
+            </div>
+          )}
+
+          {stepShow.step6 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Bước 5: Chọn giờ
                 {stepShow.step6 && `(${stepShow.step6?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
@@ -951,20 +1013,20 @@ export default function Home() {
               </div>
             </div>
           )}
-
-          {stepShow.step4 && (
+          {stepShow.step7 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Bước 5: Chọn giờ
-                {stepShow.step4 && `(${stepShow.step4?.length})`}
+                Kiểm tra thêm hợp hoá ngày/giờ{" "}
+                {stepShow.step7 && `(${stepShow.step7?.length})`}
               </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
+
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
                 <TableSangCatNgay
                   valueSelect={valueSelect}
-                  data={stepShow.step4}
-                  infoNguoiMat={infoNguoiMat}
+                  data={stepShow.step7}
+                  infoGiaChu={infoGiaChu}
                   toaNha={valueText}></TableSangCatNgay>
               </div>
             </div>
@@ -978,11 +1040,10 @@ export default function Home() {
                 {stepShow.step8 && `(${stepShow.step8?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableSangCatNgay
+                <TableResultStepFinal
                   valueSelect={valueSelect}
                   data={stepShow.step8}
-                  infoNguoiMat={infoNguoiMat}
-                  toaNha={valueText}></TableSangCatNgay>
+                  infoNguoiMat={infoNguoiMat}></TableResultStepFinal>
               </div>
             </div>
           )}
@@ -1015,8 +1076,12 @@ const handleHopHoaNgayThang = async (arr, toa) => {
   let ArrHopHoa = [];
   arr?.map((item, ind) => {
     let combineThienCanNgayThang = CombineThienCan(item.thangCan, item.ngayCan);
+    let combineThienCanNgayNam = CombineThienCan(item.namCan, item.ngayCan);
 
-    if (combineThienCanNgayThang.length !== 0) {
+    if (
+      combineThienCanNgayThang.length !== 0 ||
+      combineThienCanNgayNam.length !== 0
+    ) {
       if (
         !CheckNguHanhTuongKhacKhauQuyet(
           NGU_HANH[item.thangChi],
@@ -1025,12 +1090,26 @@ const handleHopHoaNgayThang = async (arr, toa) => {
         !CheckNguHanhTuongKhacKhauQuyet(
           NGU_HANH[item.ngayChi],
           combineThienCanNgayThang
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.namChi],
+          combineThienCanNgayNam
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.ngayChi],
+          combineThienCanNgayNam
         )
       ) {
-        if (!CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanNgayThang))
+        if (
+          !CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanNgayThang) &&
+          CheckSinhXuat(NGU_HANH[toa], combineThienCanNgayThang) === false &&
+          !CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanNgayNam) &&
+          CheckSinhXuat(NGU_HANH[toa], combineThienCanNgayNam) === false
+        )
           ArrHopHoa.push(item);
       } else {
-        ArrHopHoa.push(item);
+        if (CheckSinhXuat(NGU_HANH[toa], combineThienCanNgayThang) === false)
+          ArrHopHoa.push(item);
       }
     } else {
       ArrHopHoa.push(item);
@@ -1039,4 +1118,8 @@ const handleHopHoaNgayThang = async (arr, toa) => {
   // return 1;
   // console.log(ArrHopHoa, "ArrHopHoa");
   return ArrHopHoa;
+};
+
+const handleHopHoaNgayGio = async (arr, toa) => {
+  return arr;
 };

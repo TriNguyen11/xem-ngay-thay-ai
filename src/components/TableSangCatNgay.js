@@ -41,8 +41,10 @@ import {
   CheckTieuLoi,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTyHoa,
+  CheckTrucXungChi,
   CheckTrungTang,
+  CheckSinhXuat,
+  CombineThienCan,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
@@ -149,7 +151,7 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                     date.ngayChi
                   )
                 )
-                  backky = "Trùng, Xung, Hình, Hại tuổi mất";
+                  backky = "Trùng, Xung tuổi mất";
 
                 if (date.dayLunar === 1) backky = "Mùng 1";
                 if (date.dayLunar === 15) backky = "Rằm";
@@ -203,6 +205,9 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                 // Ky chon cat
                 if (CheckKyChonCat(date.monthLunar, date.dayLunar))
                   backky = "Kỵ Chôn cất";
+                if (CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[date.ngayCan])) {
+                  backky = "Sinh xuất";
+                }
                 return (
                   <TableRow
                     style={{
@@ -306,6 +311,47 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-row text-center my-1">
                               {date.gio?.map((itemGio, index) => {
+                                let timeErr = "";
+                                let combineThienCanGioNgay = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.ngayCan
+                                );
+                                let combineThienCanGioThang = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.thangCan
+                                );
+                                let combineThienCanGioNam = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.namCan
+                                );
+
+                                if (
+                                  combineThienCanGioNam === "" &&
+                                  combineThienCanGioThang === "" &&
+                                  combineThienCanGioNgay === "" &&
+                                  date.isTruongHop2BonusHoaHop === true
+                                ) {
+                                  timeErr = "Không hợp hoá";
+                                }
+                                if (
+                                  CheckSinhXuat(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ]
+                                    ]
+                                  ) === true &&
+                                  date.isTruongHop2BonusHoaHop === true
+                                ) {
+                                  timeErr = "Sinh Xuất";
+                                }
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
                                   CHI_NAM_SORTED.indexOf(itemGio) < 9
@@ -366,6 +412,8 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                             )
                                           ? "(Nhị Hợp Nữ), "
                                           : "")}
+                                      {timeErr.length !== 0 &&
+                                        " (" + timeErr + ")"}
                                     </span>
                                   );
                               })}
@@ -379,6 +427,48 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-row text-center my-1">
                               {date.gio?.map((itemGio, index) => {
+                                let timeErr = "";
+                                let combineThienCanGioNgay = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.ngayCan
+                                );
+                                let combineThienCanGioThang = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.thangCan
+                                );
+                                let combineThienCanGioNam = CombineThienCan(
+                                  date.arrGioCan[
+                                    CHI_NAM_SORTED.indexOf(itemGio)
+                                  ],
+                                  date.namCan
+                                );
+
+                                if (
+                                  combineThienCanGioNam === "" &&
+                                  combineThienCanGioThang === "" &&
+                                  combineThienCanGioNgay === "" &&
+                                  date.isTruongHop2BonusHoaHop === true
+                                ) {
+                                  timeErr = "Không hợp hoá";
+                                }
+                                if (
+                                  CheckSinhXuat(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ]
+                                    ]
+                                  ) === true &&
+                                  date.isTruongHop2BonusHoaHop === true
+                                ) {
+                                  timeErr = "Sinh Xuất";
+                                }
+
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
                                   CHI_NAM_SORTED.indexOf(itemGio) >= 9
@@ -439,6 +529,8 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                             )
                                           ? "(Nhị Hợp Nữ), "
                                           : "")}
+                                      {timeErr.length !== 0 &&
+                                        " (" + timeErr + ")"}
                                     </span>
                                   );
                               })}
