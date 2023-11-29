@@ -688,6 +688,7 @@ export const CheckTrucXungGio = (
       arrGioHoangDao.includes(item) === true &&
       CheckGioThoTu(ngayChi, item) === false &&
       CheckGioSatChu(monthLunar, item) === false &&
+      CheckNguHanhTuongKhac(NGU_HANH[toaNha], NGU_HANH[item]) &&
       !CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[item])
     ) {
       if (CheckTrucXungChi(item, tuoiGiaChu) === false) {
