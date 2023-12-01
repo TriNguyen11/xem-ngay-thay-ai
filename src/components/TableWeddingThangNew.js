@@ -28,7 +28,6 @@ const TableWeddingThangNew = ({
   toaNha,
   title,
 }) => {
-  console.log(data, "data");
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (

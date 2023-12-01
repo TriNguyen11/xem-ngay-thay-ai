@@ -15,6 +15,9 @@ import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
 import TableShow from "@Root/components/Table";
 import TableResult from "@Root/components/TableResult";
+import TableResultStepFinal from "@Root/components/TableResultStepFinal";
+import TableSangCatTrucTu from "@Root/components/TableSangCatTrucTu";
+import TableTrucXungNgayThang from "@Root/components/TableTrucXungNgayThang";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
@@ -43,6 +46,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
+import TableXayDung from "../xay-dung/component/TableXayDung";
 
 export default function Home() {
   const refNotify = React.useRef();
@@ -87,19 +91,18 @@ export default function Home() {
     step7: undefined,
     step8: undefined,
   });
-
   const handleGetPerfectDate = async () => {
-    // console.log(
-    //   {
-    //     dateStart,
-    //     dateEnd,
-    //     valueAge,
-    //     valueAgeBorrow,
-    //     valueSelect,
-    //     isMuonTuoi,
-    //   },
-    //   "adsas"
-    // );
+    console.log(
+      {
+        dateStart,
+        dateEnd,
+        valueAge,
+        valueAgeBorrow,
+        valueSelect,
+        isMuonTuoi,
+      },
+      "adsas"
+    );
     let tuoiChiGiaChu = CHI_NAM[valueAge.year % 12];
     let tuoiCanGiaChu = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
@@ -123,11 +126,6 @@ export default function Home() {
       }
     }
     // Xac dinh can Chi gia chu
-    setInfoGiaChu({
-      ...infoGiaChu,
-      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
-      tuoiGiaChu: tuoiGiaChu,
-    });
 
     setLoading(true);
     let dateArr = await enumerateDaysBetweenDates(
@@ -147,11 +145,24 @@ export default function Home() {
     let arrPerfectDateStep5 = [];
     let arrPerfectDateStep6 = []; // hop hoa ngay/thang
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
-    let arrPerfectDateStep8 = []; // loc gio
+    let arrPerfectDateStep8 = []; // xoa gio khong co
 
-    // Convert  RangeDayInMonthLunar
+    // kiem tra truc/tu
+    dateArr.map((item, ind) => {
+      if (
+        //   !! || 1 trong 2 pham deu` bi
+        //
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+      ) {
+      } else {
+        arrPerfectDateStep2.push(item);
+      }
+    });
+
     // Tranh Bach ky
-    dateArr.map((item, index) => {
+    arrPerfectDateStep2.map((item, index) => {
       if (
         item.dayLunar !== 1 &&
         item.dayLunar !== 15 &&
@@ -172,15 +183,7 @@ export default function Home() {
         !CheckTrucXungNgayThangNam(
           CHI_NAM[Number(tuoiGiaChu) % 12],
           item.ngayChi
-        )
-      ) {
-        arrPerfectDateStep2.push(item);
-      }
-    });
-
-    //Tranh tuong xung tuong hai
-    arrPerfectDateStep2.map((item, inex) => {
-      if (
+        ) &&
         CheckTuongXungTuongHaiTuoiKhongToa(
           CHI_NAM[tuoiGiaChu % 12],
           item.ngayChi
@@ -190,31 +193,11 @@ export default function Home() {
       }
     });
 
-    // kiem tra truc/tu
-    arrPerfectDateStep3.map((item, ind) => {
-      if (
-        //   !! || 1 trong 2 pham deu` bi
-        //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
-        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-      ) {
-      } else {
-        arrPerfectDateStep4.push(item);
-
-        // if (
-        //   Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-        //   !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        // ) {
-        // } else {
-        // }
-      }
-    });
     let arrHours = [];
     let gioHoangDaoVar = [];
 
     // Chon gio
-    arrPerfectDateStep4.map((item, ind) => {
+    arrPerfectDateStep3.map((item, ind) => {
       arrHours = CheckTrucXungGioKhongToa(
         item.ngayChi,
         item.thangChi,
@@ -230,16 +213,22 @@ export default function Home() {
           gioHoangDao: gioHoangDaoVar,
         });
       }
+
       arrPerfectDateStep5.push({
         ...item,
         gio: arrHours,
         gioHoangDao: gioHoangDaoVar,
       });
     });
-
+    // Convert  RangeDayInMonthLunar
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
+    setInfoGiaChu({
+      ...infoGiaChu,
+      tuoi: tuoiCanGiaChu + " " + tuoiChiGiaChu,
+      tuoiGiaChu: tuoiGiaChu,
+    });
     setStepShow({
-      step1: dateArr,
+      step1: arrPerfectDateStep1,
       step2: arrPerfectDateStep2,
       step3: arrPerfectDateStep3,
       step4: arrPerfectDateStep4,
@@ -247,20 +236,10 @@ export default function Home() {
       step6: arrPerfectDateStep6,
       step7: arrPerfectDateStep7,
       step8: arrPerfectDateStep8,
-    });
-    setLoading(false);
-  };
-  const handleInit = async () => {
-    console.log(valueAge, "valueAge");
-    const a = await axios.post("http://localhost:3000/xem-ngay/suc-khoe", {
-      dateStart,
-      dateEnd,
-      infoGiaChu,
-      valueSelect,
-      valueAge,
+      dateArr,
     });
 
-    console.log(a, "check a ");
+    setLoading(false);
   };
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
@@ -590,6 +569,7 @@ export default function Home() {
             )}
           </div>
           {/* Show ket qua */}
+          {/* Show ket qua */}
           {stepShow.step8?.length !== 0 ? (
             <>
               <div className="text-[24px] font-bold mb-4 text-black">
@@ -627,71 +607,38 @@ export default function Home() {
               )}
             </>
           )}
-          {stepShow.step1 && (
+          {stepShow.dateArr && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Bước 1: Chọn ngày {"(Tránh bách kỵ)"}
-                {stepShow.step1 && ` (${stepShow.step1?.length})`}
+                Bước 1{": "}Xét Trực/Tú{" "}
+                {stepShow.dateArr && `(${stepShow.dateArr?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
+                <TableSangCatTrucTu
                   valueSelect={valueSelect}
-                  data={stepShow.step1}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  data={stepShow?.dateArr}
+                  infoNguoiMat={infoGiaChu}
+                  toaNha={""}></TableSangCatTrucTu>
               </div>
             </div>
           )}
           {stepShow.step2 && (
-            <div>
+            <div className="">
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Sau bước 1 {"(Tránh bách kỵ)"}
-                {stepShow.step2 && ` (${stepShow.step2?.length})`}
+                Bước 2: {"Chọn ngày và so với tuổi gia chủ "}
+                {`(${stepShow.step2?.length})`}
               </div>
-              <div
-                className="max-h-[500px] overflow-scroll
-        px-10 border-2 border-black mt-2 ">
-                <TableShow
-                  valueSelect={valueSelect}
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableTrucXungNgayThang
                   data={stepShow.step2}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )}
-          {stepShow.step3 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Bước 2: {"So với tuổi gia chủ"}{" "}
-                {stepShow.step3 && `(${stepShow.step3?.length})`}
-              </div>
-
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
+                  infoGiaChu={infoGiaChu}
                   valueSelect={valueSelect}
-                  data={stepShow.step3}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )}
-          {stepShow.step4 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Bước 3: {"Kiểm tra Trực/Tú"}
-                {stepShow.step4 && ` (${stepShow.step4?.length})`}
-              </div>
-
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
-                  valueSelect={valueSelect}
-                  data={stepShow.step4}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  checkTrungXungHaiTuoi={true}
+                  toaNha={""}></TableTrucXungNgayThang>
               </div>
             </div>
           )}
@@ -700,15 +647,15 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Bước 4: {"Chọn giờ"}
-                {stepShow.step5 && ` (${stepShow.step5?.length})`}
+                Bước 3: Chọn giờ
+                {stepShow.step5 && `(${stepShow.step5?.length})`}
               </div>
 
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
+                <TableXayDung
                   valueSelect={valueSelect}
                   data={stepShow.step5}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  infoGiaChu={infoGiaChu}></TableXayDung>
               </div>
             </div>
           )}
@@ -717,14 +664,15 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Bước 5: Loại bỏ những ngày không có giờ
+                Bước {"4"}: Loại bỏ những ngày không có giờ
                 {stepShow.step8 && `(${stepShow.step8?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
+                <TableResultStepFinal
                   valueSelect={valueSelect}
                   data={stepShow.step8}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  infoGiaChu={infoGiaChu}
+                  toaNha={""}></TableResultStepFinal>
               </div>
             </div>
           )}

@@ -44,7 +44,7 @@ import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 
-const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
+const TableResultStepFinal = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -128,103 +128,6 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                 // console.log(date, "date");
                 let backky = "";
                 // Dai bai
-                if (
-                  CheckDaiBai(
-                    date.namCan,
-                    date.monthLunar,
-                    date.ngayCan + " " + date.ngayChi
-                  ) &&
-                  (valueSelect === "dong-tho" || valueSelect === "nhap-trach")
-                )
-                  backky.push("Đại bại");
-                // Duong Cong
-                if (
-                  CheckDuongCong(date.monthLunar, date.dayLunar) &&
-                  (valueSelect === "dong-tho" || valueSelect === "nhap-trach")
-                )
-                  backky.push("Dương Công");
-                // hoang vu tu quy
-                if (
-                  HOANG_VU_TU_QUY[
-                    GetHoangVuTuQuy(
-                      getSunLongitude(
-                        jdn(
-                          Number(date.daySolar),
-                          Number(date.monthSolar),
-                          Number(date.yearSolar)
-                        ),
-                        7
-                      )
-                    )
-                  ] === date.ngayChi &&
-                  valueSelect === "dong-tho"
-                )
-                  backky.push("Hoang vu tứ quý");
-                // khong phong
-                if (
-                  KHONG_PHONG[
-                    GetHoangVuTuQuy(
-                      getSunLongitude(
-                        jdn(
-                          Number(date.daySolar),
-                          Number(date.monthSolar),
-                          Number(date.yearSolar)
-                        ),
-                        7
-                      )
-                    )
-                  ].includes(date.ngayChi) &&
-                  valueSelect === "dong-tho"
-                )
-                  backky.push("Không phòng");
-                if (
-                  CheckThienTaiDiaHoa(date.ngayChi, date.monthLunar) &&
-                  (valueSelect === "dong-tho" || valueSelect === "nhap-trach")
-                )
-                  backky.push("Thien Tai Dia Hoa");
-                // if(CheckTamTai(tuoiChiGiaChu, date.namChi)) backky="Tam Tai"
-                if (date.dayLunar === 1) backky.push("Mùng 1");
-                if (date.dayLunar === 15) backky.push("Rằm");
-                if (
-                  monthDays(date.yearLunar, date.monthLunar) === date.dayLunar
-                )
-                  backky.push("Cuối tháng ");
-                if (
-                  infoGiaChu?.tuoiGiaChu &&
-                  CheckTamTai(
-                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                    date.ngayChi
-                  ) &&
-                  valueSelect === "dong-tho"
-                )
-                  backky.push("Tam Tai Ngày");
-                if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
-                if (TAM_NUONG.includes(date.dayLunar)) backky = "Tam Nương";
-                if (THO_TU[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Thọ Tử";
-                if (SAT_CHU_AM[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Sát chủ âm";
-                if (SAT_CHU_DUONG[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Sát chủ dương";
-                if (VANG_VONG[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Vãng vong";
-                if (NGUYET_PHA[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Nguyệt Phá";
-                if (
-                  CheckTrucXungNgayThangNam(
-                    CHI_NAM[Number(date.yearLunar) % 12],
-                    date.ngayChi
-                  )
-                )
-                  backky = "Tuế Phá";
-                if (
-                  CheckTrucXungNgayThangNam(
-                    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
-                    date.ngayChi
-                  )
-                ) {
-                  backky = "Đại Hao";
-                }
 
                 return (
                   <TableRow
@@ -333,12 +236,10 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-col  my-1">
                               {date.gio?.map((itemGio, index) => {
-                                // console.log(date?.arrHoursOke, "2323");
+                                console.log(itemGio, "2323");
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
-                                  CHI_NAM_SORTED.indexOf(itemGio) < 9 &&
-                                  (date?.arrHoursOke?.includes(itemGio) ||
-                                    date.arrHoursOke === undefined)
+                                  CHI_NAM_SORTED.indexOf(itemGio) < 9
                                 ) {
                                   // console.log(itemGio);
                                   return (
@@ -371,13 +272,13 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                                         ] +
                                         ")" +
                                         (CheckTamHop(
-                                          CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                          CHI_NAM[infoNguoiMat?.namSinh % 12],
                                           itemGio
                                         )
                                           ? "(Tam Hợp), "
                                           : CheckNhiHop(
                                               CHI_NAM[
-                                                infoGiaChu?.tuoiGiaChu % 12
+                                                infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
@@ -398,10 +299,8 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                             <div className="flex flex-col  my-1">
                               {date.gio?.map((itemGio, index) => {
                                 if (
-                                  (CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
-                                    CHI_NAM_SORTED.indexOf(itemGio) >= 9) &&
-                                  (date?.arrHoursOke?.includes(itemGio) ||
-                                    date.arrHoursOke === undefined)
+                                  CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
+                                  CHI_NAM_SORTED.indexOf(itemGio) >= 9
                                 )
                                   return (
                                     <span
@@ -433,13 +332,13 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                                         ] +
                                         ") " +
                                         (CheckTamHop(
-                                          CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                          CHI_NAM[infoNguoiMat?.namSinh % 12],
                                           itemGio
                                         )
                                           ? "(Tam Hợp), "
                                           : CheckNhiHop(
                                               CHI_NAM[
-                                                infoGiaChu?.tuoiGiaChu % 12
+                                                infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )

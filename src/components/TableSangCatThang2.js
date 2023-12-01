@@ -91,7 +91,7 @@ const TableWeddingThang2 = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                         )
                       )
                         // xungThang = "Xung, Trực, Hình, Hại";
-                        xungThang = "Xung, Trực";
+                        xungThang = "Xung, Trùng";
 
                       if (
                         CheckTrucXungNgayThangNam(

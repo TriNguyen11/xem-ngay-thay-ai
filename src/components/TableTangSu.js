@@ -270,7 +270,7 @@ const TableTangSu = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                         {date?.gio && (
                           <div>
                             Trong thời gian mặt trời mọc:
-                            <div className="flex flex-row text-center my-1">
+                            <div className="flex flex-col my-1">
                               {date.gio?.map((itemGio, index) => {
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
@@ -306,33 +306,31 @@ const TableTangSu = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                         ] +
                                         ")" +
                                         (CheckTamHop(
-                                          CHI_NAM[
-                                            infoNguoiMat?.namSinhNam % 12
-                                          ],
+                                          CHI_NAM[infoNguoiMat?.namSinh % 12],
                                           itemGio
                                         )
-                                          ? "(Tam Hợp Nam), "
+                                          ? "(Tam Hợp), "
                                           : CheckTamHop(
                                               CHI_NAM[
-                                                infoNguoiMat?.namSinhNu % 12
+                                                infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Tam Hợp Nữ),"
+                                          ? "(Tam Hợp),"
                                           : CheckNhiHop(
                                               CHI_NAM[
-                                                infoNguoiMat?.namSinhNam % 12
+                                                infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nam), "
+                                          ? "(Nhị Hợp), "
                                           : CheckNhiHop(
                                               CHI_NAM[
-                                                infoNguoiMat?.namSinhNu % 12
+                                                infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nữ), "
+                                          ? "(Nhị Hợp), "
                                           : "")}
                                     </span>
                                   );
@@ -345,7 +343,7 @@ const TableTangSu = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                         {date?.gio && (
                           <div>
                             Trong thời gian mặt trời lặn:
-                            <div className="flex flex-row text-center my-1">
+                            <div className="flex flex-col my-1">
                               {date.gio?.map((itemGio, index) => {
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
@@ -381,33 +379,31 @@ const TableTangSu = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                         ] +
                                         ") " +
                                         (CheckTamHop(
-                                          CHI_NAM[
-                                            infoNguoiMat?.namSinhNam % 12
-                                          ],
+                                          CHI_NAM[infoNguoiMat?.namSinh % 12],
                                           itemGio
                                         )
-                                          ? "(Tam Hợp Nam), "
+                                          ? "(Tam Hợp), "
                                           : CheckTamHop(
                                               CHI_NAM[
-                                                infoNguoiMat?.namSinhNu % 12
+                                                infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Tam Hợp Nữ),"
+                                          ? "(Tam Hợp),"
                                           : CheckNhiHop(
                                               CHI_NAM[
-                                                infoNguoiMat?.namSinhNam % 12
+                                                infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nam), "
+                                          ? "(Nhị Hợp), "
                                           : CheckNhiHop(
                                               CHI_NAM[
-                                                infoNguoiMat?.namSinhNu % 12
+                                                infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nữ), "
+                                          ? "(Nhị Hợp), "
                                           : "")}
                                     </span>
                                   );

@@ -15,6 +15,9 @@ import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
 import TableShow from "@Root/components/Table";
 import TableResult from "@Root/components/TableResult";
+import TableResultStepFinal from "@Root/components/TableResultStepFinal";
+import TableSangCatTrucTu from "@Root/components/TableSangCatTrucTu";
+import TableTrucXungNgayThang from "@Root/components/TableTrucXungNgayThang";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
@@ -44,6 +47,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
+import TableXayDung from "../xay-dung/component/TableXayDung";
 
 export default function Home() {
   const refNotify = React.useRef();
@@ -145,8 +149,22 @@ export default function Home() {
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
     let arrPerfectDateStep8 = []; // xoa gio khong co
 
+    // kiem tra truc/tu
+    dateArr.map((item, ind) => {
+      if (
+        //   !! || 1 trong 2 pham deu` bi
+        //
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
+      ) {
+      } else {
+        arrPerfectDateStep2.push(item);
+      }
+    });
+
     // Tranh Bach ky
-    dateArr.map((item, index) => {
+    arrPerfectDateStep2.map((item, index) => {
       if (
         item.dayLunar !== 1 &&
         item.dayLunar !== 15 &&
@@ -167,15 +185,7 @@ export default function Home() {
         !CheckTrucXungNgayThangNam(
           CHI_NAM[Number(tuoiGiaChu) % 12],
           item.ngayChi
-        )
-      ) {
-        arrPerfectDateStep2.push(item);
-      }
-    });
-
-    //Tranh tuong xung tuong hai
-    arrPerfectDateStep2.map((item, inex) => {
-      if (
+        ) &&
         CheckTuongXungTuongHaiTuoiKhongToa(
           CHI_NAM[tuoiGiaChu % 12],
           item.ngayChi
@@ -185,32 +195,11 @@ export default function Home() {
       }
     });
 
-    // kiem tra truc/tu
-    arrPerfectDateStep3.map((item, ind) => {
-      if (
-        //   !! || 1 trong 2 pham deu` bi
-        //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
-        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-      ) {
-      } else {
-        arrPerfectDateStep4.push(item);
-
-        // if (
-        //   Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-        //   !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        // ) {
-        // } else {
-        // }
-      }
-    });
-
     let arrHours = [];
     let gioHoangDaoVar = [];
 
     // Chon gio
-    arrPerfectDateStep4.map((item, ind) => {
+    arrPerfectDateStep3.map((item, ind) => {
       arrHours = CheckTrucXungGioKhongToa(
         item.ngayChi,
         item.thangChi,
@@ -241,7 +230,7 @@ export default function Home() {
       tuoiGiaChu: tuoiGiaChu,
     });
     setStepShow({
-      step1: dateArr,
+      step1: arrPerfectDateStep1,
       step2: arrPerfectDateStep2,
       step3: arrPerfectDateStep3,
       step4: arrPerfectDateStep4,
@@ -249,6 +238,7 @@ export default function Home() {
       step6: arrPerfectDateStep6,
       step7: arrPerfectDateStep7,
       step8: arrPerfectDateStep8,
+      dateArr,
     });
 
     setLoading(false);
@@ -382,89 +372,6 @@ export default function Home() {
             />
           </div>
         </div>
-        {/* Tuoi Muon */}
-        {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") && (
-          <div className="flex flex-row items-end  mt-5 ">
-            <div
-              style={{ color: "black", marginBottom: 25 }}
-              className="flex flex-row items-center ">
-              <div
-                style={{
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                }}>
-                Tuổi mượn
-              </div>
-              <Switch
-                color="warning"
-                onChange={() => {
-                  setIsMuonTuoi(!isMuonTuoi);
-                }}
-              />
-            </div>
-            <div
-              className="flex flex-row justify-center mt-3 flex-wrap"
-              style={{
-                visibility: isMuonTuoi ? "visible" : "hidden",
-              }}>
-              <TextField
-                type={"number"}
-                id="standard-basic"
-                label="Ngày"
-                placeholder="Ngày"
-                variant="standard"
-                style={{ marginBottom: 25, marginLeft: 20 }}
-                onChange={(e) => {
-                  setValueAgeBorrow({ ...valueAgeBorrow, day: e.target.value });
-                }}
-              />
-              <FormControl fullWidth style={{ marginLeft: 20, width: 200 }}>
-                <InputLabel id="demo-simple-select-label">Tháng</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Tháng"
-                  onChange={(e) => {
-                    setValueAgeBorrow({
-                      ...valueAgeBorrow,
-                      month: e.target.value,
-                    });
-                  }}>
-                  {MONTHS.map((key, inex) => {
-                    return (
-                      <MenuItem key={Math.random()} value={inex + 1}>
-                        {key}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              <TextField
-                type={"number"}
-                id="standard-basic"
-                label="Năm"
-                placeholder="Năm"
-                variant="standard"
-                style={{ marginBottom: 25, marginLeft: 20 }}
-                onChange={(e) => {
-                  setValueAgeBorrow({
-                    ...valueAgeBorrow,
-                    year: e.target.value,
-                  });
-                }}
-              />
-              <TimeField
-                label="Giờ/phút/giây"
-                format="HH:mm:ss"
-                value={valueAge.time}
-                style={{ marginLeft: 20 }}
-                onChange={(e) => {
-                  setValueAgeBorrow({ ...valueAgeBorrow, time: e });
-                }}
-              />
-            </div>
-          </div>
-        )}
         <div className="flex flex-col w-full mt-5">
           <div
             style={{
@@ -634,70 +541,38 @@ export default function Home() {
               )}
             </>
           )}
-          {/* Show table */}
-          {stepShow.step1 && (
+          {stepShow.dateArr && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Bước 1: Chọn ngày {"(Tránh bách kỵ)"}
-                {stepShow.step1 && ` (${stepShow.step1?.length})`}
+                Bước 1{": "}Xét Trực/Tú{" "}
+                {stepShow.dateArr && `(${stepShow.dateArr?.length})`}
               </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
+                <TableSangCatTrucTu
                   valueSelect={valueSelect}
-                  data={stepShow.step1}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  data={stepShow?.dateArr}
+                  infoNguoiMat={infoGiaChu}
+                  toaNha={""}></TableSangCatTrucTu>
               </div>
             </div>
           )}
           {stepShow.step2 && (
-            <div>
+            <div className="">
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Sau bước 1 {"(Tránh bách kỵ)"}
-                {stepShow.step2 && ` (${stepShow.step2?.length})`}
+                Bước 2: {"Chọn ngày và so với tuổi gia chủ "}
+                {`(${stepShow.step2?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
-                  valueSelect={valueSelect}
+                <TableTrucXungNgayThang
                   data={stepShow.step2}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )}
-          {stepShow.step3 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Bước 2: {"So với tuổi gia chủ"}{" "}
-                {stepShow.step3 && `(${stepShow.step3?.length})`}
-              </div>
-
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
+                  infoGiaChu={infoGiaChu}
                   valueSelect={valueSelect}
-                  data={stepShow.step3}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )}
-          {stepShow.step4 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Bước 3: {"Kiểm tra Trực/Tú"}
-                {stepShow.step4 && ` (${stepShow.step4?.length})`}
-              </div>
-
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
-                  valueSelect={valueSelect}
-                  data={stepShow.step4}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  checkTrungXungHaiTuoi={true}
+                  toaNha={""}></TableTrucXungNgayThang>
               </div>
             </div>
           )}
@@ -706,15 +581,15 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Bước 4: {"Chọn giờ"}
-                {stepShow.step5 && ` (${stepShow.step5?.length})`}
+                Bước 3: Chọn giờ
+                {stepShow.step5 && `(${stepShow.step5?.length})`}
               </div>
 
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
+                <TableXayDung
                   valueSelect={valueSelect}
                   data={stepShow.step5}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  infoGiaChu={infoGiaChu}></TableXayDung>
               </div>
             </div>
           )}
@@ -723,14 +598,15 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Bước 5: Loại bỏ những ngày không có giờ
+                Bước {"4"}: Loại bỏ những ngày không có giờ
                 {stepShow.step8 && `(${stepShow.step8?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
+                <TableResultStepFinal
                   valueSelect={valueSelect}
                   data={stepShow.step8}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  infoGiaChu={infoGiaChu}
+                  toaNha={""}></TableResultStepFinal>
               </div>
             </div>
           )}

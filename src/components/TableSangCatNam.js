@@ -87,7 +87,7 @@ const TableSangCatNam = ({
                     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
                   )
                 )
-                  xungNam = "Xung, Trực, Hình, Hại";
+                  xungNam = "Xung, Trùng, Hình, Hại";
                 if (isLeapYearLunar(year)) xungNam = "Năm nhuận";
 
                 return (

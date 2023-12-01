@@ -29,28 +29,39 @@ import {
 import {
   CheckDaiBai,
   CheckDuongCong,
+  CheckGioSatChu,
+  CheckGioThoTu,
   CheckNguHanhTuongKhac,
+  CheckNguHanhTuongKhacKhauQuyet,
   CheckNhiHop,
+  CheckSinhHanh,
   CheckSinhXuat,
   CheckTamHop,
   CheckTamTai,
   CheckThienTaiDiaHoa,
+  CheckTrucXungChi,
   CheckTrucXungNgayThangNam,
-  CheckTuongXungTuongHaiTuoi,
+  CheckTySinh,
+  CombineThienCan,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
+import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
+import { GetErrorGioHopHoa } from "@Root/script/HandleGetErrorShow";
 
-const TableTrucXungNgayThang = ({
+const TableXayDung = ({
+  step,
   data,
   infoGiaChu,
   valueSelect,
-  checkTrungXungHaiTuoi = false,
   toaNha,
+  checkHopHoa,
+  KhongCheckThemDongTho = false,
 }) => {
-  // console.log(infoGiaChu, "infoGiaChu");
+  console.log(valueSelect, "valueSelect");
+
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -105,6 +116,13 @@ const TableTrucXungNgayThang = ({
                     minWidth: 120,
                   }}>
                   Can/Chi Tháng
+                </TableCell>
+                <TableCell
+                  style={{
+                    textAlign: "center",
+                    minWidth: 120,
+                  }}>
+                  Can/Chi Năm
                 </TableCell>
                 <TableCell
                   style={{
@@ -201,9 +219,6 @@ const TableTrucXungNgayThang = ({
                     (valueSelect === "dong-tho" || valueSelect === "nhap-trach")
                   )
                     backky.push("Thien Tai Dia Hoa");
-                  if (CheckTrucXungNgayThangNam(toaNha, date.ngayChi)) {
-                    backky.push("Xung toạ");
-                  }
                 }
                 // if(CheckTamTai(tuoiChiGiaChu, date.namChi)) backky="Tam Tai"
                 if (date.dayLunar === 1) backky.push("Mùng 1");
@@ -225,15 +240,6 @@ const TableTrucXungNgayThang = ({
                   backky.push("Vãng vong");
                 if (NGUYET_PHA[date.monthLunar - 1] === date.ngayChi)
                   backky.push("Nguyệt Phá");
-                // Trung xung hai tuoi
-                if (
-                  CheckTuongXungTuongHaiTuoi(
-                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                    date.ngayChi
-                  )
-                )
-                  backky.push("Trùng, Xung tuổi");
-
                 if (
                   CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(date.yearLunar) % 12],
@@ -249,18 +255,69 @@ const TableTrucXungNgayThang = ({
                 ) {
                   backky.push("Đại Hao");
                 }
+                if (checkHopHoa) {
+                  let combineThienCanNgayThang = CombineThienCan(
+                    date.thangCan,
+                    date.ngayCan
+                  );
+                  let combineThienCanNgayNam = CombineThienCan(
+                    date.namCan,
+                    date.ngayCan
+                  );
 
-                // if (CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[date.ngayCan])) {
-                //   backky.push("Sinh xuất");
-                // }
-                // if (
-                //   CheckNguHanhTuongKhac(
-                //     NGU_HANH[toaNha],
-                //     NGU_HANH[date.ngayCan]
-                //   )
-                // ) {
-                //   backky.push("Khắc ngũ hành");
-                // }
+                  if (
+                    combineThienCanNgayThang.length !== 0 ||
+                    combineThienCanNgayNam.length !== 0
+                  ) {
+                    // console.log(
+                    //   NGU_HANH[toaNha],
+                    //   CheckNguHanhTuongKhac(
+                    //     NGU_HANH[toaNha],
+                    //     combineThienCanNgayThang
+                    //   )
+                    // );
+                    if (
+                      // ngay Thang
+                      (CheckNguHanhTuongKhacKhauQuyet(
+                        NGU_HANH[date.thangChi],
+                        combineThienCanNgayThang
+                      ) ||
+                        CheckNguHanhTuongKhacKhauQuyet(
+                          NGU_HANH[date.ngayChi],
+                          combineThienCanNgayThang
+                        ) ||
+                        CheckNguHanhTuongKhac(
+                          NGU_HANH[toaNha],
+                          combineThienCanNgayThang
+                        ) ||
+                        CheckSinhXuat(
+                          NGU_HANH[toaNha],
+                          combineThienCanNgayThang
+                        ) ||
+                        // ngay Nam
+                        CheckNguHanhTuongKhacKhauQuyet(
+                          NGU_HANH[date.namChi],
+                          combineThienCanNgayNam
+                        ) ||
+                        CheckNguHanhTuongKhacKhauQuyet(
+                          NGU_HANH[date.ngayChi],
+                          combineThienCanNgayNam
+                        ) ||
+                        CheckNguHanhTuongKhac(
+                          NGU_HANH[toaNha],
+                          combineThienCanNgayNam
+                        ) ||
+                        CheckSinhXuat(
+                          NGU_HANH[toaNha],
+                          combineThienCanNgayNam
+                        )) &&
+                      valueSelect !== "dao-gieng" &&
+                      valueSelect !== "lap-gieng"
+                    ) {
+                      backky.push("Hợp hoá");
+                    }
+                  }
+                }
                 return (
                   <TableRow
                     style={{
@@ -271,7 +328,13 @@ const TableTrucXungNgayThang = ({
                     <TableCell
                       style={{
                         textAlign: "center",
+                        flexDirection: "row",
+                        minWidth: 0,
                       }}>
+                      {CheckNguHanhTuongKhac(
+                        NGU_HANH[toaNha],
+                        NGU_HANH[date.ngayCan]
+                      ) && <SwapHorizOutlinedIcon />}{" "}
                       {index + 1}
                     </TableCell>
                     <TableCell
@@ -285,11 +348,7 @@ const TableTrucXungNgayThang = ({
                         textAlign: "center",
                       }}>
                       {date.dayLunar} - {date.monthLunar}- {date.yearLunar}{" "}
-                      <div>
-                        {backky.length !== 0
-                          ? "(" + backky.toString().replaceAll(",", ", ") + ")"
-                          : ""}
-                      </div>
+                      {backky.length !== 0 ? "(" + backky.toString() + ")" : ""}
                     </TableCell>
                     <TableCell
                       style={{
@@ -311,6 +370,13 @@ const TableTrucXungNgayThang = ({
                     <TableCell
                       style={{
                         textAlign: "center",
+                        color: COLOR_TEXT_NGU_HANH[NGU_HANH[date.namCan]],
+                      }}>
+                      {date.namCan} {date.namChi} ({NGU_HANH[date.namCan]})
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
                         flexDirection: "row",
                         alignItems: "center",
                       }}>
@@ -318,7 +384,7 @@ const TableTrucXungNgayThang = ({
                         style={{
                           color: Object.keys(
                             ObjectTruc[date.truc].KhongLam
-                          ).includes(valueSelect)
+                          ).includes()
                             ? "red"
                             : "green",
                           textTransform: Object.keys(
@@ -362,18 +428,105 @@ const TableTrucXungNgayThang = ({
                       style={{
                         fontSize: 12,
                       }}>
-                      <span style={{}}>
+                      <div style={{}}>
                         {date?.gio && (
                           <div>
                             Trong thời gian mặt trời mọc:
-                            <div className="flex flex-row text-center my-1">
+                            <div className="flex flex-col my-1">
                               {date.gio?.map((itemGio, index) => {
+                                let timeNormal = [];
+                                // Normal
+                                if (CheckTrucXungNgayThangNam(itemGio, toaNha))
+                                  timeNormal.push("Xung toạ");
+
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    itemGio,
+                                    date.ngayChi
+                                  )
+                                )
+                                  timeNormal.push("Xung ngày");
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    itemGio,
+                                    date.thangChi
+                                  )
+                                ) {
+                                  timeNormal.push("Xung tháng");
+                                }
+                                if (CheckGioThoTu(date.ngayChi, itemGio)) {
+                                  timeNormal.push("Thọ tử");
+                                }
+                                if (CheckGioSatChu(date.monthLunar, itemGio)) {
+                                  timeNormal.push("Sát chủ");
+                                }
+                                // if (
+                                //   CheckNguHanhTuongKhac(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[
+                                //       date.arrGioCan[
+                                //         CHI_NAM_SORTED.indexOf(itemGio)
+                                //       ]
+                                //     ]
+                                //   ) &&
+                                //   valueSelect !== "dao-gieng" &&
+                                //   valueSelect !== "lap-gieng"
+                                // ) {
+                                //   timeNormal.push("Khắc hành toạ");
+                                // }
+                                if (
+                                  CheckTrucXungChi(
+                                    itemGio,
+                                    infoGiaChu?.tuoiGiaChu
+                                  )
+                                ) {
+                                  timeNormal.push("Xung, trùng tuổi");
+                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                }
+
+                                let timeErr = "";
+                                if (
+                                  CheckNguHanhTuongKhac(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[date.ngayCan]
+                                  )
+                                ) {
+                                  timeErr = GetErrorGioHopHoa(
+                                    itemGio,
+                                    date.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ],
+                                    date.ngayCan,
+                                    date.ngayChi,
+                                    date.thangCan,
+                                    date.thangChi,
+                                    date.namCan,
+                                    date.namChi,
+                                    toaNha
+                                  );
+                                }
+                                // if (
+                                //   CheckSinhXuat(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[
+                                //       date.arrGioCan[
+                                //         CHI_NAM_SORTED.indexOf(itemGio)
+                                //       ]
+                                //     ]
+                                //   ) === true &&
+                                //   CheckNguHanhTuongKhac(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[date.ngayCan]
+                                //   )
+                                // ) {
+                                //   timeErr = "Sinh Xuất";
+                                // }
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
                                   CHI_NAM_SORTED.indexOf(itemGio) < 9
                                 )
                                   return (
-                                    <span
+                                    <div
                                       key={Math.random()}
                                       style={{
                                         marginRight: 5,
@@ -414,25 +567,129 @@ const TableTrucXungNgayThang = ({
                                             )
                                           ? "(Nhị Hợp), "
                                           : "")}
-                                    </span>
+                                      {timeErr.length !== 0 &&
+                                        " (" + timeErr + ")"}
+                                      {timeNormal.length !== 0 &&
+                                        " (" +
+                                          timeNormal
+                                            .toString()
+                                            .replaceAll(",", ", ") +
+                                          ")"}
+                                    </div>
                                   );
                               })}
                             </div>
                           </div>
                         )}
-                      </span>
-                      <span className="my-2" style={{}}>
+                      </div>
+                      <div className="my-2" style={{}}>
                         {date?.gio && (
                           <div>
                             Trong thời gian mặt trời lặn:
-                            <div className="flex flex-row text-center my-1">
+                            <div className="flex flex-col my-1">
                               {date.gio?.map((itemGio, index) => {
+                                let timeNormal = [];
+                                // console.log(
+                                //   CheckTrucXungChi(
+                                //     itemGio,
+                                //     CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12]
+                                //   ),
+                                //   itemGio,
+                                //   "213123"
+                                // );
+                                // Normal
+                                if (CheckTrucXungNgayThangNam(itemGio, toaNha))
+                                  timeNormal.push("Xung toạ");
+
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    itemGio,
+                                    date.ngayChi
+                                  )
+                                )
+                                  timeNormal.push("Xung ngày");
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    itemGio,
+                                    date.thangChi
+                                  )
+                                ) {
+                                  timeNormal.push("Xung tháng");
+                                }
+                                if (CheckGioThoTu(date.ngayChi, itemGio)) {
+                                  timeNormal.push("Thọ tử");
+                                }
+                                if (CheckGioSatChu(date.monthLunar, itemGio)) {
+                                  timeNormal.push("Sát chủ");
+                                }
+                                // if (
+                                //   CheckNguHanhTuongKhac(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[
+                                //       date.arrGioCan[
+                                //         CHI_NAM_SORTED.indexOf(itemGio)
+                                //       ]
+                                //     ]
+                                //   ) &&
+                                //   valueSelect !== "dao-gieng" &&
+                                //   valueSelect !== "lap-gieng"
+                                // )
+                                //   timeNormal.push("Khắc hành toạ");
+                                if (
+                                  CheckTrucXungChi(
+                                    itemGio,
+                                    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12]
+                                  )
+                                ) {
+                                  timeNormal.push("Xung, trùng tuổi");
+                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                }
+
+                                //Hop Hoa
+                                let timeErr = "";
+                                if (
+                                  CheckNguHanhTuongKhac(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[date.ngayCan]
+                                  )
+                                ) {
+                                  timeErr = GetErrorGioHopHoa(
+                                    itemGio,
+                                    date.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ],
+                                    date.ngayCan,
+                                    date.ngayChi,
+                                    date.thangCan,
+                                    date.thangChi,
+                                    date.namCan,
+                                    date.namChi,
+                                    toaNha
+                                  );
+                                }
+                                // if (
+                                //   CheckSinhXuat(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[
+                                //       date.arrGioCan[
+                                //         CHI_NAM_SORTED.indexOf(itemGio)
+                                //       ]
+                                //     ]
+                                //   ) === true &&
+                                //   CheckNguHanhTuongKhac(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[date.ngayCan]
+                                //   )
+                                // ) {
+                                //   timeErr = "Sinh Xuất";
+                                // }
+
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
                                   CHI_NAM_SORTED.indexOf(itemGio) >= 9
                                 )
                                   return (
-                                    <span
+                                    <div
                                       key={Math.random()}
                                       style={{
                                         marginRight: 5,
@@ -473,13 +730,21 @@ const TableTrucXungNgayThang = ({
                                             )
                                           ? "(Nhị Hợp), "
                                           : "")}
-                                    </span>
+                                      {timeErr.length !== 0 &&
+                                        " (" + timeErr + ")"}
+                                      {timeNormal.length !== 0 &&
+                                        " (" +
+                                          timeNormal
+                                            .toString()
+                                            .replaceAll(",", ", ") +
+                                          ")"}
+                                    </div>
                                   );
                               })}
                             </div>
                           </div>
                         )}
-                      </span>
+                      </div>
                     </TableCell>
                     <TableCell
                       style={{
@@ -490,7 +755,7 @@ const TableTrucXungNgayThang = ({
                         {date?.gioHoangDao &&
                           date.gioHoangDao?.map((item, index) => {
                             return (
-                              <span
+                              <div
                                 key={Math.random()}
                                 style={{
                                   marginRight: 5,
@@ -514,7 +779,7 @@ const TableTrucXungNgayThang = ({
                                     date.arrGioCan[CHI_NAM_SORTED.indexOf(item)]
                                   ] +
                                   ")"}
-                              </span>
+                              </div>
                             );
                           })}
                       </span>
@@ -568,4 +833,4 @@ const TableTrucXungNgayThang = ({
     </Box>
   );
 };
-export default memo(TableTrucXungNgayThang);
+export default memo(TableXayDung);

@@ -45,13 +45,27 @@ import {
   CheckTrungTang,
   CheckSinhXuat,
   CombineThienCan,
+  CheckNguHanhTuongKhac,
+  CheckTrucXungHinhHaiChiTangSu,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
+import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
+import {
+  GetErrorGioHopHoa,
+  GetErrorTimeNormalSangCat,
+} from "@Root/script/HandleGetErrorShow";
 
 const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
-  // console.log(infoNguoiMat, "infoNguoiMat");
+  console.log(
+    CheckTrucXungHinhHaiChiTangSu(
+      CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
+      "Mão"
+    ),
+    Number(infoNguoiMat?.namSinh) % 12,
+    "infoNguoiMat"
+  );
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -112,6 +126,13 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                     textAlign: "center",
                     minWidth: 120,
                   }}>
+                  Can/Chi Năm
+                </TableCell>
+                <TableCell
+                  style={{
+                    textAlign: "center",
+                    minWidth: 120,
+                  }}>
                   Trực/Tú
                 </TableCell>
                 <TableCell
@@ -132,10 +153,10 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
             </TableHead>
             <TableBody>
               {data?.map((date, index) => {
-                let backky = "";
+                let backky = [];
                 // 1.
                 if (CheckTrucXungNgayThangNam(toaNha, date.ngayChi))
-                  backky = "Xung Toạ";
+                  backky.push("Xung Toạ");
 
                 // if (
                 //   !CheckNguHanhTuongSinh(
@@ -143,33 +164,33 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                 //     NGU_HANH[date.ngayCan]
                 //   )
                 // )
-                //   backky = "Ngũ hành tương khắc Toạ";
+                //   backky.push( "Ngũ hành tương khắc Toạ")
                 // 2.
                 if (
-                  CheckTrucXungHinhHaiChi(
+                  CheckTrucXungHinhHaiChiTangSu(
                     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
                     date.ngayChi
                   )
                 )
-                  backky = "Trùng, Xung tuổi mất";
+                  backky.push("Trùng, Xung, Hình, Hại tuổi mất");
 
-                if (date.dayLunar === 1) backky = "Mùng 1";
-                if (date.dayLunar === 15) backky = "Rằm";
+                if (date.dayLunar === 1) backky.push("Mùng 1");
+                if (date.dayLunar === 15) backky.push("Rằm");
                 if (
                   monthDays(date.yearLunar, date.monthLunar) === date.dayLunar
                 )
-                  backky = "Cuối tháng ";
-                if (NGUYET_KY.includes(date.dayLunar)) backky = "Nguyệt kỵ";
+                  backky.push("Cuối tháng ");
+                if (NGUYET_KY.includes(date.dayLunar)) backky.push("Nguyệt kỵ");
 
                 if (THO_TU[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Thọ Tử";
+                  backky.push("Thọ Tử");
                 if (SAT_CHU_AM[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Sát chủ âm";
+                  backky.push("Sát chủ âm");
                 if (SAT_CHU_DUONG[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Sát chủ dương";
+                  backky.push("Sát chủ dương");
                 // VANG_VONG[item.monthLunar - 1] !== item.ngayChi &&
                 if (NGUYET_PHA[date.monthLunar - 1] === date.ngayChi)
-                  backky = "Nguyệt Phá";
+                  backky.push("Nguyệt Phá");
                 //Trung Phuc
                 if (
                   CheckCase5TrungTang(
@@ -178,7 +199,7 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                     date.ngayChi
                   ).length !== 0
                 )
-                  backky = "Trùng Phục";
+                  backky.push("Trùng Phục");
                 // than Trung
                 if (
                   CheckCase4TrungTang(
@@ -187,27 +208,27 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                     date.ngayChi
                   ).length !== 0
                 )
-                  backky = " Thần Trùng";
+                  backky.push(" Thần Trùng");
                 // Trung Nhat
-                if (CheckNgayTrungNhat(date.ngayChi)) backky = "Trùng Nhật";
+                if (CheckNgayTrungNhat(date.ngayChi)) backky.push("Trùng Nhật");
                 // Ha Khoi
                 if (CheckNgayGioHaKhoi(date.monthLunar, date.ngayChi))
-                  backky = "Hà Khôi";
+                  backky.push("Hà Khôi");
                 // Thien Tac
                 if (CheckNgayGioThienTac(date.monthLunar, date.ngayChi))
-                  backky = "Thiên Tặc";
+                  backky.push("Thiên Tặc");
                 //Trung tang
                 if (CheckTrungTang(date.monthLunar, date.ngayCan))
-                  backky = "Trùng tang";
+                  backky.push("Trùng tang");
                 // kiep sat
                 if (CheckGioKiepSat(infoNguoiMat?.namSinh, date.ngayChi))
-                  backky = "Kiếp sát";
+                  backky.push("Kiếp sát");
                 // Ky chon cat
                 if (CheckKyChonCat(date.monthLunar, date.dayLunar))
-                  backky = "Kỵ Chôn cất";
-                if (CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[date.ngayCan])) {
-                  backky = "Sinh xuất";
-                }
+                  backky.push("Kỵ Chôn cất");
+                // if (CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[date.ngayCan])) {
+                //   backky.push("Sinh xuất");
+                // }
                 return (
                   <TableRow
                     style={{
@@ -219,6 +240,10 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                       style={{
                         textAlign: "center",
                       }}>
+                      {CheckNguHanhTuongKhac(
+                        NGU_HANH[toaNha],
+                        NGU_HANH[date.ngayCan]
+                      ) && <SwapHorizOutlinedIcon />}{" "}
                       {index + 1}
                     </TableCell>
                     <TableCell
@@ -247,9 +272,16 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                     <TableCell
                       style={{
                         textAlign: "center",
-                        color: COLOR_TEXT_NGU_HANH[date.hanhNgay],
+                        color: COLOR_TEXT_NGU_HANH[date.hanhThang],
                       }}>
                       {date.thangCan} {date.thangChi} ({date.hanhThang})
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                        color: COLOR_TEXT_NGU_HANH[NGU_HANH[date.namCan]],
+                      }}>
+                      {date.namCan} {date.namChi} ({NGU_HANH[date.namCan]})
                     </TableCell>
                     <TableCell
                       style={{
@@ -309,48 +341,42 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                         {date?.gio && (
                           <div>
                             Trong thời gian mặt trời mọc:
-                            <div className="flex flex-row text-center my-1">
+                            <div className="flex flex-col my-1">
                               {date.gio?.map((itemGio, index) => {
-                                let timeErr = "";
-                                let combineThienCanGioNgay = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.ngayCan
-                                );
-                                let combineThienCanGioThang = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.thangCan
-                                );
-                                let combineThienCanGioNam = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.namCan
+                                let timeNormal = GetErrorTimeNormalSangCat(
+                                  itemGio,
+                                  {
+                                    ...date,
+                                    cungNguoiMat:
+                                      CHI_NAM[
+                                        Number(infoNguoiMat?.namSinh) % 12
+                                      ],
+                                    chiNamSinh:
+                                      CHI_NAM[infoNguoiMat?.namSinh % 12],
+                                  },
+                                  toaNha
                                 );
 
+                                let timeErr = "";
                                 if (
-                                  combineThienCanGioNam === "" &&
-                                  combineThienCanGioThang === "" &&
-                                  combineThienCanGioNgay === "" &&
-                                  date.isTruongHop2BonusHoaHop === true
-                                ) {
-                                  timeErr = "Không hợp hoá";
-                                }
-                                if (
-                                  CheckSinhXuat(
+                                  CheckNguHanhTuongKhac(
                                     NGU_HANH[toaNha],
-                                    NGU_HANH[
-                                      date.arrGioCan[
-                                        CHI_NAM_SORTED.indexOf(itemGio)
-                                      ]
-                                    ]
-                                  ) === true &&
-                                  date.isTruongHop2BonusHoaHop === true
+                                    NGU_HANH[date.ngayCan]
+                                  )
                                 ) {
-                                  timeErr = "Sinh Xuất";
+                                  timeErr = GetErrorGioHopHoa(
+                                    itemGio,
+                                    date.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ],
+                                    date.ngayCan,
+                                    date.ngayChi,
+                                    date.thangCan,
+                                    date.thangChi,
+                                    date.namCan,
+                                    date.namChi,
+                                    toaNha
+                                  );
                                 }
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
@@ -389,31 +415,33 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                           CHI_NAM[infoNguoiMat?.namSinh % 12],
                                           itemGio
                                         )
-                                          ? "(Tam Hợp Nam), "
+                                          ? "(Tam Hợp), "
                                           : CheckTamHop(
                                               CHI_NAM[
                                                 infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Tam Hợp Nữ),"
+                                          ? "(Tam Hợp),"
                                           : CheckNhiHop(
                                               CHI_NAM[
                                                 infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nam), "
+                                          ? "(Nhị Hợp), "
                                           : CheckNhiHop(
                                               CHI_NAM[
                                                 infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nữ), "
+                                          ? "(Nhị Hợp), "
                                           : "")}
                                       {timeErr.length !== 0 &&
                                         " (" + timeErr + ")"}
+                                      {timeNormal.length !== 0 &&
+                                        " (" + timeNormal.toString() + ")"}
                                     </span>
                                   );
                               })}
@@ -425,48 +453,43 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                         {date?.gio && (
                           <div>
                             Trong thời gian mặt trời lặn:
-                            <div className="flex flex-row text-center my-1">
+                            <div className="flex flex-col  my-1">
                               {date.gio?.map((itemGio, index) => {
-                                let timeErr = "";
-                                let combineThienCanGioNgay = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.ngayCan
-                                );
-                                let combineThienCanGioThang = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.thangCan
-                                );
-                                let combineThienCanGioNam = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.namCan
+                                console.log(itemGio, "itemGioitemGio");
+                                let timeNormal = GetErrorTimeNormalSangCat(
+                                  itemGio,
+                                  {
+                                    ...date,
+                                    cungNguoiMat:
+                                      CHI_NAM[
+                                        Number(infoNguoiMat?.namSinh) % 12
+                                      ],
+                                    chiNamSinh:
+                                      CHI_NAM[infoNguoiMat?.namSinh % 12],
+                                  },
+                                  toaNha
                                 );
 
+                                let timeErr = "";
                                 if (
-                                  combineThienCanGioNam === "" &&
-                                  combineThienCanGioThang === "" &&
-                                  combineThienCanGioNgay === "" &&
-                                  date.isTruongHop2BonusHoaHop === true
-                                ) {
-                                  timeErr = "Không hợp hoá";
-                                }
-                                if (
-                                  CheckSinhXuat(
+                                  CheckNguHanhTuongKhac(
                                     NGU_HANH[toaNha],
-                                    NGU_HANH[
-                                      date.arrGioCan[
-                                        CHI_NAM_SORTED.indexOf(itemGio)
-                                      ]
-                                    ]
-                                  ) === true &&
-                                  date.isTruongHop2BonusHoaHop === true
+                                    NGU_HANH[date.ngayCan]
+                                  )
                                 ) {
-                                  timeErr = "Sinh Xuất";
+                                  timeErr = GetErrorGioHopHoa(
+                                    itemGio,
+                                    date.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ],
+                                    date.ngayCan,
+                                    date.ngayChi,
+                                    date.thangCan,
+                                    date.thangChi,
+                                    date.namCan,
+                                    date.namChi,
+                                    toaNha
+                                  );
                                 }
 
                                 if (
@@ -506,31 +529,33 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                           CHI_NAM[infoNguoiMat?.namSinh % 12],
                                           itemGio
                                         )
-                                          ? "(Tam Hợp Nam), "
+                                          ? "(Tam Hợp), "
                                           : CheckTamHop(
                                               CHI_NAM[
                                                 infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Tam Hợp Nữ),"
+                                          ? "(Tam Hợp),"
                                           : CheckNhiHop(
                                               CHI_NAM[
                                                 infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nam), "
+                                          ? "(Nhị Hợp), "
                                           : CheckNhiHop(
                                               CHI_NAM[
                                                 infoNguoiMat?.namSinh % 12
                                               ],
                                               itemGio
                                             )
-                                          ? "(Nhị Hợp Nữ), "
+                                          ? "(Nhị Hợp), "
                                           : "")}
                                       {timeErr.length !== 0 &&
                                         " (" + timeErr + ")"}
+                                      {timeNormal.length !== 0 &&
+                                        " (" + timeNormal.toString() + ")"}
                                     </span>
                                   );
                               })}
@@ -544,7 +569,7 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                         fontSize: 12,
                         textAlign: "center",
                       }}>
-                      <span className="flex flex-row text-center" style={{}}>
+                      <span className="flex flex-col" style={{}}>
                         {date?.gioHoangDao &&
                           date.gioHoangDao?.map((item, index) => {
                             return (

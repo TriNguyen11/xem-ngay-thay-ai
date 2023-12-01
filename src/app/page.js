@@ -13,9 +13,10 @@ import {
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
-import TableShow from "@Root/components/Table";
+
 import TableNamKimLauHoangOcTamTai from "@Root/components/TableNamKimLauHoangOcTamTai";
 import TableResult from "@Root/components/TableResult";
+import TableResultStepFinal from "@Root/components/TableResultStepFinal";
 import TableSangCatThang from "@Root/components/TableSangCatThang";
 import TableSangCatTrucTu from "@Root/components/TableSangCatTrucTu";
 import TableShowRecommend from "@Root/components/TableShowRecommend";
@@ -56,6 +57,7 @@ import {
   CheckNguHanhTuongKhac,
   CheckNguHanhTuongKhacKhauQuyet,
   CheckNguHanhTuongSinh,
+  CheckSinhXuat,
   CheckTamTai,
   CheckThienTaiDiaHoa,
   CheckTrucXungGio,
@@ -71,10 +73,15 @@ import {
   getCanChi,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
+import {
+  handleHopHoaGio,
+  handleHopHoaNgayThang,
+} from "@Root/script/handleHopHoaNgayThang";
 import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import TableXayDung from "./xay-dung/component/TableXayDung";
 
 export default function Home() {
   const refNotify = React.useRef();
@@ -186,18 +193,10 @@ export default function Home() {
 
     let dateArrNgayLoaiThang = []; // dateArrNgayLoaiThang
     let monthInYear = {};
+    let checkLeapMonth = false;
+
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
-      // if (
-      //   !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
-      //   !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
-      //   !CheckTrucXungHinhHaiChi(
-      //     item.thangChi,
-      //     CHI_NAM[Number(tuoiGiaChu) % 12]
-      //   )
-      // ) {
-      //   arrPerfectDateStep1.push(item);
-      // }
       if (
         !CheckTrucXungNgayThangNam(valueText, item.thangChi) &&
         !CheckTrucXungHinhHaiChi(
@@ -210,12 +209,35 @@ export default function Home() {
       if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
         monthInYear[item.yearLunar] = {};
       }
+
+      if (
+        index < dateArr.length &&
+        dateArr[index + 1] !== undefined &&
+        item.yearLunar !== dateArr[index + 1].yearLunar
+      ) {
+        checkLeapMonth = false;
+      }
+
       if (!Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar)) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
+        if (item.isLeap) {
+          checkLeapMonth = true;
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+            isLeap: item.isLeap,
+          };
+        } else {
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+          };
+        }
       }
     });
     // kiem tra truc/tu
@@ -253,15 +275,21 @@ export default function Home() {
           item.ngayChi
         ) &&
         // tranh trung xung hai tuoi gia chu
-        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi) &&
-        !CheckTrucXungNgayThangNam(valueText, item.ngayChi)
+        !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
+        !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi)
+        // &&
+        // Sinh Xuat
+        // !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
         arrPerfectDateStep3.push(item);
       }
     });
 
     // Xet them hop hoa
-    arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep3);
+    arrPerfectDateStep6 = await handleHopHoaNgayThang(
+      arrPerfectDateStep3,
+      valueText
+    );
 
     let arrHours = [];
     let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
@@ -283,80 +311,27 @@ export default function Home() {
         item.ngayChi,
         item.thangChi,
         CHI_NAM[tuoiGiaChu % 12],
-        item.monthLunar
+        item.monthLunar,
+        item.arrGioCan
       );
+
+      arrPerfectDateStep6[ind] = {
+        ...item,
+        gio: CheckHoangDao(item.ngayChi),
+      };
 
       if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
         // if (combineThienCanNgayThang.length !== 0) {
-        arrHours.map((hour, index) => {
-          let combineThienCanGioNgay = CombineThienCan(
-            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-            item.ngayCan
-          );
-          let combineThienCanGioThang = CombineThienCan(
-            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-            item.thangCan
-          );
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioNgay
-            ) === false &&
-            combineThienCanGioThang === "" &&
-            combineThienCanGioNgay !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HD");
-            arrHoursOke.push(hour);
-          }
-
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioThang
-            ) === false &&
-            combineThienCanGioNgay === "" &&
-            combineThienCanGioThang !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HM");
-            arrHoursOke.push(hour);
-          }
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioNgay
-            ) === false &&
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioThang
-            ) === false &&
-            combineThienCanGioNgay !== "" &&
-            combineThienCanGioThang !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HDM");
-            arrHoursOke.push(hour);
-          }
-        });
-        if (isCheckGioNgayThangWhileCanNgayKhacToaNha) {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: true,
-            titleCheckGioNgayThang,
-            arrHoursOke,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep9.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: true,
-              titleCheckGioNgayThang,
-              arrHoursOke,
-            });
-          }
-        }
+        handleHopHoaGio(
+          item,
+          arrHours,
+          isCheckGioNgayThangWhileCanNgayKhacToaNha,
+          arrHoursOke,
+          titleCheckGioNgayThang,
+          valueText,
+          arrPerfectDateStep5,
+          arrPerfectDateStep9
+        );
       } else {
         // ty hoa
         if (NGU_HANH[valueText] === NGU_HANH[item.ngayCan]) {
@@ -402,6 +377,7 @@ export default function Home() {
 
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
+
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
 
     setArrMonthInYear(monthInYear);
@@ -464,6 +440,7 @@ export default function Home() {
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
     let arrPerfectDateStep8 = []; // bonus dong-tho nhap-trach
     let arrPerfectDateStep9 = []; // loc gio
+    let arrHoursHop = []; // loc gio
     let KimLau = [];
     let HoangOc = [];
     let TamTai = [];
@@ -476,6 +453,7 @@ export default function Home() {
 
     let dateArrNgayLoaiThang = []; // dateArrNgayLoaiThang
     let monthInYear = {};
+
     // Xac dinh KimLau, HoangOc,TamTai
     dateArr.map((item, index) => {
       if (!lunarYear.includes(item.yearLunar)) lunarYear.push(item.yearLunar);
@@ -505,6 +483,7 @@ export default function Home() {
     });
 
     if (valueSelect === "dong-tho") handleRecommendYearDongTho(lunarYear);
+    let checkLeapMonth = false;
 
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
@@ -531,6 +510,14 @@ export default function Home() {
         monthInYear[item.yearLunar] = {};
       }
       if (
+        index < dateArr.length &&
+        dateArr[index - 1] !== undefined &&
+        item.yearLunar !== dateArr[index - 1].yearLunar
+      ) {
+        checkLeapMonth = false;
+      }
+
+      if (
         !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar) &&
         !KimLau.includes(item.yearLunar) &&
         !TamTai.includes(item.yearLunar) &&
@@ -542,11 +529,25 @@ export default function Home() {
         CHI_NAM[Number(tuoiGiaChu) % 12] !==
           CHI_NAM[Number(item.yearLunar) % 12]
       ) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
+        if (item.isLeap) {
+          checkLeapMonth = true;
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+            isLeap: item.isLeap,
+          };
+        } else {
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+          };
+        }
       }
     });
 
@@ -590,16 +591,16 @@ export default function Home() {
         // tranh trung xung hai tuoi gia chu
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
         !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.ngayChi)
+        //  &&
+        // Sinh Xuat
+        // !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
         arrPerfectDateStep4.push(item);
       }
     });
 
-    // Xet them hop hoa ngay/thang
-    arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep4);
-
     //xet them dong-tho nhap-trach
-    arrPerfectDateStep6.map((item, ind) => {
+    arrPerfectDateStep4.map((item, ind) => {
       if (
         !CheckThienTaiDiaHoa(item.ngayChi, item.monthLunar) &&
         !CheckDaiBai(
@@ -634,14 +635,16 @@ export default function Home() {
                 7
               )
             )
-          ].includes(item.ngayChi) &&
-          CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiGiaChu % 12], item.namChi) ===
-            false
+          ].includes(item.ngayChi)
         )
           arrPerfectDateStep3.push(item);
       }
     });
-
+    // Xet them hop hoa ngay/thang
+    arrPerfectDateStep6 = await handleHopHoaNgayThang(
+      arrPerfectDateStep3,
+      valueText
+    );
     // Chon gio
     let arrHours = [];
     let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
@@ -649,7 +652,7 @@ export default function Home() {
     let titleCheckGioNgayThang = [];
 
     // Chon gio
-    arrPerfectDateStep3.map((item, ind) => {
+    arrPerfectDateStep6.map((item, ind) => {
       isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
       arrHoursOke = [];
       titleCheckGioNgayThang = [];
@@ -657,86 +660,32 @@ export default function Home() {
         item.ngayCan,
         item.thangCan
       );
-
       arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
         item.thangChi,
         CHI_NAM[tuoiGiaChu % 12],
-        item.monthLunar
+        item.monthLunar,
+        item.arrGioCan
       );
+      arrPerfectDateStep6[ind] = {
+        ...item,
+        gio: CheckHoangDao(item.ngayChi),
+      };
+
       // if (combineThienCanNgayThang.length !== 0) {
       if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
         // if (combineThienCanNgayThang.length !== 0) {
-        arrHours.map((hour, index) => {
-          let combineThienCanGioNgay = CombineThienCan(
-            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-            item.ngayCan
-          );
-          let combineThienCanGioThang = CombineThienCan(
-            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-            item.thangCan
-          );
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioNgay
-            ) === false &&
-            combineThienCanGioThang === "" &&
-            combineThienCanGioNgay !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HD");
-            arrHoursOke.push(hour);
-          }
-
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioThang
-            ) === false &&
-            combineThienCanGioNgay === "" &&
-            combineThienCanGioThang !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HM");
-            arrHoursOke.push(hour);
-          }
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioNgay
-            ) === false &&
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioThang
-            ) === false &&
-            combineThienCanGioNgay !== "" &&
-            combineThienCanGioThang !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HDM");
-            arrHoursOke.push(hour);
-          }
-        });
-        if (isCheckGioNgayThangWhileCanNgayKhacToaNha) {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: true,
-            titleCheckGioNgayThang,
-            arrHoursOke,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep9.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: true,
-              titleCheckGioNgayThang,
-              arrHoursOke,
-            });
-          }
-        }
+        handleHopHoaGio(
+          item,
+          arrHours,
+          isCheckGioNgayThangWhileCanNgayKhacToaNha,
+          arrHoursOke,
+          titleCheckGioNgayThang,
+          valueText,
+          arrPerfectDateStep5,
+          arrPerfectDateStep9
+        );
       } else {
         // ty hoa
         if (NGU_HANH[valueText] === NGU_HANH[item.ngayCan]) {
@@ -769,20 +718,6 @@ export default function Home() {
           }
         }
       }
-      // } else {
-      //   arrPerfectDateStep5.push({
-      //     ...item,
-      //     gio: arrHours,
-      //     isTruongHop2BonusHoaHop: undefined,
-      //   });
-      //   if (arrHours.length !== 0) {
-      //     arrPerfectDateStep9.push({
-      //       ...item,
-      //       gio: arrHours,
-      //       isTruongHop2BonusHoaHop: undefined,
-      //     });
-      //   }
-      // }
     });
     // Xet hop hoa ngay/gio
     arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
@@ -947,6 +882,8 @@ export default function Home() {
       TamTai,
     });
 
+    let checkLeapMonth = false;
+
     // Xac dinh ngay/thang xung toa nha
     dateArr.map((item, index) => {
       if (
@@ -969,6 +906,15 @@ export default function Home() {
       if (!Object.keys(monthInYear).includes(item.yearLunar.toString())) {
         monthInYear[item.yearLunar] = {};
       }
+
+      if (
+        index < dateArr.length &&
+        dateArr[index - 1] !== undefined &&
+        item.yearLunar !== dateArr[index - 1].yearLunar
+      ) {
+        checkLeapMonth = false;
+      }
+
       if (
         !Object.keys(monthInYear[item.yearLunar]).includes(item.monthLunar) &&
         !KimLau.includes(item.yearLunar) &&
@@ -980,11 +926,25 @@ export default function Home() {
         ) &&
         CHI_NAM[Number(tuoiMuon) % 12] !== CHI_NAM[Number(item.yearLunar) % 12]
       ) {
-        monthInYear[item.yearLunar][item.monthLunar] = {
-          month: item.monthLunar,
-          canMonth: item.thangCan,
-          chiMonth: item.thangChi,
-        };
+        if (item.isLeap) {
+          checkLeapMonth = true;
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+            isLeap: item.isLeap,
+          };
+        } else {
+          monthInYear[item.yearLunar][
+            item.monthLunar + (checkLeapMonth ? 1 : 0)
+          ] = {
+            month: item.monthLunar,
+            canMonth: item.thangCan,
+            chiMonth: item.thangChi,
+          };
+        }
       }
     });
 
@@ -999,6 +959,7 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
+    console.log(tuoiChiMuon, "tuoiChiMuon");
     // Tranh Bach ky
     arrPerfectDateStep2.map((item, index) => {
       if (
@@ -1026,16 +987,16 @@ export default function Home() {
         ) &&
         !CheckTrucXungNgayThangNam(valueText, item.ngayChi) &&
         !CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiMuon % 12], item.ngayChi)
+        //  &&
+        // Sinh Xuat
+        // !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
         arrPerfectDateStep4.push(item);
       }
     });
-
-    // Xet them hop hoa ngay/thang
-    arrPerfectDateStep6 = await handleHopHoaNgayThang(arrPerfectDateStep4);
-
+    console.log(arrPerfectDateStep4.length, "borrorww");
     //xet them dong-tho nhap-trach
-    arrPerfectDateStep6.map((item, ind) => {
+    arrPerfectDateStep4.map((item, ind) => {
       if (
         !CheckThienTaiDiaHoa(item.ngayChi, item.monthLunar) &&
         !CheckDaiBai(
@@ -1047,8 +1008,6 @@ export default function Home() {
       ) {
         if (valueSelect === "nhap-trach") arrPerfectDateStep3.push(item);
         else if (
-          CheckTuongXungTuongHaiTuoi(CHI_NAM[tuoiMuon % 12], item.namChi) ===
-            false &&
           HOANG_VU_TU_QUY[
             GetHoangVuTuQuy(
               getSunLongitude(
@@ -1078,14 +1037,18 @@ export default function Home() {
       }
     });
 
+    // Xet them hop hoa ngay/thang
+    arrPerfectDateStep6 = await handleHopHoaNgayThang(
+      arrPerfectDateStep3,
+      valueText
+    );
     // Chon gio
-
     let arrHours = [];
     let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
     let arrHoursOke = [];
     let titleCheckGioNgayThang = [];
 
-    arrPerfectDateStep3.map((item, ind) => {
+    arrPerfectDateStep6.map((item, ind) => {
       isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
       arrHoursOke = [];
       titleCheckGioNgayThang = [];
@@ -1099,81 +1062,26 @@ export default function Home() {
         item.ngayChi,
         item.thangChi,
         CHI_NAM[tuoiMuon % 12],
-        item.monthLunar
+        item.monthLunar,
+        item.arrGioCan
       );
+      arrPerfectDateStep6[ind] = {
+        ...item,
+        gio: CheckHoangDao(item.ngayChi),
+      };
 
       // if (combineThienCanNgayThang.length !== 0) {
       if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
-        // if (combineThienCanNgayThang.length !== 0) {
-        arrHours.map((hour, index) => {
-          let combineThienCanGioNgay = CombineThienCan(
-            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-            item.ngayCan
-          );
-          let combineThienCanGioThang = CombineThienCan(
-            item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-            item.thangCan
-          );
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioNgay
-            ) === false &&
-            combineThienCanGioThang === "" &&
-            combineThienCanGioNgay !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HD");
-            arrHoursOke.push(hour);
-          }
-
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioThang
-            ) === false &&
-            combineThienCanGioNgay === "" &&
-            combineThienCanGioThang !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HM");
-            arrHoursOke.push(hour);
-          }
-          if (
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioNgay
-            ) === false &&
-            CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanGioThang
-            ) === false &&
-            combineThienCanGioNgay !== "" &&
-            combineThienCanGioThang !== ""
-          ) {
-            isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
-            titleCheckGioNgayThang.push("HDM");
-            arrHoursOke.push(hour);
-          }
-        });
-        if (isCheckGioNgayThangWhileCanNgayKhacToaNha) {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: true,
-            titleCheckGioNgayThang,
-            arrHoursOke,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep9.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: true,
-              titleCheckGioNgayThang,
-              arrHoursOke,
-            });
-          }
-        }
+        handleHopHoaGio(
+          item,
+          arrHours,
+          isCheckGioNgayThangWhileCanNgayKhacToaNha,
+          arrHoursOke,
+          titleCheckGioNgayThang,
+          valueText,
+          arrPerfectDateStep5,
+          arrPerfectDateStep9
+        );
       } else {
         // ty hoa
         if (NGU_HANH[valueText] === NGU_HANH[item.ngayCan]) {
@@ -1206,20 +1114,6 @@ export default function Home() {
           }
         }
       }
-      // } else {
-      //   arrPerfectDateStep5.push({
-      //     ...item,
-      //     gio: arrHours,
-      //     isTruongHop2BonusHoaHop: undefined,
-      //   });
-      //   if (arrHours.length !== 0) {
-      //     arrPerfectDateStep9.push({
-      //       ...item,
-      //       gio: arrHours,
-      //       isTruongHop2BonusHoaHop: undefined,
-      //     });
-      //   }
-      // }
     });
 
     // Xet hop hoa ngay/gio
@@ -1233,9 +1127,11 @@ export default function Home() {
       namSinh: tuoiGiaChu,
     });
     // xac dinh can chi tuoi muon
+
     setInfoGiaChuBorrow({
       ...infoGiaChuBorrow,
       tuoi: tuoiCanMuon + " " + tuoiChiMuon,
+      tuoiGiaChu: tuoiMuon,
       tuoiTuoiMuon: tuoiMuon,
       namSinh: tuoiMuon,
     });
@@ -1265,75 +1161,7 @@ export default function Home() {
     // setLoading(false);
   };
 
-  const handleHopHoaNgayThang = async (arr, toa) => {
-    let ArrHopHoa = [];
-    arr?.map((item, ind) => {
-      let combineThienCanNgayThang = CombineThienCan(
-        item.thangCan,
-        item.ngayCan
-      );
-
-      if (combineThienCanNgayThang.length !== 0) {
-        if (
-          !CheckNguHanhTuongKhacKhauQuyet(
-            NGU_HANH[item.thangChi],
-            combineThienCanNgayThang
-          ) &&
-          !CheckNguHanhTuongKhacKhauQuyet(
-            NGU_HANH[item.ngayChi],
-            combineThienCanNgayThang
-          )
-        ) {
-          if (
-            !CheckNguHanhTuongKhac(
-              NGU_HANH[valueText],
-              combineThienCanNgayThang
-            )
-          )
-            ArrHopHoa.push(item);
-        } else {
-          ArrHopHoa.push(item);
-        }
-      } else {
-        ArrHopHoa.push(item);
-      }
-    });
-    // return 1;
-    // console.log(ArrHopHoa, "ArrHopHoa");
-    return ArrHopHoa;
-  };
   const handleHopHoaNgayGio = async (arr, toa) => {
-    // let ArrHopHoa = [];
-    // arr?.forEach((item, ind) => {
-    //   let combineThienCanNgayGio = "";
-    //   item.gio.map((itemGio) => {
-    //     combineThienCanNgayGio = CombineThienCan(
-    //       item.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)],
-    //       item.ngayCan
-    //     );
-    //     if (combineThienCanNgayGio.length !== 0) {
-    //       if (
-    //         !CheckNguHanhTuongKhac(
-    //           NGU_HANH[valueText],
-    //           combineThienCanNgayGio
-    //         ) &&
-    //         !CheckNguHanhTuongKhac(
-    //           NGU_HANH[item.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]],
-    //           combineThienCanNgayGio
-    //         ) &&
-    //         !CheckNguHanhTuongKhac(
-    //           NGU_HANH[item.ngayChi],
-    //           combineThienCanNgayGio
-    //         )
-    //       ) {
-    //         ArrHopHoa.push(itemGio);
-    //       }
-    //     } else {
-    //       ArrHopHoa.push(itemGio);
-    //     }
-    //   });
-    //   item.gio = ArrHopHoa;
-    // });
     return arr;
   };
   const handleGetPerfectDateKhongToa = async () => {
@@ -1511,7 +1339,6 @@ export default function Home() {
     });
     setArrRecommend(arrYearRecommend);
   };
-  console.log(arrMonthInYear, "val");
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1848,7 +1675,7 @@ export default function Home() {
             style={{
               width: window.innerWidth * 0.9,
             }}>
-            {rangeDayInMonthLunar &&
+            {/* {rangeDayInMonthLunar &&
               Object.keys(rangeDayInMonthLunar).map((year) => {
                 return (
                   <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
@@ -1879,7 +1706,7 @@ export default function Home() {
                     })}
                   </ul>
                 );
-              })}
+              })} */}
           </div>
           {/* Nhan */}
           <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>
@@ -2029,7 +1856,8 @@ export default function Home() {
                         <TableResult
                           data={item}
                           infoGiaChu={infoGiaChu}
-                          valueSelect={valueSelect}></TableResult>
+                          valueSelect={valueSelect}
+                          toaNha={valueText}></TableResult>
                       </div>
                     </>
                   );
@@ -2064,7 +1892,7 @@ export default function Home() {
                 <TableSangCatThang
                   valueSelect={valueSelect}
                   data={arrMonthInYear}
-                  infoNguoiMat={infoGiaChu}
+                  infoNguoiMat={isMuonTuoi ? infoGiaChuBorrow : infoGiaChu}
                   toaNha={valueText}
                   showFull={true}
                   textXungToa="Xung toạ nhà"></TableSangCatThang>
@@ -2097,7 +1925,7 @@ export default function Home() {
                       ? stepShow.dateArrNgayLoaiThang
                       : stepShow?.dateArr
                   }
-                  infoNguoiMat={infoGiaChu}
+                  infoNguoiMat={isMuonTuoi ? infoGiaChuBorrow : infoGiaChu}
                   toaNha={valueText}></TableSangCatTrucTu>
               </div>
             </div>
@@ -2117,7 +1945,7 @@ export default function Home() {
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
                 <TableTrucXungNgayThang
                   data={stepShow.step2}
-                  infoGiaChu={infoGiaChu}
+                  infoGiaChu={isMuonTuoi ? infoGiaChuBorrow : infoGiaChu}
                   valueSelect={valueSelect}
                   checkTrungXungHaiTuoi={true}
                   toaNha={valueText}></TableTrucXungNgayThang>
@@ -2134,14 +1962,18 @@ export default function Home() {
               </div>
 
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
+                <TableXayDung
                   valueSelect={valueSelect}
                   data={stepShow.step3}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  checkHopHoa={true}
+                  toaNha={valueText}
+                  infoGiaChu={
+                    isMuonTuoi ? infoGiaChuBorrow : infoGiaChu
+                  }></TableXayDung>
               </div>
             </div>
           )}
-          {stepShow.step5 && (
+          {stepShow.step6 && (
             <div>
               <div
                 className="font-bold text-[20px]"
@@ -2151,14 +1983,18 @@ export default function Home() {
                   ? "4"
                   : "3"}
                 : {"Chọn giờ "}
-                {stepShow.step5 && `(${stepShow.step5?.length})`}
+                {stepShow.step6 && `(${stepShow.step6?.length})`}
               </div>
 
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
+                <TableXayDung
                   valueSelect={valueSelect}
-                  data={stepShow.step5}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  checkHopHoa={true}
+                  toaNha={valueText}
+                  data={stepShow.step6}
+                  infoGiaChu={
+                    isMuonTuoi ? infoGiaChuBorrow : infoGiaChu
+                  }></TableXayDung>
               </div>
             </div>
           )}
@@ -2168,14 +2004,18 @@ export default function Home() {
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Kiểm tra thêm hợp hoá ngày/giờ{" "}
-                {stepShow.step7 && `(${stepShow.step7?.length})`}
+                {stepShow.step5 && `(${stepShow.step5?.length})`}
               </div>
 
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
+                <TableXayDung
+                  checkHopHoa={true}
+                  toaNha={valueText}
                   valueSelect={valueSelect}
-                  data={stepShow.step7}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  data={stepShow.step5}
+                  infoGiaChu={
+                    isMuonTuoi ? infoGiaChuBorrow : infoGiaChu
+                  }></TableXayDung>
               </div>
             </div>
           )}
@@ -2192,211 +2032,15 @@ export default function Home() {
                 {stepShow.step9 && `(${stepShow.step9?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
+                <TableResultStepFinal
                   valueSelect={valueSelect}
                   data={stepShow.step9}
-                  infoGiaChu={infoGiaChu}></TableShow>
+                  infoGiaChu={isMuonTuoi ? infoGiaChuBorrow : infoGiaChu}
+                  toaNha={valueText}></TableResultStepFinal>
               </div>
             </div>
           )}
           {/* Show table */}
-          {/* {valueSelect !== "dao-gieng" &&
-            valueSelect !== "lap-gieng" &&
-            stepShow.step1 && (
-              <div className="">
-                <div
-                  className="font-bold text-[20px]"
-                  style={{ color: "black", marginTop: 30 }}>
-                  Sau bước 1 {"(Tránh ngày, tháng xung toạ)"}
-                  {stepShow.step1 && `(${stepShow.step1?.length})`}
-                </div>
-                <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                  <TableShow
-                    data={stepShow.step1}
-                    infoGiaChu={infoGiaChu}
-                    valueSelect={valueSelect}></TableShow>
-                </div>
-              </div>
-            )}
-          {stepShow.step2 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Sau bước{" "}
-                {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-                  ? "2 "
-                  : "1 "}
-                {"Kiểm tra Trực/Tú"}
-                {stepShow.step2 && `(${stepShow.step2?.length})`}
-              </div>
-
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
-                  valueSelect={valueSelect}
-                  data={stepShow.step2}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )}
-          {stepShow.step3 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Sau bước{" "}
-                {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-                  ? "3 "
-                  : "2 "}
-                {"(Tránh bách kỵ)"}
-                {stepShow.step3 && `(${stepShow.step3?.length})`}
-              </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
-                  valueSelect={valueSelect}
-                  data={stepShow.step3}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )}
-          {valueSelect !== "dao-gieng" &&
-            valueSelect !== "lap-gieng" &&
-            stepShow.step6 && (
-              <div>
-                <div
-                  className="font-bold text-[20px]"
-                  style={{ color: "black", marginTop: 30 }}>
-                  Kiểm tra thêm hợp hoá ngày/tháng{" "}
-                  {stepShow.step6 && `(${stepShow.step6?.length})`}
-                </div>
-
-                <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                  <TableShow
-                    valueSelect={valueSelect}
-                    data={stepShow.step6}
-                    infoGiaChu={infoGiaChu}></TableShow>
-                </div>
-              </div>
-            )}
-          {(valueSelect === "dong-tho" || valueSelect === "nhap-trach") &&
-            stepShow.step8 && (
-              <div>
-                <div
-                  className="font-bold text-[20px]"
-                  style={{ color: "black", marginTop: 30 }}>
-                  Kiểm tra những ngày không nên {SERVICE_XAYDUNG[valueSelect]}{" "}
-                  {stepShow.step8 && `(${stepShow.step8?.length})`}
-                </div>
-
-                <div
-                  className="max-h-[500px] overflow-scroll
-              px-10 border-2 border-black mt-2">
-                  <TableShow
-                    valueSelect={valueSelect}
-                    data={stepShow.step8}
-                    infoGiaChu={infoGiaChu}></TableShow>
-                </div>
-              </div>
-            )}
-          {stepShow.step4 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Sau bước{" "}
-                {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-                  ? "4"
-                  : "3"}{" "}
-                {"(So với tuổi gia chủ)"}{" "}
-                {stepShow.step4 && `(${stepShow.step4?.length})`}
-              </div>
-
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
-                <TableShow
-                  valueSelect={valueSelect}
-                  data={stepShow.step4}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )}
-
-          {stepShow.step5 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Sau bước{" "}
-                {valueSelect !== "dao-gieng" && valueSelect !== "lap-gieng"
-                  ? "5"
-                  : "4"}{" "}
-                {"Chọn giờ"}
-              </div>
-
-              <div
-                className="max-h-[500px] overflow-scroll
-            px-10 border-2 border-black mt-2">
-                <TableShow
-                  valueSelect={valueSelect}
-                  data={stepShow.step5}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )}
-          {valueSelect !== "dao-gieng" &&
-            valueSelect !== "lap-gieng" &&
-            stepShow.step7 && (
-              <div>
-                <div
-                  className="font-bold text-[20px]"
-                  style={{ color: "black", marginTop: 30 }}>
-                  Kiểm tra thêm hợp hoá ngày/giờ{" "}
-                  {stepShow.step7 && `(${stepShow.step7?.length})`}
-                </div>
-
-                <div
-                  className="max-h-[500px] overflow-scroll
-              px-10 border-2 border-black mt-2">
-                  <TableShow
-                    valueSelect={valueSelect}
-                    data={stepShow.step7}
-                    infoGiaChu={infoGiaChu}></TableShow>
-                </div>
-              </div>
-            )}
-          {valueSelect === "dong-tho" && stepShow.step5 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Sau bước 5 khi chọn việc động thổ{" "}
-                {"(Tránh Kim Lâu, Hoang Ốc, Tam Tai)"}
-              </div>
-
-              <div
-                className="max-h-[500px] overflow-scroll
-              px-10 border-2 border-black mt-2">
-                <TableShow
-                  valueSelect={valueSelect}
-                  data={stepShow.step5}></TableShow>
-              </div>
-            </div>
-          )}
-          {stepShow.step9 && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Loại bỏ những ngày không có giờ
-                {stepShow.step9 && `(${stepShow.step9?.length})`}
-              </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableShow
-                  valueSelect={valueSelect}
-                  data={stepShow.step9}
-                  infoGiaChu={infoGiaChu}></TableShow>
-              </div>
-            </div>
-          )} */}
           <div style={{ height: 200 }}></div>
           <Notify
             description={infoNotify.description}

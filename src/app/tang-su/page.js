@@ -14,12 +14,16 @@ import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
 import TableShow from "@Root/components/Table";
 import TableResult from "@Root/components/TableResult";
+import TableResultStepFinal from "@Root/components/TableResultStepFinal";
+import TableSangCatNgay from "@Root/components/TableSangCatNgay";
+import TableSangCatTrucTu from "@Root/components/TableSangCatTrucTu";
 import TableTangSu from "@Root/components/TableTangSu";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
   CHI_NAM,
   COLOR_TEXT_NGU_HANH,
+  DIA_CHI_HINH,
   HOANG_OC,
   MONTHS,
   NGUYET_KY,
@@ -35,6 +39,7 @@ import {
   SERVICE_XAYDUNG,
   TAM_NUONG,
   THO_TU,
+  TRUC_XUNG_HAI,
   TRUNG_TANG,
   VANG_VONG,
 } from "@Root/script/Constant";
@@ -45,12 +50,14 @@ import {
   CheckCase3TrungTang,
   CheckCase4TrungTang,
   CheckCase5TrungTang,
+  CheckKyChonCat,
   CheckNgayGioHaKhoi,
   CheckNgayGioThienTac,
   CheckNgayTrungNhat,
   CheckTrucXungGio,
   CheckTrucXungGioTangSu,
   CheckTrucXungHinhHaiChi,
+  CheckTrucXungHinhHaiChiTangSu,
   CheckTrucXungNgayThangNam,
   CheckTrungTang,
   ConvertToRangeDayInMonthLunar,
@@ -61,6 +68,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
+import TableResultStepFinalTangSang from "./component/TableResultStepFinalTangSang";
 
 export default function Home() {
   const refNotify = React.useRef();
@@ -92,7 +100,7 @@ export default function Home() {
   const [valueSelect, setValueSelect] = useState("");
 
   const [stepShow, setStepShow] = useState({
-    stepInit: undefined,
+    dateArr: undefined,
     step1: undefined,
     step2: undefined,
     step3: undefined,
@@ -399,17 +407,28 @@ export default function Home() {
     let arrPerfectDateStep7 = []; // hop hoa ngay/gio
     let arrPerfectDateStep8 = []; // check gio tang su// sang cat
     // Convert  RangeDayInMonthLunar
-    // Chon ngay
-    // Xac dinh ngay/thang xung toa nha
-    dateArr.map((item, index) => {
-      if (!CheckTrucXungHinhHaiChi(bamCung.bamCungTuoi, item.ngayChi)) {
-        arrPerfectDateStep1.push(item);
+
+    // kiem tra truc/tu
+    dateArr.map((item, ind) => {
+      if (
+        //   !! || 1 trong 2 pham deu` bi
+        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
+        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
+      ) {
+      } else {
+        arrPerfectDateStep2.push(item);
       }
     });
 
+    // Chon ngay
     // Tranh Bach ky
-    arrPerfectDateStep1.map((item, index) => {
+    arrPerfectDateStep2.map((item, index) => {
       if (
+        // Truc Xung Hinh Hai
+        !CheckTrucXungHinhHaiChiTangSu(
+          CHI_NAM[Number(namSinh) % 12],
+          item.ngayChi
+        ) &&
         item.dayLunar !== 1 &&
         item.dayLunar !== 15 &&
         monthDays(item.yearLunar, item.monthLunar) !== item.dayLunar &&
@@ -431,41 +450,42 @@ export default function Home() {
         // Ha Khoi
         !CheckNgayGioHaKhoi(item.monthLunar, item.ngayChi) &&
         // Thien Tac
-        !CheckNgayGioThienTac(item.monthLunar, item.ngayChi)
+        !CheckNgayGioThienTac(item.monthLunar, item.ngayChi) &&
+        //Trung tang
+        !CheckTrungTang(item.monthLunar, item.ngayCan) &&
+        !CheckKyChonCat(item.monthLunar, item.dayLunar)
       ) {
-        arrPerfectDateStep2.push(item);
-      }
-    });
-
-    // kiem tra truc/tu
-    arrPerfectDateStep2.map((item, ind) => {
-      if (
-        //   !! || 1 trong 2 pham deu` bi
-        //
-        Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
-        Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
-        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-      ) {
-      } else {
         arrPerfectDateStep3.push(item);
-
-        // if (
-        //   Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-        //   !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        // ) {
-        // } else {
-        // }
       }
     });
+
     let arrHours = [];
 
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
       arrHours = CheckTrucXungGioTangSu({
         ...item,
-        cungNguoiMat: bamCung.bamCungTuoi,
+        cungNguoiMat: CHI_NAM[Number(namSinh) % 12],
         chiNamSinh: CHI_NAM[namSinh % 12],
       });
+      console.log(arrHours, "arrHours");
+      arrPerfectDateStep3[ind] = {
+        ...item,
+        gio: [
+          "Tý",
+          "Sửu",
+          "Dần",
+          "Mão",
+          "Thìn",
+          "Tỵ",
+          "Ngọ",
+          "Mùi",
+          "Thân",
+          "Dậu",
+          "Tuất",
+          "Hợi",
+        ],
+      };
       if (arrHours.length !== 0) {
         arrPerfectDateStep8.push({
           ...item,
@@ -477,11 +497,17 @@ export default function Home() {
         gio: arrHours,
       });
     });
-    setInfoNguoiMat({ ...bamCung, tuoiNguoiMat, namMat, namSinh });
+    setInfoNguoiMat({
+      ...bamCung,
+      tuoiNguoiMat,
+      namMat,
+      namSinh,
+      tuoiGiaChu: namSinh,
+    });
     setRangeDayInMonthLunar(ConvertToRangeDayInMonthLunar(dateArr));
 
     setStepShow({
-      stepInit: dateArr,
+      dateArr,
       step1: arrPerfectDateStep1,
       step2: arrPerfectDateStep2,
       step3: arrPerfectDateStep3,
@@ -911,7 +937,6 @@ export default function Home() {
               if (valueAge.gender === 1) return handleTrungTangNam();
               return handleTrungTangNu();
             } else {
-              if (valueAge.gender === 1) return handleTangSuNam();
               return handleTangSuNu();
             }
           }}
@@ -987,11 +1012,11 @@ export default function Home() {
                     {CHI_NAM[infoNguoiMat.namSinh % 12]}
                   </div>{" "}
                   <div>
-                    Thời gian mất: {infoNguoiMat?.duongLich.day}/
-                    {infoNguoiMat?.duongLich.month}/
-                    {infoNguoiMat?.duongLich.year} - ÂL:{" "}
-                    {infoNguoiMat?.amLich.day}/{infoNguoiMat?.amLich.month}/
-                    {infoNguoiMat?.amLich.year}
+                    Thời gian mất: {infoNguoiMat?.duongLich?.day}/
+                    {infoNguoiMat?.duongLich?.month}/
+                    {infoNguoiMat?.duongLich?.year} - ÂL:{" "}
+                    {infoNguoiMat?.amLich?.day}/{infoNguoiMat?.amLich?.month}/
+                    {infoNguoiMat?.amLich?.year}
                   </div>{" "}
                   <div
                     style={{
@@ -1099,7 +1124,7 @@ export default function Home() {
                       <div className="max-h-[500px] overflow-scroll">
                         <TableResult
                           data={item}
-                          infoGiaChu={infoGiaChu}
+                          infoGiaChu={infoNguoiMat}
                           description="tang-su"
                           valueSelect={valueSelect}></TableResult>
                       </div>
@@ -1170,51 +1195,53 @@ export default function Home() {
             )}
           </div>
 
-          {stepShow.stepInit && (
-            <div>
-              <div
-                className="font-bold text-[20px]"
-                style={{ color: "black", marginTop: 30 }}>
-                Bước 1: Chọn ngày
-                {stepShow.stepInit && `(${stepShow.stepInit?.length})`}
-              </div>
-              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableTangSu
-                  valueSelect={valueSelect}
-                  data={stepShow.stepInit}
-                  infoNguoiMat={infoNguoiMat}></TableTangSu>
-              </div>
-            </div>
-          )}
-          {stepShow.step2 && (
+          {stepShow.dateArr && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Xét Trực/Tú
-                {stepShow.step2 && `(${stepShow.step2?.length})`}
+                {stepShow.dateArr && `(${stepShow.dateArr?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableTangSu
+                <TableSangCatTrucTu
                   valueSelect={valueSelect}
-                  data={stepShow.step2}
-                  infoNguoiMat={infoNguoiMat}></TableTangSu>
+                  data={stepShow.dateArr}
+                  infoNguoiMat={infoNguoiMat}></TableSangCatTrucTu>
               </div>
             </div>
           )}
-          {stepShow.step4 && (
+
+          {stepShow.step2 && (
+            <div>
+              <div
+                className="font-bold text-[20px]"
+                style={{ color: "black", marginTop: 30 }}>
+                Bước 1: Chọn ngày
+                {stepShow.step2 && `(${stepShow.step2?.length})`}
+              </div>
+              <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
+                <TableSangCatNgay
+                  valueSelect={valueSelect}
+                  data={stepShow.step2}
+                  infoNguoiMat={infoNguoiMat}></TableSangCatNgay>
+              </div>
+            </div>
+          )}
+
+          {stepShow.step3 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Bước 2: Chọn giờ
-                {stepShow.step4 && `(${stepShow.step4?.length})`}
+                {stepShow.step3 && `(${stepShow.step3?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableTangSu
+                <TableSangCatNgay
                   valueSelect={valueSelect}
-                  data={stepShow.step4}
-                  infoNguoiMat={infoNguoiMat}></TableTangSu>
+                  data={stepShow.step3}
+                  infoNguoiMat={infoNguoiMat}></TableSangCatNgay>
               </div>
             </div>
           )}
@@ -1227,10 +1254,10 @@ export default function Home() {
                 {stepShow.step8 && `(${stepShow.step8?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableTangSu
+                <TableResultStepFinalTangSang
                   valueSelect={valueSelect}
                   data={stepShow.step8}
-                  infoNguoiMat={infoNguoiMat}></TableTangSu>
+                  infoNguoiMat={infoNguoiMat}></TableResultStepFinalTangSang>
               </div>
             </div>
           )}

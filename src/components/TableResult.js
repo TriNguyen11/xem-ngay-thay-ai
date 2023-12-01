@@ -37,6 +37,9 @@ import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EastOutlinedIcon from "@mui/icons-material/EastOutlined";
+import Image from "next/image";
+import DensityLargeIcon from "@mui/icons-material/DensityLarge";
+
 const TableResult = ({
   data,
   infoGiaChu,
@@ -52,11 +55,67 @@ const TableResult = ({
   //   CheckSinhHanh(toaNha, NGU_HANH[data.ngayCan]),
   //   CheckSinhXuat(toaNha, NGU_HANH[data.ngayCan]),
   //   "data"
-  // );
+  // );c
+  // console.log(infoGiaChu,)
+
+  let textStatusDate = "Bình Thường";
+
+  if (toaNha) {
+    if (CheckSinhHanh(NGU_HANH[toaNha], NGU_HANH[data.ngayCan])) {
+      // Rat Tot
+      if (
+        CheckSinhHanh(NGU_HANH[data.ngayCan], NGU_HANH[data.ngayChi]) ||
+        CheckSinhHanh(NGU_HANH[data.ngayChi], NGU_HANH[data.ngayCan])
+      ) {
+        textStatusDate = "Rất Tốt";
+      } else {
+        if (
+          !CheckNguHanhTuongKhac(NGU_HANH[data.ngayCan], NGU_HANH[data.ngayChi])
+        ) {
+          textStatusDate = "Tốt";
+        }
+      }
+    } else {
+      if (
+        !CheckNguHanhTuongKhac(NGU_HANH[toaNha], NGU_HANH[data.ngayCan]) &&
+        !CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[data.ngayCan])
+      ) {
+        if (
+          CheckSinhHanh(NGU_HANH[data.ngayCan], NGU_HANH[data.ngayChi]) ||
+          CheckSinhHanh(NGU_HANH[data.ngayChi], NGU_HANH[data.ngayCan])
+        ) {
+          textStatusDate = "Tốt";
+        } else {
+          if (
+            !CheckNguHanhTuongKhac(
+              NGU_HANH[data.ngayCan],
+              NGU_HANH[data.ngayChi]
+            )
+          ) {
+            textStatusDate = "Hơi Tốt";
+          }
+        }
+      }
+    }
+  } else {
+    if (
+      CheckSinhHanh(NGU_HANH[data.ngayCan], NGU_HANH[data.ngayChi]) ||
+      CheckSinhHanh(NGU_HANH[data.ngayChi], NGU_HANH[data.ngayCan])
+    ) {
+      textStatusDate = "Tốt";
+    } else {
+      if (
+        !CheckNguHanhTuongKhac(NGU_HANH[data.ngayCan], NGU_HANH[data.ngayChi])
+      ) {
+        textStatusDate = "Hơi Tốt";
+      }
+    }
+  }
+
   return (
     <Collapse
       in={checked}
-      collapsedSize={40}
+      collapsedSize={60}
       onClick={() => {
         setChecked(!checked);
       }}>
@@ -76,34 +135,38 @@ const TableResult = ({
                   <TableCell
                     style={{
                       textAlign: "left",
-                      width: "65%",
+                      width: "100%",
                       fontSize: 18,
                       fontWeight: "bold",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}>
-                    <span className="mr-2">
-                      {data.isTruongHop2BonusHoaHop === false ? (
-                        CheckSinhHanh(
-                          NGU_HANH[toaNha],
-                          NGU_HANH[data.ngayCan]
-                        ) ? (
-                          <EastOutlinedIcon />
-                        ) : CheckSinhXuat(
+                    <span className="mr-2 flex flex-row items-center">
+                      {toaNha &&
+                        (data.isTruongHop2BonusHoaHop === false ? (
+                          CheckSinhHanh(
                             NGU_HANH[toaNha],
                             NGU_HANH[data.ngayCan]
                           ) ? (
-                          <EastOutlinedIcon
-                            style={{
-                              transform: "rotate(180deg)",
-                            }}
-                          />
+                            <EastOutlinedIcon />
+                          ) : CheckSinhXuat(
+                              NGU_HANH[toaNha],
+                              NGU_HANH[data.ngayCan]
+                            ) ? (
+                            <EastOutlinedIcon
+                              style={{
+                                transform: "rotate(180deg)",
+                              }}
+                            />
+                          ) : (
+                            <></>
+                          )
+                        ) : data.isTruongHop2BonusHoaHop === true ? (
+                          <SwapHorizOutlinedIcon />
                         ) : (
-                          <></>
-                        )
-                      ) : data.isTruongHop2BonusHoaHop === true ? (
-                        <SwapHorizOutlinedIcon />
-                      ) : (
-                        <></>
-                      )}
+                          <DensityLargeIcon />
+                        ))}
                       {CheckSinhHanh(
                         NGU_HANH[data.ngayCan],
                         NGU_HANH[data.ngayChi]
@@ -112,7 +175,7 @@ const TableResult = ({
                         NGU_HANH[data.ngayChi],
                         NGU_HANH[data.ngayCan]
                       ) ? (
-                        <EventAvailableIcon />
+                        <Image src={"/Sinh.png"} width={30} height={30} />
                       ) : CheckNguHanhTuongKhac(
                           NGU_HANH[data.ngayCan],
                           NGU_HANH[data.ngayChi]
@@ -121,27 +184,18 @@ const TableResult = ({
                           NGU_HANH[data.ngayChi],
                           NGU_HANH[data.ngayCan]
                         ) ? (
-                        <CalendarTodayIcon />
+                        <Image width={30} height={30} src={"/Khac.png"} />
                       ) : (
-                        <></>
+                        <>
+                          <Image
+                            width={30}
+                            height={30}
+                            src={"/BinhThuong.png"}
+                          />
+                        </>
                       )}
                     </span>
-                    {Object.keys(ObjectTruc[data.truc].KhongLam).includes(
-                      valueSelect
-                    )
-                      ? "Bình Thường"
-                      : Object.keys(ObjectTu[data.tu].KhongLam).includes(
-                          valueSelect
-                        )
-                      ? "Hơi Tốt"
-                      : !Object.keys(ObjectTu[data.tu].CanLam).includes(
-                          valueSelect
-                        ) &&
-                        !Object.keys(ObjectTruc[data.truc].CanLam).includes(
-                          valueSelect
-                        )
-                      ? "Tốt"
-                      : "Rất Tốt"}
+                    {textStatusDate}
                     {Object.keys(ObjectTruc[data.truc].CanLam).includes(
                       valueSelect
                     ) &&
@@ -156,7 +210,7 @@ const TableResult = ({
                           }}
                         />
                       )}
-                    {CheckArrTamHop(
+                    {/* {CheckArrTamHop(
                       data.gio,
                       CHI_NAM[infoGiaChu?.tuoiGiaChu % 12]
                     ) ? (
@@ -174,7 +228,7 @@ const TableResult = ({
                       <StarIcon style={{ color: "#F9D045", marginTop: -2 }} />
                     ) : (
                       ""
-                    )}
+                    )} */}
                     {/* Ngay Tam Hop Nhi Hop */}
                     {CheckTamHop(
                       data.ngayChi,
@@ -262,7 +316,7 @@ const TableResult = ({
                   <TableCell
                     style={{
                       textAlign: "center",
-                      width: "50%",
+                      width: "25%",
                       textDecorationLine: "underline",
                       fontSize: 16,
                     }}>
@@ -338,6 +392,28 @@ const TableResult = ({
                     }}>
                     {data &&
                       data?.gio?.map((itemGio, index) => {
+                        if (index === 0)
+                          console.log(
+                            data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)],
+                            itemGio,
+                            NGU_HANH[itemGio],
+                            NGU_HANH[
+                              data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
+                            ],
+
+                            CheckSinhHanh(
+                              NGU_HANH[
+                                data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
+                              ],
+                              NGU_HANH[itemGio]
+                            ),
+                            CheckSinhHanh(
+                              NGU_HANH[itemGio],
+                              NGU_HANH[
+                                data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
+                              ]
+                            )
+                          );
                         if (
                           (Array.isArray(data?.arrHoursOke) &&
                             data?.arrHoursOke?.includes(itemGio)) ||
@@ -348,6 +424,7 @@ const TableResult = ({
                               key={Math.random()}
                               style={{
                                 marginRight: 5,
+                                marginBottom: 5,
                                 color:
                                   COLOR_TEXT_NGU_HANH[
                                     NGU_HANH[
@@ -356,31 +433,61 @@ const TableResult = ({
                                       ]
                                     ]
                                   ],
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
                               }}>
-                              {data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)] +
-                                " " +
-                                itemGio +
-                                " (" +
-                                GIO_DIA_CHI[CHI.indexOf(itemGio)] +
-                                ") " +
-                                "(" +
-                                NGU_HANH[
-                                  data.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ]
-                                ] +
-                                ")" +
-                                (CheckTamHop(
+                              {CheckTamHop(
+                                CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                itemGio
+                              ) ? (
+                                <StarIcon
+                                  style={{
+                                    color: "#F9D045",
+                                    marginTop: -2,
+                                    fontSize: 20,
+                                  }}
+                                />
+                              ) : CheckNhiHop(
                                   CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
                                   itemGio
-                                )
-                                  ? "(Tam Hợp) "
-                                  : CheckNhiHop(
-                                      CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                                      itemGio
-                                    )
-                                  ? "(Nhị Hợp) "
-                                  : "")}
+                                ) ? (
+                                <StarIcon
+                                  style={{ color: "#F9D045", marginTop: -2 }}
+                                />
+                              ) : (
+                                ""
+                              )}
+                              <div className="mx-2">
+                                {data.arrGioCan[
+                                  CHI_NAM_SORTED.indexOf(itemGio)
+                                ] +
+                                  " " +
+                                  itemGio +
+                                  " (" +
+                                  GIO_DIA_CHI[CHI.indexOf(itemGio)] +
+                                  ") " +
+                                  "(" +
+                                  NGU_HANH[
+                                    data.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ]
+                                  ] +
+                                  ") "}
+                                <div>
+                                  {CheckTamHop(
+                                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                    itemGio
+                                  )
+                                    ? "(Tam Hợp) "
+                                    : CheckNhiHop(
+                                        CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                        itemGio
+                                      )
+                                    ? "(Nhị Hợp) "
+                                    : ""}
+                                </div>
+                              </div>
                               {Array.isArray(data?.arrHoursOke) &&
                                 data?.arrHoursOke?.includes(itemGio) &&
                                 data?.titleCheckGioNgayThang &&
@@ -389,16 +496,8 @@ const TableResult = ({
                                     data?.arrHoursOke?.indexOf(itemGio)
                                   ] +
                                   ")"}{" "}
-                              {CheckSinhHanh(
-                                NGU_HANH[toaNha],
-                                NGU_HANH[
-                                  data.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ]
-                                ]
-                              ) ? (
-                                <EastOutlinedIcon />
-                              ) : CheckSinhXuat(
+                              {toaNha &&
+                                (CheckSinhHanh(
                                   NGU_HANH[toaNha],
                                   NGU_HANH[
                                     data.arrGioCan[
@@ -406,23 +505,87 @@ const TableResult = ({
                                     ]
                                   ]
                                 ) ? (
-                                <EastOutlinedIcon
-                                  style={{
-                                    transform: "rotate(180deg)",
-                                  }}
-                                />
-                              ) : CheckNguHanhTuongKhac(
-                                  NGU_HANH[toaNha],
+                                  <EastOutlinedIcon />
+                                ) : CheckSinhXuat(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[
+                                      data.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ]
+                                    ]
+                                  ) ? (
+                                  <EastOutlinedIcon
+                                    style={{
+                                      transform: "rotate(180deg)",
+                                    }}
+                                  />
+                                ) : CheckNguHanhTuongKhac(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[
+                                      data.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ]
+                                    ]
+                                  ) ? (
+                                  <SwapHorizOutlinedIcon />
+                                ) : (
+                                  <DensityLargeIcon />
+                                ))}
+                              <div className="ml-2">
+                                {CheckSinhHanh(
+                                  NGU_HANH[
+                                    data.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ]
+                                  ],
+                                  NGU_HANH[itemGio]
+                                ) ||
+                                CheckSinhHanh(
+                                  NGU_HANH[itemGio],
                                   NGU_HANH[
                                     data.arrGioCan[
                                       CHI_NAM_SORTED.indexOf(itemGio)
                                     ]
                                   ]
                                 ) ? (
-                                <SwapHorizOutlinedIcon />
-                              ) : (
-                                <></>
-                              )}
+                                  <Image
+                                    src={"/Sinh.png"}
+                                    width={30}
+                                    height={30}
+                                  />
+                                ) : CheckNguHanhTuongKhac(
+                                    NGU_HANH[
+                                      NGU_HANH[
+                                        data.arrGioCan[
+                                          CHI_NAM_SORTED.indexOf(itemGio)
+                                        ]
+                                      ]
+                                    ],
+                                    NGU_HANH[itemGio]
+                                  ) ||
+                                  CheckNguHanhTuongKhac(
+                                    NGU_HANH[itemGio],
+                                    NGU_HANH[
+                                      data.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ]
+                                    ]
+                                  ) ? (
+                                  <Image
+                                    width={30}
+                                    height={30}
+                                    src={"/Khac.png"}
+                                  />
+                                ) : (
+                                  <>
+                                    <Image
+                                      width={30}
+                                      height={30}
+                                      src={"/BinhThuong.png"}
+                                    />
+                                  </>
+                                )}
+                              </div>
                             </div>
                           );
                       })}

@@ -30,26 +30,40 @@ import {
   CheckCoNhatTuanPhong,
   CheckDaiBai,
   CheckDuongCong,
+  CheckGioSatChu,
+  CheckGioThoTu,
   CheckHongXaKyNhat,
   CheckNgayNguLy,
   CheckNgaySat,
   CheckNghenhHonKyNhat,
+  CheckNguHanhTuongKhac,
+  CheckNguHanhTuongKhacKhauQuyet,
   CheckNhiHop,
   CheckSinhXuat,
   CheckSinh_TyHoa,
   CheckTamHop,
   CheckTamTai,
   CheckThienTaiDiaHoa,
+  CheckTrucXungChi,
   CheckTrucXungNgayThangNam,
   CheckTuongXungTuongHaiTuoiMonth,
+  CheckTySinh,
   CombineThienCan,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
+import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
+import { GetErrorGioHopHoa } from "@Root/script/HandleGetErrorShow";
 
-const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
+const TableWedding = ({
+  data,
+  infoGiaChu,
+  valueSelect,
+  toaNha,
+  checkHopHoa,
+}) => {
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -104,6 +118,13 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                     minWidth: 120,
                   }}>
                   Can/Chi Tháng
+                </TableCell>
+                <TableCell
+                  style={{
+                    textAlign: "center",
+                    minWidth: 120,
+                  }}>
+                  Can/Chi Năm
                 </TableCell>
                 <TableCell
                   style={{
@@ -282,7 +303,69 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                 // if (CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[date.ngayCan])) {
                 //   backky.push("Sinh xuất");
                 // }
+                if (checkHopHoa) {
+                  let combineThienCanNgayThang = CombineThienCan(
+                    date.thangCan,
+                    date.ngayCan
+                  );
+                  let combineThienCanNgayNam = CombineThienCan(
+                    date.namCan,
+                    date.ngayCan
+                  );
 
+                  if (
+                    combineThienCanNgayThang.length !== 0 ||
+                    combineThienCanNgayNam.length !== 0
+                  ) {
+                    // console.log(
+                    //   NGU_HANH[toaNha],
+                    //   CheckNguHanhTuongKhac(
+                    //     NGU_HANH[toaNha],
+                    //     combineThienCanNgayThang
+                    //   )
+                    // );
+                    if (
+                      // ngay Thang
+                      (CheckNguHanhTuongKhacKhauQuyet(
+                        NGU_HANH[date.thangChi],
+                        combineThienCanNgayThang
+                      ) ||
+                        CheckNguHanhTuongKhacKhauQuyet(
+                          NGU_HANH[date.ngayChi],
+                          combineThienCanNgayThang
+                        ) ||
+                        CheckNguHanhTuongKhac(
+                          NGU_HANH[toaNha],
+                          combineThienCanNgayThang
+                        ) ||
+                        CheckSinhXuat(
+                          NGU_HANH[toaNha],
+                          combineThienCanNgayThang
+                        ) ||
+                        // ngay Nam
+                        CheckNguHanhTuongKhacKhauQuyet(
+                          NGU_HANH[date.namChi],
+                          combineThienCanNgayNam
+                        ) ||
+                        CheckNguHanhTuongKhacKhauQuyet(
+                          NGU_HANH[date.ngayChi],
+                          combineThienCanNgayNam
+                        ) ||
+                        CheckNguHanhTuongKhac(
+                          NGU_HANH[toaNha],
+                          combineThienCanNgayNam
+                        ) ||
+                        CheckSinhXuat(
+                          NGU_HANH[toaNha],
+                          combineThienCanNgayNam
+                        )) &&
+                      valueSelect !== "ngay-dang-ki-ket-hon" &&
+                      valueSelect !== "ngay-mai-moi"
+                    ) {
+                      backky.push("Hợp hoá");
+                    }
+                  }
+                }
                 return (
                   <TableRow
                     style={{
@@ -294,6 +377,10 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                       style={{
                         textAlign: "center",
                       }}>
+                      {CheckNguHanhTuongKhac(
+                        NGU_HANH[toaNha],
+                        NGU_HANH[date.ngayCan]
+                      ) && <SwapHorizOutlinedIcon />}{" "}
                       {index + 1}
                     </TableCell>
                     <TableCell
@@ -307,9 +394,11 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                         textAlign: "center",
                       }}>
                       {date.dayLunar} - {date.monthLunar}- {date.yearLunar}{" "}
-                      {backky.length !== 0
-                        ? "(" + backky.toString().replaceAll(",", ", ") + ")"
-                        : ""}
+                      <div>
+                        {backky.length !== 0
+                          ? "(" + backky.toString().replaceAll(",", ", ") + ")"
+                          : ""}
+                      </div>
                     </TableCell>
                     <TableCell
                       style={{
@@ -327,6 +416,13 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                         color: COLOR_TEXT_NGU_HANH[date.hanhNgay],
                       }}>
                       {date.thangCan} {date.thangChi} ({date.hanhThang})
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                        color: COLOR_TEXT_NGU_HANH[NGU_HANH[date.namCan]],
+                      }}>
+                      {date.namCan} {date.namChi} ({NGU_HANH[date.namCan]})
                     </TableCell>
                     <TableCell
                       style={{
@@ -386,55 +482,109 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                         {date?.gio && (
                           <div>
                             Trong thời gian mặt trời mọc:
-                            <div className="flex flex-row text-center my-1">
+                            <div className="flex flex-col my-1">
                               {date.gio?.map((itemGio, index) => {
-                                let timeErr = "";
-                                let combineThienCanGioNgay = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.ngayCan
-                                );
-                                let combineThienCanGioThang = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.thangCan
-                                );
-                                let combineThienCanGioNam = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.namCan
-                                );
+                                let timeNormal = [];
 
                                 if (
-                                  combineThienCanGioNam === "" &&
-                                  combineThienCanGioThang === "" &&
-                                  combineThienCanGioNgay === "" &&
-                                  date.isTruongHop2BonusHoaHop === true
+                                  CheckTrucXungNgayThangNam(itemGio, toaNha)
                                 ) {
-                                  timeErr = "Không hợp hoá";
+                                  timeNormal.push("Xung toạ");
+                                }
+
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    itemGio,
+                                    date.ngayChi
+                                  )
+                                )
+                                  timeNormal.push("Xung ngày");
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    itemGio,
+                                    date.thangChi
+                                  )
+                                ) {
+                                  timeNormal.push("Xung tháng");
+                                }
+                                if (CheckGioThoTu(date.ngayChi, itemGio)) {
+                                  timeNormal.push("Thọ tử");
+                                }
+                                if (CheckGioSatChu(date.monthLunar, itemGio)) {
+                                  timeNormal.push("Sát chủ");
+                                }
+
+                                // if (
+                                //   CheckNguHanhTuongKhac(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[
+                                //       date.arrGioCan[
+                                //         CHI_NAM_SORTED.indexOf(itemGio)
+                                //       ]
+                                //     ]
+                                //   ) &&
+                                //   valueSelect !== "ngay-dang-ki-ket-hon" &&
+                                //   valueSelect !== "ngay-mai-moi"
+                                // ) {
+                                //   timeNormal.push("Khắc hành toạ");
+                                // }
+                                if (
+                                  CheckTrucXungChi(
+                                    itemGio,
+                                    CHI_NAM[infoGiaChu?.namSinhNam % 12]
+                                  )
+                                ) {
+                                  timeNormal.push("Xung, trùng tuổi Nam");
+                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
                                 }
                                 if (
-                                  CheckSinhXuat(
-                                    NGU_HANH[toaNha],
-                                    NGU_HANH[
-                                      date.arrGioCan[
-                                        CHI_NAM_SORTED.indexOf(itemGio)
-                                      ]
-                                    ]
-                                  ) === true &&
-                                  date.isTruongHop2BonusHoaHop === true
+                                  CheckTrucXungChi(
+                                    itemGio,
+                                    CHI_NAM[infoGiaChu?.namSinhNu % 12]
+                                  )
                                 ) {
-                                  timeErr = "Sinh Xuất";
+                                  timeNormal.push("Xung, trùng tuổi Nữ");
+                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                }
+                                // if (
+                                //   CheckNguHanhTuongKhac(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[
+                                //       date.arrGioCan[
+                                //         CHI_NAM_SORTED.indexOf(itemGio)
+                                //       ]
+                                //     ]
+                                //   )
+                                // )
+                                //   timeNormal.push("Khắc hành toạ");
+
+                                let timeErr = "";
+                                if (
+                                  CheckNguHanhTuongKhac(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[date.ngayCan]
+                                  )
+                                ) {
+                                  timeErr = GetErrorGioHopHoa(
+                                    itemGio,
+                                    date.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ],
+                                    date.ngayCan,
+                                    date.ngayChi,
+                                    date.thangCan,
+                                    date.thangChi,
+                                    date.namCan,
+                                    date.namChi,
+                                    toaNha
+                                  );
                                 }
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
                                   CHI_NAM_SORTED.indexOf(itemGio) < 9
                                 )
                                   return (
-                                    <span
+                                    <div
                                       key={Math.random()}
                                       style={{
                                         marginRight: 5,
@@ -488,8 +638,12 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                                               itemGio
                                             )
                                           ? "(Nhị Hợp Nữ), "
-                                          : "")}
-                                    </span>
+                                          : "")}{" "}
+                                      {timeErr.length !== 0 &&
+                                        " (" + timeErr + ")"}
+                                      {timeNormal.length !== 0 &&
+                                        " (" + timeNormal.toString() + ")"}
+                                    </div>
                                   );
                               })}
                             </div>
@@ -500,55 +654,110 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                         {date?.gio && (
                           <div>
                             Trong thời gian mặt trời lặn:
-                            <div className="flex flex-row text-center my-1">
+                            <div className="flex flex-col my-1">
                               {date.gio?.map((itemGio, index) => {
-                                let timeErr = "";
-                                let combineThienCanGioNgay = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.ngayCan
-                                );
-                                let combineThienCanGioThang = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.thangCan
-                                );
-                                let combineThienCanGioNam = CombineThienCan(
-                                  date.arrGioCan[
-                                    CHI_NAM_SORTED.indexOf(itemGio)
-                                  ],
-                                  date.namCan
-                                );
+                                let timeNormal = [];
 
                                 if (
-                                  combineThienCanGioNam === "" &&
-                                  combineThienCanGioThang === "" &&
-                                  combineThienCanGioNgay === "" &&
-                                  date.isTruongHop2BonusHoaHop === true
+                                  CheckTrucXungNgayThangNam(itemGio, toaNha)
                                 ) {
-                                  timeErr = "Không hợp hoá";
+                                  console.log("xung toaaa", 22222, itemGio);
+
+                                  timeNormal.push("Xung toạ");
+                                }
+
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    itemGio,
+                                    date.ngayChi
+                                  )
+                                )
+                                  timeNormal.push("Xung ngày");
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    itemGio,
+                                    date.thangChi
+                                  )
+                                ) {
+                                  timeNormal.push("Xung tháng");
+                                }
+                                if (CheckGioThoTu(date.ngayChi, itemGio)) {
+                                  timeNormal.push("Thọ tử");
+                                }
+                                if (CheckGioSatChu(date.monthLunar, itemGio)) {
+                                  timeNormal.push("Sát chủ");
+                                }
+
+                                // if (
+                                //   CheckNguHanhTuongKhac(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[
+                                //       date.arrGioCan[
+                                //         CHI_NAM_SORTED.indexOf(itemGio)
+                                //       ]
+                                //     ]
+                                //   ) &&
+                                //   valueSelect !== "ngay-dang-ki-ket-hon" &&
+                                //   valueSelect !== "ngay-mai-moi"
+                                // ) {
+                                //   timeNormal.push("Khắc hành toạ");
+                                // }
+                                if (
+                                  CheckTrucXungChi(
+                                    itemGio,
+                                    CHI_NAM[infoGiaChu?.namSinhNam % 12]
+                                  )
+                                ) {
+                                  timeNormal.push("Xung, trùng tuổi Nam");
+                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
                                 }
                                 if (
-                                  CheckSinhXuat(
-                                    NGU_HANH[toaNha],
-                                    NGU_HANH[
-                                      date.arrGioCan[
-                                        CHI_NAM_SORTED.indexOf(itemGio)
-                                      ]
-                                    ]
-                                  ) === true &&
-                                  date.isTruongHop2BonusHoaHop === true
+                                  CheckTrucXungChi(
+                                    itemGio,
+                                    CHI_NAM[infoGiaChu?.namSinhNu % 12]
+                                  )
                                 ) {
-                                  timeErr = "Sinh Xuất";
+                                  timeNormal.push("Xung, trùng tuổi Nữ");
+                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                }
+                                // if (
+                                //   CheckNguHanhTuongKhac(
+                                //     NGU_HANH[toaNha],
+                                //     NGU_HANH[
+                                //       date.arrGioCan[
+                                //         CHI_NAM_SORTED.indexOf(itemGio)
+                                //       ]
+                                //     ]
+                                //   )
+                                // )
+                                //   timeNormal.push("Khắc hành toạ");
+                                let timeErr = "";
+                                if (
+                                  CheckNguHanhTuongKhac(
+                                    NGU_HANH[toaNha],
+                                    NGU_HANH[date.ngayCan]
+                                  )
+                                ) {
+                                  timeErr = GetErrorGioHopHoa(
+                                    itemGio,
+                                    date.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ],
+                                    date.ngayCan,
+                                    date.ngayChi,
+                                    date.thangCan,
+                                    date.thangChi,
+                                    date.namCan,
+                                    date.namChi,
+                                    toaNha
+                                  );
                                 }
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
                                   CHI_NAM_SORTED.indexOf(itemGio) >= 9
                                 )
                                   return (
-                                    <span
+                                    <div
                                       key={Math.random()}
                                       style={{
                                         marginRight: 5,
@@ -602,8 +811,16 @@ const TableWedding = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                                               itemGio
                                             )
                                           ? "(Nhị Hợp Nữ), "
-                                          : "")}
-                                    </span>
+                                          : "")}{" "}
+                                      {timeErr.length !== 0 &&
+                                        " (" + timeErr + ")"}
+                                      {timeNormal.length !== 0 &&
+                                        " (" +
+                                          timeNormal
+                                            .toString()
+                                            .replaceAll(",", ", ") +
+                                          ")"}
+                                    </div>
                                   );
                               })}
                             </div>

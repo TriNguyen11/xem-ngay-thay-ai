@@ -10,6 +10,7 @@ import { isLeapYearLunar } from "@Root/script/AmLich";
 import { CHI_NAM } from "@Root/script/Constant";
 import {
   CheckTrucXungHinhHaiChi,
+  CheckTrucXungHinhHaiChiTangSu,
   CheckTrucXungNgayThangNam,
 } from "@Root/script/handleDateChange";
 import { memo } from "react";
@@ -77,13 +78,13 @@ const TableSangCatThang = ({
                         xungThang = "Tháng nhuận";
 
                       if (
-                        CheckTrucXungHinhHaiChi(
+                        CheckTrucXungHinhHaiChiTangSu(
                           data[year][month].chiMonth,
                           CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
                         )
                       )
-                        // xungThang = "Xung, Trực, Hình, Hại";
-                        xungThang = "Xung, Trực";
+                        xungThang = "Xung, Trực, Hình, Hại";
+                      // xungThang = "Xung, Trùng";
 
                       if (
                         CheckTrucXungNgayThangNam(
