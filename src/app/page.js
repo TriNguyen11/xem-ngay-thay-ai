@@ -1312,7 +1312,7 @@ export default function Home() {
     let arrYearRecommend = {};
     lunarYear?.map((year) => {
       let arrYear = [];
-      for (let i = year - 80; i < year - 10; i++) {
+      for (let i = year - 80; i < year - 20; i++) {
         if (
           !CheckTamTai(CHI_NAM[Number(i) % 12], CHI_NAM[Number(year) % 12]) &&
           CheckHoangOcRecommend(Number(year) - Number(i) + 1).length === 0 &&
@@ -1370,6 +1370,7 @@ export default function Home() {
             onChange={(e) => {
               setValueSelect(e.target.value);
               setArrMonthInYear();
+              setValueText();
               setStepShow({
                 step1: undefined,
                 step2: undefined,
@@ -2040,7 +2041,6 @@ export default function Home() {
               </div>
             </div>
           )}
-          {/* Show table */}
           <div style={{ height: 200 }}></div>
           <Notify
             description={infoNotify.description}
