@@ -759,7 +759,7 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Xét thêm hợp hoá{" "}
+                Xét thêm hợp hoá ngày{" "}
                 {stepShow.step2 && `(${stepShow.step2?.length})`}
               </div>
 
@@ -797,7 +797,7 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Kiểm tra thêm hợp hoá ngày/giờ{" "}
+                Kiểm tra thêm hợp hoá giờ{" "}
                 {stepShow.step7 && `(${stepShow.step7?.length})`}
               </div>
 

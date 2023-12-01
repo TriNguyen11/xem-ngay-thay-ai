@@ -895,7 +895,7 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Xét thêm hợp hoá
+                Xét thêm hợp hoá ngày
                 {stepShow.step4 && `(${stepShow.step4?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
@@ -937,7 +937,7 @@ export default function Home() {
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
-                Kiểm tra thêm hợp hoá ngày/giờ{" "}
+                Kiểm tra thêm hợp hoá giờ{" "}
                 {stepShow.step7 && `(${stepShow.step7?.length})`}
               </div>
 
