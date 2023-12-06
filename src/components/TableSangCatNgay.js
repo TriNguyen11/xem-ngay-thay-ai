@@ -58,14 +58,14 @@ import {
 } from "@Root/script/HandleGetErrorShow";
 
 const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
-  console.log(
-    CheckTrucXungHinhHaiChiTangSu(
-      CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
-      "Mão"
-    ),
-    Number(infoNguoiMat?.namSinh) % 12,
-    "infoNguoiMat"
-  );
+  // console.log(
+  //   CheckTrucXungHinhHaiChiTangSu(
+  //     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
+  //     "Mão"
+  //   ),
+  //   Number(infoNguoiMat?.namSinh) % 12,
+  //   "infoNguoiMat"
+  // );
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (

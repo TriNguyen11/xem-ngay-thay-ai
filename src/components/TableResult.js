@@ -392,28 +392,6 @@ const TableResult = ({
                     }}>
                     {data &&
                       data?.gio?.map((itemGio, index) => {
-                        if (index === 0)
-                          console.log(
-                            data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)],
-                            itemGio,
-                            NGU_HANH[itemGio],
-                            NGU_HANH[
-                              data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
-                            ],
-
-                            CheckSinhHanh(
-                              NGU_HANH[
-                                data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
-                              ],
-                              NGU_HANH[itemGio]
-                            ),
-                            CheckSinhHanh(
-                              NGU_HANH[itemGio],
-                              NGU_HANH[
-                                data.arrGioCan[CHI_NAM_SORTED.indexOf(itemGio)]
-                              ]
-                            )
-                          );
                         if (
                           (Array.isArray(data?.arrHoursOke) &&
                             data?.arrHoursOke?.includes(itemGio)) ||

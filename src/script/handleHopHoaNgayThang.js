@@ -50,7 +50,7 @@ export const handleHopHoaNgayThang = async (arr, toa) => {
   // console.log(ArrHopHoa, "ArrHopHoa");
   return ArrHopHoa;
 };
-export const handleHopHoaGio = async (
+export const handleHopHoaGio = (
   item,
   arrHours,
   isCheckGioNgayThangWhileCanNgayKhacToaNha,

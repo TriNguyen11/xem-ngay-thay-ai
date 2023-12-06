@@ -129,8 +129,9 @@ export default function Home() {
   const [infoNguoiMat, setInfoNguoiMat] = useState();
 
   const handleSangCatNu = async () => {
-    console.log("asds");
+    console.log(valueAge, "asds");
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
+    console.log(tuoiNguoiMat, "tuoiNguoiMat");
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
     if (Number(valueAge.month) <= 2) {
@@ -760,7 +761,8 @@ export default function Home() {
                 <div className="text-black mb-2 font-bold text-lg">
                   Gia chủ tên: {infoGiaChu.name}
                   <div>
-                    Tuổi: {infoNguoiMat.tuoiNguoiMat} -{" "}
+                    Tuổi:
+                    {/* {infoNguoiMat.namSinh} -{" "} */}
                     {CAN_NAM[infoNguoiMat.namSinh % 10]}{" "}
                     {CHI_NAM[infoNguoiMat.namSinh % 12]}
                   </div>{" "}

@@ -285,10 +285,6 @@ export default function Home() {
       isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
       arrHoursOke = [];
       titleCheckGioNgayThang = [];
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
       arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
@@ -400,6 +396,7 @@ export default function Home() {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label=" Chọn việc cần xem"
+            value={valueSelect}
             onChange={(e) => {
               setValueSelect(e.target.value);
               setStepShow({

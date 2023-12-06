@@ -703,14 +703,15 @@ export default function Home() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Toạ nhà"
+                  value={valueText.namToa}
                   onChange={(e) => {
                     setValueText({
-                      namToa: TOA_NHA[e.target.value],
+                      namToa: e.target.value,
                     });
                   }}>
                   {TOA_NHA.map((key, inex) => {
                     return (
-                      <MenuItem key={Math.random()} value={inex}>
+                      <MenuItem key={Math.random()} value={key}>
                         {key}
                       </MenuItem>
                     );
@@ -796,14 +797,15 @@ export default function Home() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Toạ nhà"
+                  value={valueText.nuToa}
                   onChange={(e) => {
                     setValueText({
-                      nuToa: TOA_NHA[e.target.value],
+                      nuToa: e.target.value,
                     });
                   }}>
                   {TOA_NHA.map((key, inex) => {
                     return (
-                      <MenuItem key={Math.random()} value={inex}>
+                      <MenuItem key={Math.random()} value={key}>
                         {key}
                       </MenuItem>
                     );
