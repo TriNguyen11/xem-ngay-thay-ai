@@ -339,28 +339,27 @@ export default function Home() {
     }
 
     // Xet Thang
-    // if (
-    //   valueSelect !== "ngay-mai-moi" &&
-    //   valueSelect !== "ngay-dang-ki-ket-hon"
-    // ) {
-    arrPerfectDateStep1.map((item, index) => {
-      if (
-        !item.isLeap &&
-        !CheckTrucXungChi(CHI_NAM[Number(namSinhNam) % 12], item.thangChi) &&
-        !CheckTrucXungChi(CHI_NAM[Number(namSinhNu) % 12], item.thangChi) &&
-        //Nu
-        !CheckTheChu(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
-        !CheckPhuChu(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
-        !CheckCongCo(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
-        !CheckNhacThan(CHI_NAM[namSinhNu % 12], item.monthLunar)
-      ) {
-        arrPerfectDateStep2.push(item);
-      }
-    });
-    // }
-    // else {
-    //   arrPerfectDateStep2 = arrPerfectDateStep1;
-    // }
+    if (
+      valueSelect !== "ngay-mai-moi" &&
+      valueSelect !== "ngay-dang-ki-ket-hon"
+    ) {
+      arrPerfectDateStep1.map((item, index) => {
+        if (
+          !item.isLeap &&
+          !CheckTrucXungChi(CHI_NAM[Number(namSinhNam) % 12], item.thangChi) &&
+          !CheckTrucXungChi(CHI_NAM[Number(namSinhNu) % 12], item.thangChi) &&
+          //Nu
+          !CheckTheChu(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
+          !CheckPhuChu(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
+          !CheckCongCo(CHI_NAM[namSinhNu % 12], item.monthLunar) &&
+          !CheckNhacThan(CHI_NAM[namSinhNu % 12], item.monthLunar)
+        ) {
+          arrPerfectDateStep2.push(item);
+        }
+      });
+    } else {
+      arrPerfectDateStep2 = arrPerfectDateStep1;
+    }
 
     // kiem tra truc/tu
     arrPerfectDateStep2.map((item, ind) => {
