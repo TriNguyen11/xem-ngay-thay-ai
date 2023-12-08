@@ -32,6 +32,8 @@ import {
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
   CheckTrucXungChi,
+  CheckHinhChi,
+  CheckHaiChi,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
@@ -80,15 +82,46 @@ const TableSangCatNam = ({
             </TableHead>
             <TableBody>
               {yearArr.lunar?.map((year, index) => {
-                let xungNam = "";
+                let xungNam = [];
+                // if (
+                //   CheckTrucXungHinhHaiChi(
+                //     CHI_NAM[Number(year) % 12],
+                //     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
+                //   )
+                // )
+                //   xungNam = "Xung, Trùng, Hình, Hại";
+
                 if (
-                  CheckTrucXungHinhHaiChi(
-                    CHI_NAM[Number(year) % 12],
-                    CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
-                  )
+                  CHI_NAM[Number(infoNguoiMat?.namSinh) % 12] ===
+                  CHI_NAM[Number(year) % 12]
                 )
-                  xungNam = "Xung, Trùng, Hình, Hại";
-                if (isLeapYearLunar(year)) xungNam = "Năm nhuận";
+                  xungNam.push("Trùng tuổi");
+                if (
+                  CheckTrucXungNgayThangNam(
+                    CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
+                    CHI_NAM[Number(year) % 12]
+                  )
+                ) {
+                  xungNam.push("Xung tuổi");
+                }
+                if (
+                  CheckHinhChi(
+                    CHI_NAM[infoNguoiMat?.namSinh % 12],
+                    CHI_NAM[Number(year) % 12]
+                  )
+                ) {
+                  xungNam.push("Hình tuổi");
+                }
+                if (
+                  CheckHaiChi(
+                    CHI_NAM[infoNguoiMat?.namSinh % 12],
+                    CHI_NAM[Number(year) % 12]
+                  )
+                ) {
+                  xungNam.push("Hại tuổi");
+                }
+
+                if (isLeapYearLunar(year)) xungNam.push("Năm nhuận");
 
                 return (
                   <TableRow
@@ -106,7 +139,7 @@ const TableSangCatNam = ({
                       style={{
                         textAlign: "center",
                       }}>
-                      {xungNam}
+                      {xungNam.toString().replaceAll(",", ", ")}
                     </TableCell>
                   </TableRow>
                 );

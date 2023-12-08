@@ -9,6 +9,8 @@ import {
 import { isLeapYearLunar } from "@Root/script/AmLich";
 import { CHI_NAM } from "@Root/script/Constant";
 import {
+  CheckHaiChi,
+  CheckHinhChi,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungHinhHaiChiTangSu,
   CheckTrucXungNgayThangNam,
@@ -70,21 +72,51 @@ const TableSangCatThang = ({
                     showFull === true
                   ) {
                     return Object.keys(data[year]).map((month, indMonth) => {
-                      let xungThang = "";
+                      let xungThang = [];
                       if (
                         data[year][month]?.isLeap &&
                         window.location.pathname.indexOf("tho-cung") !== -1
                       )
-                        xungThang = "Tháng nhuận";
+                        xungThang.push("Tháng nhuận");
+
+                      // if (
+                      //   CheckTrucXungHinhHaiChiTangSu(
+                      //     data[year][month].chiMonth,
+                      //     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
+                      //   )
+                      // )
+                      //   xungThang = "Xung, Trực, Hình, Hại";
+                      // // xungThang = "Xung, Trùng";
 
                       if (
-                        CheckTrucXungHinhHaiChiTangSu(
-                          data[year][month].chiMonth,
-                          CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
-                        )
+                        CHI_NAM[Number(infoNguoiMat?.namSinh) % 12] ===
+                        data[year][month].chiMonth
                       )
-                        xungThang = "Xung, Trực, Hình, Hại";
-                      // xungThang = "Xung, Trùng";
+                        xungThang.push("Trùng tuổi");
+                      if (
+                        CheckTrucXungNgayThangNam(
+                          CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
+                          data[year][month].chiMonth
+                        )
+                      ) {
+                        xungThang.push("Xung tuổi");
+                      }
+                      if (
+                        CheckHinhChi(
+                          CHI_NAM[infoNguoiMat?.namSinh % 12],
+                          data[year][month].chiMonth
+                        )
+                      ) {
+                        xungThang.push("Hình tuổi");
+                      }
+                      if (
+                        CheckHaiChi(
+                          CHI_NAM[infoNguoiMat?.namSinh % 12],
+                          data[year][month].chiMonth
+                        )
+                      ) {
+                        xungThang.push("Hại tuổi");
+                      }
 
                       if (
                         CheckTrucXungNgayThangNam(
@@ -121,7 +153,7 @@ const TableSangCatThang = ({
                               textAlign: "center",
                               color: "red",
                             }}>
-                            {xungThang}
+                            {xungThang.toString().replaceAll(",", ", ")}
                           </TableCell>
                         </TableRow>
                       );

@@ -836,7 +836,7 @@ export default function Home() {
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
                 <TableSangCatNam
                   valueSelect={valueSelect}
-                  toaNha={valueText.namToa || valueText.nuToa}
+                  toaNha={valueText}
                   yearArr={yearArr}
                   infoNguoiMat={infoNguoiMat}></TableSangCatNam>
               </div>
@@ -907,12 +907,12 @@ export default function Home() {
                   infoNguoiMat={infoNguoiMat}
                   toaNha={valueText}></TableSangCatNgay> */}
 
-                <TableXayDung
+                <TableSangCatNgay
                   valueSelect={valueSelect}
                   data={stepShow.step4}
                   checkHopHoa={true}
                   toaNha={valueText}
-                  infoNguoiMat={infoNguoiMat}></TableXayDung>
+                  infoNguoiMat={infoNguoiMat}></TableSangCatNgay>
               </div>
             </div>
           )}

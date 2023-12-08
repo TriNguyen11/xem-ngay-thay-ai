@@ -47,6 +47,9 @@ import {
   CombineThienCan,
   CheckNguHanhTuongKhac,
   CheckTrucXungHinhHaiChiTangSu,
+  CheckNguHanhTuongKhacKhauQuyet,
+  CheckHinhChi,
+  CheckHaiChi,
 } from "@Root/script/handleDateChange";
 import moment from "moment";
 import { memo } from "react";
@@ -57,7 +60,13 @@ import {
   GetErrorTimeNormalSangCat,
 } from "@Root/script/HandleGetErrorShow";
 
-const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
+const TableSangCatNgay = ({
+  data,
+  infoNguoiMat,
+  valueSelect,
+  toaNha,
+  checkHopHoa,
+}) => {
   // console.log(
   //   CheckTrucXungHinhHaiChiTangSu(
   //     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
@@ -166,13 +175,39 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                 // )
                 //   backky.push( "Ngũ hành tương khắc Toạ")
                 // 2.
+                // if (
+                //   CheckTrucXungHinhHaiChiTangSu(
+                //     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
+                //     date.ngayChi
+                //   )
+                // )
+                //   backky.push("Trùng, Xung, Hình, Hại tuổi mất");
+
                 if (
-                  CheckTrucXungHinhHaiChiTangSu(
+                  CHI_NAM[Number(infoNguoiMat?.namSinh) % 12] === date.ngayChi
+                )
+                  backky.push("Trùng tuổi");
+                if (
+                  CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
                     date.ngayChi
                   )
-                )
-                  backky.push("Trùng, Xung, Hình, Hại tuổi mất");
+                ) {
+                  backky.push("Xung tuổi");
+                }
+                // if (
+                //   CheckHinhChi(
+                //     CHI_NAM[infoNguoiMat?.namSinh % 12],
+                //     date.ngayChi
+                //   )
+                // ) {
+                //   backky.push("Hình tuổi");
+                // }
+                // if (
+                //   CheckHaiChi(CHI_NAM[infoNguoiMat?.namSinh % 12], date.ngayChi)
+                // ) {
+                //   backky.push("Hại tuổi");
+                // }
 
                 if (date.dayLunar === 1) backky.push("Mùng 1");
                 if (date.dayLunar === 15) backky.push("Rằm");
@@ -229,6 +264,64 @@ const TableSangCatNgay = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                 // if (CheckSinhXuat(NGU_HANH[toaNha], NGU_HANH[date.ngayCan])) {
                 //   backky.push("Sinh xuất");
                 // }
+                if (checkHopHoa) {
+                  let combineThienCanNgayThang = CombineThienCan(
+                    date.thangCan,
+                    date.ngayCan
+                  );
+                  let combineThienCanNgayNam = CombineThienCan(
+                    date.namCan,
+                    date.ngayCan
+                  );
+
+                  if (
+                    combineThienCanNgayThang.length !== 0 ||
+                    combineThienCanNgayNam.length !== 0
+                  ) {
+                    // console.log(
+                    //   NGU_HANH[toaNha],
+                    //   CheckNguHanhTuongKhac(
+                    //     NGU_HANH[toaNha],
+                    //     combineThienCanNgayThang
+                    //   )
+                    // );
+                    if (
+                      // ngay Thang
+                      CheckNguHanhTuongKhacKhauQuyet(
+                        NGU_HANH[date.thangChi],
+                        combineThienCanNgayThang
+                      ) ||
+                      CheckNguHanhTuongKhacKhauQuyet(
+                        NGU_HANH[date.ngayChi],
+                        combineThienCanNgayThang
+                      ) ||
+                      CheckNguHanhTuongKhac(
+                        NGU_HANH[toaNha],
+                        combineThienCanNgayThang
+                      ) ||
+                      CheckSinhXuat(
+                        NGU_HANH[toaNha],
+                        combineThienCanNgayThang
+                      ) ||
+                      // ngay Nam
+                      CheckNguHanhTuongKhacKhauQuyet(
+                        NGU_HANH[date.namChi],
+                        combineThienCanNgayNam
+                      ) ||
+                      CheckNguHanhTuongKhacKhauQuyet(
+                        NGU_HANH[date.ngayChi],
+                        combineThienCanNgayNam
+                      ) ||
+                      CheckNguHanhTuongKhac(
+                        NGU_HANH[toaNha],
+                        combineThienCanNgayNam
+                      ) ||
+                      CheckSinhXuat(NGU_HANH[toaNha], combineThienCanNgayNam)
+                    ) {
+                      backky.push("Hợp hoá");
+                    }
+                  }
+                }
                 return (
                   <TableRow
                     style={{

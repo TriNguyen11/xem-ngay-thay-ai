@@ -651,6 +651,12 @@ export const CheckTrucXungNgayThangNam = (Chi1, Chi2) => {
   }
   if (Chi1) return TRUC_XUNG_HAI[Chi1][0] === Chi2;
 };
+export const CheckHaiChi = (Chi1, Chi2) => {
+  if (Chi1) return TRUC_XUNG_HAI[Chi1][1] === Chi2;
+};
+export const CheckHinhChi = (Chi1, Chi2) => {
+  if (Chi1) return DIA_CHI_HINH[Chi1].includes(Chi2);
+};
 export const CheckTrucXungTuoiMuon = (CanChi1, CanChi2) => {
   if (CanChi1) return CAN_CHI_XUNG_60_HOA_GIAP[CanChi1].includes(CanChi2);
 };

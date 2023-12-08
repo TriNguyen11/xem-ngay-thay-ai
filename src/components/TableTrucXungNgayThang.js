@@ -226,14 +226,26 @@ const TableTrucXungNgayThang = ({
                 if (NGUYET_PHA[date.monthLunar - 1] === date.ngayChi)
                   backky.push("Nguyệt Phá");
                 // Trung xung hai tuoi
+                // if (
+                //   CheckTuongXungTuongHaiTuoi(
+                //     CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                //     date.ngayChi
+                //   )
+                // )
+                //   backky.push("Trùng, Xung tuổi");
+
                 if (
-                  CheckTuongXungTuongHaiTuoi(
-                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                  CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12] === date.ngayChi
+                )
+                  backky.push("Trùng tuổi");
+                if (
+                  CheckTrucXungNgayThangNam(
+                    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
                     date.ngayChi
                   )
-                )
-                  backky.push("Trùng, Xung tuổi");
-
+                ) {
+                  backky.push("Xung tuổi");
+                }
                 if (
                   CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(date.yearLunar) % 12],
