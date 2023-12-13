@@ -316,21 +316,14 @@ export default function Home() {
     );
     console.log(arrPerfectDateStep4.length, "4");
     console.log(arrPerfectDateStep6.length, "6");
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
+
     // Chon gio
     arrPerfectDateStep6.map((item, ind) => {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      arrHoursOke = [];
-      titleCheckGioNgayThang = [];
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
 
-      arrHours = CheckTrucXungGioTangSu({
+      const arrHours = CheckTrucXungGioTangSu({
         ...item,
         cungNguoiMat: CHI_NAM[Number(namSinh) % 12],
         chiNamSinh: CHI_NAM[namSinh % 12],

@@ -480,14 +480,8 @@ export default function Home() {
       arrPerfectDateStep6 = arrPerfectDateStep4;
     }
     // Chon gio
-    console.log(toaNha, "232");
-    arrPerfectDateStep6.map((item, ind) => {
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
-
-      let arrHours = CheckTrucXungGioCuoiHoi(
+    arrPerfectDateStep6.map(async (item, ind) => {
+      const arrHours = CheckTrucXungGioCuoiHoi(
         toaNha,
         item.ngayChi,
         item.thangChi,
@@ -502,10 +496,9 @@ export default function Home() {
         gio: CheckHoangDao(item.ngayChi),
       };
 
-      let gioHoangDaoVar = CheckHoangDao(item.ngayChi);
-      let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      let arrHoursOke = [];
-      let titleCheckGioNgayThang = [];
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
       // if (combineThienCanNgayThang.length !== 0 && toaNha) {
       if (CheckNguHanhTuongKhac(NGU_HANH[toaNha], NGU_HANH[item.ngayCan])) {
         // if (combineThienCanNgayThang.length !== 0) {

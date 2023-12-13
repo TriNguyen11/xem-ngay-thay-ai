@@ -243,22 +243,6 @@ export default function Home() {
 
     setLoading(false);
   };
-  const handleInit = async () => {
-    console.log(valueAge, "valueAge");
-    const a = await axios.post(
-      "http://localhost:3000/xem-ngay/cong-viec-dai-su",
-      {
-        dateStart,
-        dateEnd,
-        infoGiaChu,
-        valueSelect,
-        valueAge,
-      }
-    );
-
-    console.log(a, "check a ");
-  };
-
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div

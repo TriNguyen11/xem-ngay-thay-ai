@@ -115,7 +115,7 @@ const TableResult = ({
   return (
     <Collapse
       in={checked}
-      collapsedSize={60}
+      collapsedSize={80}
       onClick={() => {
         setChecked(!checked);
       }}>
@@ -128,9 +128,11 @@ const TableResult = ({
               display: "table",
               tableLayout: "fixed",
             }}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead className="">
-                <TableRow style={{ cursor: "pointer" }}>
+            <Table
+              sx={{ minWidth: 650, height: "100%" }}
+              aria-label="simple table">
+              <TableHead className="h-full">
+                <TableRow style={{ cursor: "pointer", height: "100%" }}>
                   {/* Status */}
                   <TableCell
                     style={{
@@ -141,6 +143,7 @@ const TableResult = ({
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
+                      flexWrap: "wrap",
                     }}>
                     <span className="mr-2 flex flex-row items-center">
                       {toaNha &&
@@ -316,7 +319,7 @@ const TableResult = ({
                   <TableCell
                     style={{
                       textAlign: "center",
-                      width: "25%",
+                      width: "50%",
                       textDecorationLine: "underline",
                       fontSize: 16,
                     }}>
@@ -389,6 +392,10 @@ const TableResult = ({
                       textAlign: "center",
                       minWidth: 120,
                       fontSize: 16,
+                      // backgroundColor: "red",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
                     }}>
                     {data &&
                       data?.gio?.map((itemGio, index) => {
@@ -415,65 +422,6 @@ const TableResult = ({
                                 flexDirection: "row",
                                 alignItems: "center",
                               }}>
-                              {CheckTamHop(
-                                CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                                itemGio
-                              ) ? (
-                                <StarIcon
-                                  style={{
-                                    color: "#F9D045",
-                                    marginTop: -2,
-                                    fontSize: 20,
-                                  }}
-                                />
-                              ) : CheckNhiHop(
-                                  CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                                  itemGio
-                                ) ? (
-                                <StarIcon
-                                  style={{ color: "#F9D045", marginTop: -2 }}
-                                />
-                              ) : (
-                                ""
-                              )}
-                              <div className="mx-2">
-                                {data.arrGioCan[
-                                  CHI_NAM_SORTED.indexOf(itemGio)
-                                ] +
-                                  " " +
-                                  itemGio +
-                                  " (" +
-                                  GIO_DIA_CHI[CHI.indexOf(itemGio)] +
-                                  ") " +
-                                  "(" +
-                                  NGU_HANH[
-                                    data.arrGioCan[
-                                      CHI_NAM_SORTED.indexOf(itemGio)
-                                    ]
-                                  ] +
-                                  ") "}
-                                <div>
-                                  {CheckTamHop(
-                                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                                    itemGio
-                                  )
-                                    ? "(Tam Hợp) "
-                                    : CheckNhiHop(
-                                        CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
-                                        itemGio
-                                      )
-                                    ? "(Nhị Hợp) "
-                                    : ""}
-                                </div>
-                              </div>
-                              {Array.isArray(data?.arrHoursOke) &&
-                                data?.arrHoursOke?.includes(itemGio) &&
-                                data?.titleCheckGioNgayThang &&
-                                "(" +
-                                  data?.titleCheckGioNgayThang[
-                                    data?.arrHoursOke?.indexOf(itemGio)
-                                  ] +
-                                  ")"}{" "}
                               {toaNha &&
                                 (CheckSinhHanh(
                                   NGU_HANH[toaNha],
@@ -564,6 +512,65 @@ const TableResult = ({
                                   </>
                                 )}
                               </div>
+                              <div className="mx-2">
+                                {data.arrGioCan[
+                                  CHI_NAM_SORTED.indexOf(itemGio)
+                                ] +
+                                  " " +
+                                  itemGio +
+                                  " (" +
+                                  GIO_DIA_CHI[CHI.indexOf(itemGio)] +
+                                  ") " +
+                                  "(" +
+                                  NGU_HANH[
+                                    data.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ]
+                                  ] +
+                                  ") "}
+                                <div>
+                                  {CheckTamHop(
+                                    CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                    itemGio
+                                  )
+                                    ? "(Tam Hợp) "
+                                    : CheckNhiHop(
+                                        CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                        itemGio
+                                      )
+                                    ? "(Nhị Hợp) "
+                                    : ""}
+                                </div>
+                              </div>
+                              {Array.isArray(data?.arrHoursOke) &&
+                                data?.arrHoursOke?.includes(itemGio) &&
+                                data?.titleCheckGioNgayThang &&
+                                "(" +
+                                  data?.titleCheckGioNgayThang[
+                                    data?.arrHoursOke?.indexOf(itemGio)
+                                  ] +
+                                  ")"}{" "}
+                              {CheckTamHop(
+                                CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                itemGio
+                              ) ? (
+                                <StarIcon
+                                  style={{
+                                    color: "#F9D045",
+                                    marginTop: -2,
+                                    fontSize: 20,
+                                  }}
+                                />
+                              ) : CheckNhiHop(
+                                  CHI_NAM[infoGiaChu?.tuoiGiaChu % 12],
+                                  itemGio
+                                ) ? (
+                                <StarIcon
+                                  style={{ color: "#F9D045", marginTop: -2 }}
+                                />
+                              ) : (
+                                ""
+                              )}
                             </div>
                           );
                       })}

@@ -140,14 +140,14 @@ export const DIA_CHI_HINH = {
   Sửu: ["Mùi", "Tuất"],
   Dần: ["Thân", "Tỵ"],
   Mão: ["Tý"],
-  Thìn: [],
+  Thìn: ["Thìn"],
   Tỵ: ["Dần", "Thân"],
-  Ngọ: [],
+  Ngọ: ["Ngọ"],
   Mùi: ["Sửu", "Tuất"],
   Thân: ["Dần", "Tỵ"],
-  Dậu: [],
+  Dậu: ["Dậu"],
   Tuất: ["Sửu", "Mùi"],
-  Hợi: [],
+  Hợi: ["Hợi"],
 };
 export const GIO_THO_TU = {
   Tý: "Sửu",

@@ -58,7 +58,10 @@ export const handleHopHoaGio = (
   titleCheckGioNgayThang,
   toa,
   arrPerfectDateStep5,
-  arrPerfectDateStep8
+  arrPerfectDateStep8,
+  textStatusDate,
+
+  isTruongHop2BonusHoaHop
 ) => {
   arrHours.map((hour, index) => {
     // if (
@@ -92,7 +95,8 @@ export const handleHopHoaGio = (
       combineThienCanGioThang === "" &&
       combineThienCanGioNam !== ""
     ) {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+      isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+
       titleCheckGioNgayThang.push("HY");
       arrHoursOke.push(hour);
     }
@@ -109,7 +113,8 @@ export const handleHopHoaGio = (
       combineThienCanGioThang === "" &&
       combineThienCanGioNam === ""
     ) {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+      isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+
       titleCheckGioNgayThang.push("HD");
       arrHoursOke.push(hour);
     }
@@ -129,7 +134,8 @@ export const handleHopHoaGio = (
       combineThienCanGioThang !== "" &&
       combineThienCanGioNam === ""
     ) {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+      isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+
       titleCheckGioNgayThang.push("HM");
       arrHoursOke.push(hour);
     }
@@ -155,28 +161,163 @@ export const handleHopHoaGio = (
       combineThienCanGioThang !== "" &&
       combineThienCanGioNam === ""
     ) {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = true;
+      isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+
       titleCheckGioNgayThang.push("HDM");
       arrHoursOke.push(hour);
     }
     // }
   });
-  if (isCheckGioNgayThangWhileCanNgayKhacToaNha) {
+  if (isCheckGioNgayThangWhileCanNgayKhacToaNha.length !== 0) {
     arrPerfectDateStep5.push({
       ...item,
       gio: arrHours,
-      isTruongHop2BonusHoaHop: true,
+      isTruongHop2BonusHoaHop,
       titleCheckGioNgayThang,
+      textStatusDate,
       arrHoursOke,
     });
     if (arrHours.length !== 0) {
       arrPerfectDateStep8.push({
         ...item,
         gio: arrHours,
-        isTruongHop2BonusHoaHop: true,
+        isTruongHop2BonusHoaHop,
         titleCheckGioNgayThang,
+        textStatusDate,
         arrHoursOke,
       });
     }
   }
 };
+// const handleHopHoaGio = async (
+//   item,
+//   arrHours,
+//   isCheckGioNgayThangWhileCanNgayKhacToaNha,
+//   arrHoursOke,
+//   titleCheckGioNgayThang,
+//   toa,
+//   arrPerfectDateStep8,
+//   textStatusDate,
+//   isTruongHop2BonusHoaHop
+// ) => {
+//   await arrHours.map((hour, index) => {
+//     // if (
+//     //   CheckSinhXuat(
+//     //     NGU_HANH[toa],
+//     //     NGU_HANH[item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)]]
+//     //   ) === false
+//     // ) {
+
+//     let combineThienCanGioNgay = CombineThienCan(
+//       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+//       item.ngayCan
+//     );
+//     let combineThienCanGioThang = CombineThienCan(
+//       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+//       item.thangCan
+//     );
+//     let combineThienCanGioNam = CombineThienCan(
+//       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+//       item.namCan
+//     );
+//     if (
+//       !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNam) &&
+//       !CheckNguHanhTuongKhacKhauQuyet(
+//         NGU_HANH[item.namChi],
+//         combineThienCanGioNam
+//       ) &&
+//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNam) === false &&
+//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNam) &&
+//       combineThienCanGioNgay === "" &&
+//       combineThienCanGioThang === "" &&
+//       combineThienCanGioNam !== ""
+//     ) {
+//       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+//       titleCheckGioNgayThang.push("HY");
+//       arrHoursOke.push(hour);
+//     }
+
+//     if (
+//       !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNgay) &&
+//       !CheckNguHanhTuongKhacKhauQuyet(
+//         NGU_HANH[item.ngayChi],
+//         combineThienCanGioNgay
+//       ) &&
+//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) === false &&
+//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
+//       combineThienCanGioNgay !== "" &&
+//       combineThienCanGioThang === "" &&
+//       combineThienCanGioNam === ""
+//     ) {
+//       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+//       titleCheckGioNgayThang.push("HD");
+//       arrHoursOke.push(hour);
+//     }
+
+//     if (
+//       !CheckNguHanhTuongKhacKhauQuyet(
+//         NGU_HANH[hour],
+//         combineThienCanGioThang
+//       ) &&
+//       !CheckNguHanhTuongKhacKhauQuyet(
+//         NGU_HANH[item.thangChi],
+//         combineThienCanGioThang
+//       ) &&
+//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) === false &&
+//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang) &&
+//       combineThienCanGioNgay === "" &&
+//       combineThienCanGioThang !== "" &&
+//       combineThienCanGioNam === ""
+//     ) {
+//       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+//       titleCheckGioNgayThang.push("HM");
+//       arrHoursOke.push(hour);
+//     }
+//     if (
+//       !CheckNguHanhTuongKhacKhauQuyet(
+//         NGU_HANH[hour],
+//         combineThienCanGioThang
+//       ) &&
+//       !CheckNguHanhTuongKhacKhauQuyet(
+//         NGU_HANH[item.thangChi],
+//         combineThienCanGioThang
+//       ) &&
+//       !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNgay) &&
+//       !CheckNguHanhTuongKhacKhauQuyet(
+//         NGU_HANH[item.ngayChi],
+//         combineThienCanGioNgay
+//       ) &&
+//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) === false &&
+//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
+//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) === false &&
+//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang) &&
+//       combineThienCanGioNgay !== "" &&
+//       combineThienCanGioThang !== "" &&
+//       combineThienCanGioNam === ""
+//     ) {
+//       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+//       titleCheckGioNgayThang.push("HDM");
+//       arrHoursOke.push(hour);
+//     }
+//     // }
+//   });
+//   if (isCheckGioNgayThangWhileCanNgayKhacToaNha.length !== 0) {
+//     arrPerfectDateStep5.push({
+//       ...item,
+//       gio: arrHours,
+//       isTruongHop2BonusHoaHop,
+//       titleCheckGioNgayThang,
+//       arrHoursOke,
+//     });
+//     if (arrHours.length !== 0) {
+//       arrPerfectDateStep8.push({
+//         ...item,
+//         gio: arrHours,
+//         textStatusDate,
+//         isTruongHop2BonusHoaHop,
+//         titleCheckGioNgayThang,
+//         arrHoursOke,
+//       });
+//     }
+//   }
+// };

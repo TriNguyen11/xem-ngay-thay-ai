@@ -252,7 +252,7 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-
+    console.log(valueSelect, "valueSelect");
     // Tranh Bach ky
     arrPerfectDateStep2.map((item, index) => {
       if (
@@ -281,7 +281,21 @@ export default function Home() {
         // Sinh Xuat
         // !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
-        arrPerfectDateStep3.push(item);
+        if (valueSelect === "nhap-trach") {
+          if (
+            !CheckThienTaiDiaHoa(item.ngayChi, item.monthLunar) &&
+            !CheckDaiBai(
+              item.namCan,
+              item.monthLunar,
+              item.ngayCan + " " + item.ngayChi
+            ) &&
+            !CheckDuongCong(item.monthLunar, item.dayLunar)
+          ) {
+            arrPerfectDateStep3.push(item);
+          }
+        } else {
+          arrPerfectDateStep3.push(item);
+        }
       }
     });
 
@@ -291,22 +305,12 @@ export default function Home() {
       valueText
     );
 
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
-
     // Chon gio
     arrPerfectDateStep6.map((item, ind) => {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      arrHoursOke = [];
-      titleCheckGioNgayThang = [];
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
-
-      arrHours = CheckTrucXungGio(
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
+      const arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
         item.thangChi,
@@ -646,21 +650,13 @@ export default function Home() {
       valueText
     );
     // Chon gio
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
 
     // Chon gio
     arrPerfectDateStep6.map((item, ind) => {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      arrHoursOke = [];
-      titleCheckGioNgayThang = [];
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
-      arrHours = CheckTrucXungGio(
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
+      const arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
         item.thangChi,
@@ -994,7 +990,6 @@ export default function Home() {
         arrPerfectDateStep4.push(item);
       }
     });
-    console.log(arrPerfectDateStep4.length, "borrorww");
     //xet them dong-tho nhap-trach
     arrPerfectDateStep4.map((item, ind) => {
       if (
@@ -1043,21 +1038,12 @@ export default function Home() {
       valueText
     );
     // Chon gio
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
-
     arrPerfectDateStep6.map((item, ind) => {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      arrHoursOke = [];
-      titleCheckGioNgayThang = [];
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
 
-      arrHours = CheckTrucXungGio(
+      const arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
         item.thangChi,
@@ -1257,13 +1243,9 @@ export default function Home() {
       }
     });
 
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
-      arrHours = CheckTrucXungGioKhongToa(
+      const arrHours = CheckTrucXungGioKhongToa(
         item.ngayChi,
         item.thangChi,
         CHI_NAM[tuoiGiaChu % 12],

@@ -126,7 +126,7 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
             <TableBody>
               {data?.map((date, index) => {
                 // console.log(date, "date");
-                let backky = "";
+                let backky = [];
                 // Dai bai
                 if (
                   CheckDaiBai(

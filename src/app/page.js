@@ -281,7 +281,21 @@ export default function Home() {
         // Sinh Xuat
         // !CheckSinhXuat(NGU_HANH[valueText], NGU_HANH[item.ngayCan])
       ) {
-        arrPerfectDateStep3.push(item);
+        if (valueSelect === "nhap-trach") {
+          if (
+            !CheckThienTaiDiaHoa(item.ngayChi, item.monthLunar) &&
+            !CheckDaiBai(
+              item.namCan,
+              item.monthLunar,
+              item.ngayCan + " " + item.ngayChi
+            ) &&
+            !CheckDuongCong(item.monthLunar, item.dayLunar)
+          ) {
+            arrPerfectDateStep3.push(item);
+          }
+        } else {
+          arrPerfectDateStep3.push(item);
+        }
       }
     });
 
@@ -1351,13 +1365,13 @@ export default function Home() {
         Xem ngày Xây dựng
       </div>
       {/* <Button
-        variant="contained"
-        style={{ backgroundColr: "green" }}
-        onClick={() => {
-          handleInit();
-        }}>
-        asdsa
-      </Button> */}
+      variant="contained"
+      style={{ backgroundColr: "green" }}
+      onClick={() => {
+        handleInit();
+      }}>
+      asdsa
+    </Button> */}
       <div>
         <FormControl fullWidth style={{ marginBottom: 20 }}>
           <InputLabel id="demo-simple-select-label">
@@ -1677,37 +1691,37 @@ export default function Home() {
               width: window.innerWidth * 0.9,
             }}>
             {/* {rangeDayInMonthLunar &&
-              Object.keys(rangeDayInMonthLunar).map((year) => {
-                return (
-                  <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
-                    Năm {year}:{" "}
-                    {Object.keys(rangeDayInMonthLunar[year]).map((month) => {
-                      return (
-                        <li style={{ fontWeight: 400 }}>
-                          - Tháng {month} (
-                          {rangeDayInMonthLunar[year][month][0].thangCan}{" "}
-                          {rangeDayInMonthLunar[year][month][0].thangChi}): từ{" "}
-                          {rangeDayInMonthLunar[year][month][0].daySolar}/
-                          {rangeDayInMonthLunar[year][month][0].monthSolar}/
-                          {rangeDayInMonthLunar[year][month][0].yearSolar} đến
-                          ngày{" "}
-                          {rangeDayInMonthLunar[year][month][1]
-                            ? rangeDayInMonthLunar[year][month][1].daySolar
-                            : rangeDayInMonthLunar[year][month][0].daySolar}
-                          /
-                          {rangeDayInMonthLunar[year][month][1]
-                            ? rangeDayInMonthLunar[year][month][1].monthSolar
-                            : rangeDayInMonthLunar[year][month][0].monthSolar}
-                          /
-                          {rangeDayInMonthLunar[year][month][1]
-                            ? rangeDayInMonthLunar[year][month][1].yearSolar
-                            : rangeDayInMonthLunar[year][month][0].yearSolar}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                );
-              })} */}
+            Object.keys(rangeDayInMonthLunar).map((year) => {
+              return (
+                <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
+                  Năm {year}:{" "}
+                  {Object.keys(rangeDayInMonthLunar[year]).map((month) => {
+                    return (
+                      <li style={{ fontWeight: 400 }}>
+                        - Tháng {month} (
+                        {rangeDayInMonthLunar[year][month][0].thangCan}{" "}
+                        {rangeDayInMonthLunar[year][month][0].thangChi}): từ{" "}
+                        {rangeDayInMonthLunar[year][month][0].daySolar}/
+                        {rangeDayInMonthLunar[year][month][0].monthSolar}/
+                        {rangeDayInMonthLunar[year][month][0].yearSolar} đến
+                        ngày{" "}
+                        {rangeDayInMonthLunar[year][month][1]
+                          ? rangeDayInMonthLunar[year][month][1].daySolar
+                          : rangeDayInMonthLunar[year][month][0].daySolar}
+                        /
+                        {rangeDayInMonthLunar[year][month][1]
+                          ? rangeDayInMonthLunar[year][month][1].monthSolar
+                          : rangeDayInMonthLunar[year][month][0].monthSolar}
+                        /
+                        {rangeDayInMonthLunar[year][month][1]
+                          ? rangeDayInMonthLunar[year][month][1].yearSolar
+                          : rangeDayInMonthLunar[year][month][0].yearSolar}
+                      </li>
+                    );
+                  })}
+                </ul>
+              );
+            })} */}
           </div>
           {/* Nhan */}
           <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>
