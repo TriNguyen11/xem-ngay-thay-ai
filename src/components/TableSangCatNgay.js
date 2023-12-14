@@ -305,7 +305,7 @@ const TableSangCatNgay = ({
                     style={{
                       textAlign: "center",
                     }}
-                    key={date.daySolar}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell
                       style={{
@@ -328,7 +328,9 @@ const TableSangCatNgay = ({
                         textAlign: "center",
                       }}>
                       {date.dayLunar} - {date.monthLunar}- {date.yearLunar}{" "}
-                      {backky.length !== 0 ? "(" + backky + ")" : ""}
+                      {backky.length !== 0
+                        ? "(" + backky?.toString()?.replaceAll(",", ", ") + ")"
+                        : ""}
                     </TableCell>
                     <TableCell
                       style={{
@@ -413,7 +415,7 @@ const TableSangCatNgay = ({
                           <div>
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-col my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 let timeNormal = GetErrorTimeNormalSangCat(
                                   itemGio,
                                   {
@@ -471,7 +473,7 @@ const TableSangCatNgay = ({
                                 )
                                   return (
                                     <span
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:
@@ -541,7 +543,7 @@ const TableSangCatNgay = ({
                           <div>
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-col  my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 let timeNormal = GetErrorTimeNormalSangCat(
                                   itemGio,
                                   {
@@ -600,7 +602,7 @@ const TableSangCatNgay = ({
                                 )
                                   return (
                                     <span
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:

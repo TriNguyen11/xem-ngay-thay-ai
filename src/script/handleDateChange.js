@@ -1200,9 +1200,6 @@ export const CheckCase2TrungTang = (data) => {
   let arrText = [];
 
   // tuoi
-  if (data.chiNamSinh === data.bamCungTuoi) {
-    countTrungTangCase1++;
-  }
 
   // namMat
   if (data.chiNamSinh === data.bamCungTuoi) {

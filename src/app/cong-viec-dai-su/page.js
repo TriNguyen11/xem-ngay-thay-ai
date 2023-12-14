@@ -484,10 +484,10 @@ export default function Home() {
                   return (
                     <>
                       <div className="max-h-[500px] overflow-scroll">
-                        <TableResult
+                        {/* <TableResult
                           data={item}
                           infoGiaChu={infoGiaChu}
-                          valueSelect={valueSelect}></TableResult>
+                          valueSelect={valueSelect}></TableResult> */}
                       </div>
                     </>
                   );

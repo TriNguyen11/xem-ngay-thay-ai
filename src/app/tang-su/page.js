@@ -107,6 +107,22 @@ export default function Home() {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
+    let momentAmLich = moment(
+      `${valueAge.dead_day}/${valueAge.dead_month}/${valueAge.dead_year}`,
+      "DD/MM/YYYY"
+    );
+    const lichAm = await getCanChi(
+      momentAmLich.date(),
+      momentAmLich.month() + 1,
+      momentAmLich.year()
+    );
+    let bamCung = CalcuBamCungNam(
+      tuoiNguoiMat,
+      Number(lichAm.monthLunar),
+      Number(lichAm.dayLunar),
+      valueAge.dead_time?.$H
+    );
+
     if (Number(valueAge.month) <= 2) {
       const sunlong = getSunLongitude(
         jdn(
@@ -141,22 +157,6 @@ export default function Home() {
         tuoiNguoiMat--;
       }
     }
-
-    let momentAmLich = moment(
-      `${valueAge.dead_day}/${valueAge.dead_month}/${valueAge.dead_year}`,
-      "DD/MM/YYYY"
-    );
-    const lichAm = await getCanChi(
-      momentAmLich.date(),
-      momentAmLich.month() + 1,
-      momentAmLich.year()
-    );
-    let bamCung = CalcuBamCungNam(
-      tuoiNguoiMat,
-      Number(lichAm.monthLunar),
-      Number(lichAm.dayLunar),
-      valueAge.dead_time?.$H
-    );
     // Case 1
     let countCase1 = CountStatusTrungTang({
       ...bamCung,
@@ -219,6 +219,22 @@ export default function Home() {
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
+    let momentAmLich = moment(
+      `${valueAge.dead_day}/${valueAge.dead_month}/${valueAge.dead_year}`,
+      "DD/MM/YYYY"
+    );
+    const lichAm = await getCanChi(
+      momentAmLich.date(),
+      momentAmLich.month() + 1,
+      momentAmLich.year()
+    );
+    let bamCung = CalcuBamCungNu(
+      tuoiNguoiMat,
+      Number(lichAm.monthLunar),
+      Number(lichAm.dayLunar),
+      valueAge.dead_time?.$H
+    );
+
     if (Number(valueAge.month) <= 2) {
       const sunlong = getSunLongitude(
         jdn(
@@ -253,22 +269,7 @@ export default function Home() {
         tuoiNguoiMat--;
       }
     }
-
-    let momentAmLich = moment(
-      `${valueAge.dead_day}/${valueAge.dead_month}/${valueAge.dead_year}`,
-      "DD/MM/YYYY"
-    );
-    const lichAm = await getCanChi(
-      momentAmLich.date(),
-      momentAmLich.month() + 1,
-      momentAmLich.year()
-    );
-    let bamCung = CalcuBamCungNu(
-      tuoiNguoiMat,
-      Number(lichAm.monthLunar),
-      Number(lichAm.dayLunar),
-      valueAge.dead_time?.$H
-    );
+    console.log(tuoiNguoiMat, "tuoiNguoiMat");
 
     let countCase1 = CountStatusTrungTang({
       ...bamCung,

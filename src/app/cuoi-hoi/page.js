@@ -1136,12 +1136,12 @@ export default function Home() {
                 {lunarYearArr && `(${lunarYearArr?.length})`}
               </div>
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2 ">
-                <TableWeddingNam
+                {/* <TableWeddingNam
                   data={stepShow.step1}
                   toaNha={valueText.namToa || valueText.nuToa}
                   infoGiaChu={infoGiaChu}
                   lunarYearArr={lunarYearArr || []}
-                  valueSelect={valueSelect}></TableWeddingNam>
+                  valueSelect={valueSelect}></TableWeddingNam> */}
               </div>
             </div>
           )}

@@ -385,7 +385,7 @@ const TableWedding = ({
                     style={{
                       textAlign: "center",
                     }}
-                    key={date.daySolar}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell
                       style={{
@@ -497,7 +497,7 @@ const TableWedding = ({
                           <div>
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-col my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 let timeNormal = [];
 
                                 if (
@@ -617,7 +617,7 @@ const TableWedding = ({
                                 )
                                   return (
                                     <div
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:
@@ -687,14 +687,12 @@ const TableWedding = ({
                           <div>
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-col my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 let timeNormal = [];
 
                                 if (
                                   CheckTrucXungNgayThangNam(itemGio, toaNha)
                                 ) {
-                                  console.log("xung toaaa", 22222, itemGio);
-
                                   timeNormal.push("Xung toạ");
                                 }
 
@@ -719,22 +717,6 @@ const TableWedding = ({
                                 if (CheckGioSatChu(date.monthLunar, itemGio)) {
                                   timeNormal.push("Sát chủ");
                                 }
-
-                                // if (
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   ) &&
-                                //   valueSelect !== "ngay-dang-ki-ket-hon" &&
-                                //   valueSelect !== "ngay-mai-moi"
-                                // ) {
-                                //   timeNormal.push("Khắc hành toạ");
-                                // }
-
                                 // xung, trung nam
                                 if (
                                   CHI_NAM[
@@ -771,17 +753,6 @@ const TableWedding = ({
                                   timeNormal.push("Xung tuổi nữ");
                                 }
 
-                                // if (
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   )
-                                // )
-                                //   timeNormal.push("Khắc hành toạ");
                                 let timeErr = "";
                                 if (
                                   CheckNguHanhTuongKhac(
@@ -823,7 +794,7 @@ const TableWedding = ({
                                 )
                                   return (
                                     <div
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:

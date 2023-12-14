@@ -144,10 +144,10 @@ const TableWeddingTrucTu = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                   );
                 return (
                   <TableRow
+                    key={index}
                     style={{
                       textAlign: "center",
                     }}
-                    key={date.daySolar}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell
                       style={{
@@ -319,14 +319,14 @@ const TableWeddingTrucTu = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                           <div>
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-row text-center my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
                                   CHI_NAM_SORTED.indexOf(itemGio) >= 9
                                 )
                                   return (
                                     <span
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:
@@ -395,10 +395,10 @@ const TableWeddingTrucTu = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                       }}>
                       <span className="flex flex-row text-center" style={{}}>
                         {date?.gioHoangDao &&
-                          date.gioHoangDao?.map((item, index) => {
+                          date.gioHoangDao?.map((item, indexChild) => {
                             return (
                               <span
-                                key={Math.random()}
+                                key={Math.random() + indexChild}
                                 style={{
                                   marginRight: 5,
                                   color:

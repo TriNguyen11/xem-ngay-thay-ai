@@ -66,8 +66,8 @@ const TableWeddingThangNew = ({
               {data &&
                 Object.keys(data).map((year, index) => {
                   return Object.keys(data[year]).map((month, indMonth) => {
-                    let backky = "";
-                    if (data[year][month]?.isLeap) backky = "Tháng nhuận";
+                    let backky = [];
+                    if (data[year][month]?.isLeap) backky.push("Tháng nhuận");
 
                     if (
                       CheckDaiLoi(
@@ -76,7 +76,7 @@ const TableWeddingThangNew = ({
                         // date.monthLunar
                       )
                     )
-                      backky = "Đại lợi nữ";
+                      backky.push("Đại lợi nữ");
                     if (
                       CheckTieuLoi(
                         CHI_NAM[infoGiaChu?.namSinhNu % 12],
@@ -85,7 +85,7 @@ const TableWeddingThangNew = ({
                         // date.monthLunar
                       )
                     )
-                      backky = "Tiểu lợi nữ";
+                      backky.push("Tiểu lợi nữ");
                     if (
                       CheckCongCo(
                         CHI_NAM[infoGiaChu?.namSinhNu % 12],
@@ -93,7 +93,7 @@ const TableWeddingThangNew = ({
                         // date.monthLunar
                       )
                     )
-                      backky = "Công cô nữ";
+                      backky.push("Công cô nữ");
 
                     //  xung, trung nam
                     if (
@@ -135,7 +135,7 @@ const TableWeddingThangNew = ({
                         // date.monthLunar
                       )
                     )
-                      backky = "Thê chủ nữ";
+                      backky.push("Thê chủ nữ");
                     if (
                       CheckPhuChu(
                         CHI_NAM[infoGiaChu?.namSinhNu % 12],
@@ -144,7 +144,7 @@ const TableWeddingThangNew = ({
                         // date.monthLunar
                       )
                     )
-                      backky = "Phu chủ nữ";
+                      backky.push("Phu chủ nữ");
 
                     if (
                       CheckNhacThan(
@@ -154,17 +154,18 @@ const TableWeddingThangNew = ({
                         // date.monthLunar
                       )
                     )
-                      backky = "Nhạc thân nữ";
-                    if (data[year][month]?.isLeap) backky = "Tháng Nhuận";
+                      backky.push("Nhạc thân nữ");
+                    if (data[year][month]?.isLeap) backky.push("Tháng Nhuận");
                     if (
                       CheckTrucXungNgayThangNam(
                         toaNha,
                         data[year][month].chiMonth
                       )
                     )
-                      backky = " Xung toạ";
+                      backky.push(" Xung toạ");
                     return (
                       <TableRow
+                        key={Math.random() + indMonth}
                         style={{
                           textAlign: "center",
                         }}
@@ -189,17 +190,17 @@ const TableWeddingThangNew = ({
                           style={{
                             textAlign: "center",
                             fontWeight:
-                              backky === "Tiểu lợi nữ" ||
-                              backky === "Đại lợi nữ"
+                              backky.includes("Tiểu lợi nữ") ||
+                              backky.includes("Đại lợi nữ")
                                 ? "bold"
                                 : "400",
                             color:
-                              backky === "Tiểu lợi nữ" ||
-                              backky === "Đại lợi nữ"
+                              backky.includes("Tiểu lợi nữ") ||
+                              backky.includes("Đại lợi nữ")
                                 ? "green"
                                 : "red",
                           }}>
-                          {backky}
+                          {backky?.toString()?.replaceAll(",", ", ")}
                         </TableCell>
                       </TableRow>
                     );

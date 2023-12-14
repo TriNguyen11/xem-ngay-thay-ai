@@ -136,16 +136,14 @@ const TableResultStepFinal = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
             </TableHead>
             <TableBody>
               {data?.map((date, index) => {
-                // console.log(date, "date");
                 let backky = "";
-                // Dai bai
 
                 return (
                   <TableRow
                     style={{
                       textAlign: "center",
                     }}
-                    key={date.daySolar}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell
                       style={{
@@ -253,7 +251,7 @@ const TableResultStepFinal = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                           <div>
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-col  my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
                                   CHI_NAM_SORTED.indexOf(itemGio) < 9 &&
@@ -299,7 +297,7 @@ const TableResultStepFinal = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                   }
                                   return (
                                     <span
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:
@@ -354,7 +352,7 @@ const TableResultStepFinal = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                           <div>
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-col  my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 if (
                                   (CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
                                     CHI_NAM_SORTED.indexOf(itemGio) >= 9) &&
@@ -400,7 +398,7 @@ const TableResultStepFinal = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                                   }
                                   return (
                                     <span
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:
@@ -458,10 +456,10 @@ const TableResultStepFinal = ({ data, infoNguoiMat, valueSelect, toaNha }) => {
                       }}>
                       <span className="flex flex-row text-center" style={{}}>
                         {date?.gioHoangDao &&
-                          date.gioHoangDao?.map((item, index) => {
+                          date.gioHoangDao?.map((item, indexChild) => {
                             return (
                               <span
-                                key={Math.random()}
+                                key={Math.random() + indexChild}
                                 style={{
                                   marginRight: 5,
                                   color:

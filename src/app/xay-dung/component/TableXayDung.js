@@ -317,7 +317,7 @@ const TableXayDung = ({
                     style={{
                       textAlign: "center",
                     }}
-                    key={date.daySolar}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell
                       style={{
@@ -427,7 +427,7 @@ const TableXayDung = ({
                           <div>
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-col my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 let timeNormal = [];
                                 // Normal
                                 if (CheckTrucXungNgayThangNam(itemGio, toaNha))
@@ -470,16 +470,6 @@ const TableXayDung = ({
                                   timeNormal.push("Xung tuổi");
                                 }
 
-                                // if (
-                                //   CheckTrucXungChi(
-                                //     itemGio,
-                                //     infoGiaChu?.tuoiGiaChu
-                                //   )
-                                // ) {
-
-                                //   // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
-                                // }
-                                console.log(timeNormal, itemGio, "timeNormal");
                                 let timeErr = "";
                                 if (toaNha) {
                                   if (
@@ -517,30 +507,13 @@ const TableXayDung = ({
                                     );
                                   }
                                 }
-
-                                // if (
-                                //   CheckSinhXuat(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   ) === true &&
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[date.ngayCan]
-                                //   )
-                                // ) {
-                                //   timeErr = "Sinh Xuất";
-                                // }
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
                                   CHI_NAM_SORTED.indexOf(itemGio) < 9
                                 )
                                   return (
                                     <div
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:
@@ -600,16 +573,9 @@ const TableXayDung = ({
                           <div>
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-col my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 let timeNormal = [];
-                                // console.log(
-                                //   CheckTrucXungChi(
-                                //     itemGio,
-                                //     CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12]
-                                //   ),
-                                //   itemGio,
-                                //   "213123"
-                                // );
+
                                 // Normal
                                 if (CheckTrucXungNgayThangNam(itemGio, toaNha))
                                   timeNormal.push("Xung toạ");
@@ -635,19 +601,6 @@ const TableXayDung = ({
                                 if (CheckGioSatChu(date.monthLunar, itemGio)) {
                                   timeNormal.push("Sát chủ");
                                 }
-                                // if (
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   ) &&
-                                //   valueSelect !== "dao-gieng" &&
-                                //   valueSelect !== "lap-gieng"
-                                // )
-                                //   timeNormal.push("Khắc hành toạ");
                                 if (
                                   CHI_NAM[
                                     Number(infoGiaChu?.tuoiGiaChu) % 12
@@ -701,22 +654,6 @@ const TableXayDung = ({
                                     );
                                   }
                                 }
-                                // if (
-                                //   CheckSinhXuat(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   ) === true &&
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[date.ngayCan]
-                                //   )
-                                // ) {
-                                //   timeErr = "Sinh Xuất";
-                                // }
 
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
@@ -724,7 +661,7 @@ const TableXayDung = ({
                                 )
                                   return (
                                     <div
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:

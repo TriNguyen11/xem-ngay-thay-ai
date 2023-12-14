@@ -394,7 +394,7 @@ const TableShow = ({
                           <div>
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-col my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 let timeNormal = [];
                                 // Normal
                                 if (CheckTrucXungNgayThangNam(itemGio, toaNha))
@@ -421,27 +421,6 @@ const TableShow = ({
                                 if (CheckGioSatChu(date.monthLunar, itemGio)) {
                                   timeNormal.push("Sát chủ");
                                 }
-                                // if (
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   )
-                                // )
-                                //   timeNormal.push("Khắc hành toạ");
-
-                                // if (
-                                //   CheckTrucXungChi(
-                                //     itemGio,
-                                //     infoGiaChu?.tuoiGiaChu
-                                //   )
-                                // ) {
-                                //   timeNormal.push("Xung, trùng tuổi");
-                                //   // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
-                                // }
                                 if (
                                   CHI_NAM[
                                     Number(infoGiaChu?.tuoiGiaChu) % 12
@@ -480,29 +459,14 @@ const TableShow = ({
                                     toaNha
                                   );
                                 }
-                                // if (
-                                //   CheckSinhXuat(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   ) === true &&
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[date.ngayCan]
-                                //   )
-                                // ) {
-                                //   timeErr = "Sinh Xuất";
-                                // }
+
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
                                   CHI_NAM_SORTED.indexOf(itemGio) < 9
                                 )
                                   return (
                                     <div
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:
@@ -562,16 +526,9 @@ const TableShow = ({
                           <div>
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-col my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 let timeNormal = [];
-                                // console.log(
-                                //   CheckTrucXungChi(
-                                //     itemGio,
-                                //     CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12]
-                                //   ),
-                                //   itemGio,
-                                //   "213123"
-                                // );
+
                                 // Normal
                                 if (CheckTrucXungNgayThangNam(itemGio, toaNha))
                                   timeNormal.push("Xung toạ");
@@ -647,22 +604,6 @@ const TableShow = ({
                                     toaNha
                                   );
                                 }
-                                // if (
-                                //   CheckSinhXuat(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   ) === true &&
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[date.ngayCan]
-                                //   )
-                                // ) {
-                                //   timeErr = "Sinh Xuất";
-                                // }
 
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
@@ -670,7 +611,7 @@ const TableShow = ({
                                 )
                                   return (
                                     <div
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:

@@ -293,14 +293,14 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                           <div>
                             Trong thời gian mặt trời mọc:
                             <div className="flex flex-row text-center my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
                                   CHI_NAM_SORTED.indexOf(itemGio) < 9
                                 )
                                   return (
                                     <span
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:
@@ -366,14 +366,14 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                           <div>
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-row text-center my-1">
-                              {date.gio?.map((itemGio, index) => {
+                              {date.gio?.map((itemGio, indexChild) => {
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) <= 2 ||
                                   CHI_NAM_SORTED.indexOf(itemGio) >= 9
                                 )
                                   return (
                                     <span
-                                      key={Math.random()}
+                                      key={Math.random() + indexChild}
                                       style={{
                                         marginRight: 5,
                                         color:

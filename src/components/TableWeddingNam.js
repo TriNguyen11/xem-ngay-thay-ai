@@ -126,6 +126,7 @@ const TableWeddingNam = ({
                   xungNam = "Hình Thái tuế";
                 return (
                   <TableRow
+                    key={index}
                     style={{
                       textAlign: "center",
                     }}

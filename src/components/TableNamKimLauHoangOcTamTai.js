@@ -129,6 +129,7 @@ const TableNamKimLauHoangOcTamTai = ({
                   ] === CHI_NAM[Number(year) % 12];
                 return (
                   <TableRow
+                    key={index}
                     style={{
                       textAlign: "center",
                     }}

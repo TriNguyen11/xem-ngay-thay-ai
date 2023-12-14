@@ -84,7 +84,7 @@ const TableShowRecommend = ({ data, bonusConditionBuilding, infoGiaChu }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Object.keys(data)?.map((year) => {
+              {Object.keys(data)?.map((year, index) => {
                 if (
                   bonusConditionBuilding.TamTai.includes(Number(year)) ||
                   bonusConditionBuilding.KimLau.includes(Number(year)) ||
@@ -98,6 +98,7 @@ const TableShowRecommend = ({ data, bonusConditionBuilding, infoGiaChu }) => {
                 )
                   return (
                     <TableRow
+                      key={index}
                       style={{
                         textAlign: "center",
                       }}
