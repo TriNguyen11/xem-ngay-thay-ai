@@ -433,14 +433,30 @@ const TableShow = ({
                                 // )
                                 //   timeNormal.push("Khắc hành toạ");
 
+                                // if (
+                                //   CheckTrucXungChi(
+                                //     itemGio,
+                                //     infoGiaChu?.tuoiGiaChu
+                                //   )
+                                // ) {
+                                //   timeNormal.push("Xung, trùng tuổi");
+                                //   // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                // }
                                 if (
-                                  CheckTrucXungChi(
-                                    itemGio,
-                                    infoGiaChu?.tuoiGiaChu
+                                  CHI_NAM[
+                                    Number(infoGiaChu?.tuoiGiaChu) % 12
+                                  ] === itemGio
+                                )
+                                  timeNormal.push("Trùng tuổi");
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    CHI_NAM[
+                                      Number(infoGiaChu?.tuoiGiaChu) % 12
+                                    ],
+                                    itemGio
                                   )
                                 ) {
-                                  timeNormal.push("Xung, trùng tuổi");
-                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                  timeNormal.push("Xung tuổi");
                                 }
 
                                 let timeErr = "";
@@ -593,13 +609,20 @@ const TableShow = ({
                                 // )
                                 //   timeNormal.push("Khắc hành toạ");
                                 if (
-                                  CheckTrucXungChi(
-                                    itemGio,
-                                    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12]
+                                  CHI_NAM[
+                                    Number(infoGiaChu?.tuoiGiaChu) % 12
+                                  ] === itemGio
+                                )
+                                  timeNormal.push("Trùng tuổi");
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    CHI_NAM[
+                                      Number(infoGiaChu?.tuoiGiaChu) % 12
+                                    ],
+                                    itemGio
                                   )
                                 ) {
-                                  timeNormal.push("Xung, trùng tuổi");
-                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                  timeNormal.push("Xung tuổi");
                                 }
 
                                 //Hop Hoa

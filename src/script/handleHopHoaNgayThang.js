@@ -40,7 +40,15 @@ export const handleHopHoaNgayThang = async (arr, toa) => {
         !CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanNgayNam) &&
         CheckSinhXuat(NGU_HANH[toa], combineThienCanNgayNam) === false
       ) {
-        ArrHopHoa.push(item);
+        ArrHopHoa.push({
+          ...item,
+          titleHopHoaNgay:
+            combineThienCanNgayThang.length !== 0
+              ? "DM"
+              : combineThienCanNgayNam.length !== 0
+              ? "DY"
+              : "DMY",
+        });
       }
     } else {
       ArrHopHoa.push(item);
@@ -59,8 +67,6 @@ export const handleHopHoaGio = (
   toa,
   arrPerfectDateStep5,
   arrPerfectDateStep8,
-  textStatusDate,
-
   isTruongHop2BonusHoaHop
 ) => {
   arrHours.map((hour, index) => {
@@ -71,18 +77,20 @@ export const handleHopHoaGio = (
     //   ) === false
     // ) {
 
-    let combineThienCanGioNgay = CombineThienCan(
+    const combineThienCanGioNgay = CombineThienCan(
       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
       item.ngayCan
     );
-    let combineThienCanGioThang = CombineThienCan(
+    const combineThienCanGioThang = CombineThienCan(
       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
       item.thangCan
     );
-    let combineThienCanGioNam = CombineThienCan(
+    const combineThienCanGioNam = CombineThienCan(
       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
       item.namCan
     );
+
+    // HY
     if (
       !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNam) &&
       !CheckNguHanhTuongKhacKhauQuyet(
@@ -96,11 +104,10 @@ export const handleHopHoaGio = (
       combineThienCanGioNam !== ""
     ) {
       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
-
       titleCheckGioNgayThang.push("HY");
       arrHoursOke.push(hour);
     }
-
+    // HD
     if (
       !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNgay) &&
       !CheckNguHanhTuongKhacKhauQuyet(
@@ -118,7 +125,7 @@ export const handleHopHoaGio = (
       titleCheckGioNgayThang.push("HD");
       arrHoursOke.push(hour);
     }
-
+    // HM
     if (
       !CheckNguHanhTuongKhacKhauQuyet(
         NGU_HANH[hour],
@@ -139,7 +146,61 @@ export const handleHopHoaGio = (
       titleCheckGioNgayThang.push("HM");
       arrHoursOke.push(hour);
     }
+    // HDM && HDY
     if (
+      // HD
+      !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNgay) &&
+      !CheckNguHanhTuongKhacKhauQuyet(
+        NGU_HANH[item.ngayChi],
+        combineThienCanGioNgay
+      ) &&
+      CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) === false &&
+      !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
+      combineThienCanGioNgay !== ""
+    ) {
+      // HM
+      if (
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioThang
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.thangChi],
+          combineThienCanGioThang
+        ) &&
+        combineThienCanGioThang !== "" &&
+        combineThienCanGioNam === "" &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) ===
+          false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang)
+      ) {
+        isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+        titleCheckGioNgayThang.push("HDM");
+        arrHoursOke.push(hour);
+      }
+      // HY
+      if (
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioNam
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.thangChi],
+          combineThienCanGioNam
+        ) &&
+        combineThienCanGioNam !== "" &&
+        combineThienCanGioThang === "" &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNam) === false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNam)
+      ) {
+        isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+        titleCheckGioNgayThang.push("HDY");
+        arrHoursOke.push(hour);
+      }
+    }
+    // HMY && HDMY
+    if (
+      // HM
       !CheckNguHanhTuongKhacKhauQuyet(
         NGU_HANH[hour],
         combineThienCanGioThang
@@ -148,33 +209,52 @@ export const handleHopHoaGio = (
         NGU_HANH[item.thangChi],
         combineThienCanGioThang
       ) &&
-      !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNgay) &&
-      !CheckNguHanhTuongKhacKhauQuyet(
-        NGU_HANH[item.ngayChi],
-        combineThienCanGioNgay
-      ) &&
-      CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) === false &&
-      !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
+      combineThienCanGioThang !== "" &&
       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) === false &&
       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang) &&
-      combineThienCanGioNgay !== "" &&
-      combineThienCanGioThang !== "" &&
-      combineThienCanGioNam === ""
+      // HY
+      !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNam) &&
+      !CheckNguHanhTuongKhacKhauQuyet(
+        NGU_HANH[item.thangChi],
+        combineThienCanGioNam
+      ) &&
+      combineThienCanGioNam !== "" &&
+      CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNam) === false &&
+      !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNam)
     ) {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
-
-      titleCheckGioNgayThang.push("HDM");
-      arrHoursOke.push(hour);
+      // HD => HDMY
+      if (
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioNgay
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.ngayChi],
+          combineThienCanGioNgay
+        ) &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) ===
+          false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
+        combineThienCanGioNgay !== ""
+      ) {
+        titleCheckGioNgayThang.push("HDMY");
+        isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+        arrHoursOke.push(hour);
+      } else {
+        //  HMY
+        titleCheckGioNgayThang.push("HMY");
+        isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+        arrHoursOke.push(hour);
+      }
     }
-    // }
   });
+
   if (isCheckGioNgayThangWhileCanNgayKhacToaNha.length !== 0) {
     arrPerfectDateStep5.push({
       ...item,
       gio: arrHours,
       isTruongHop2BonusHoaHop,
       titleCheckGioNgayThang,
-      textStatusDate,
       arrHoursOke,
     });
     if (arrHours.length !== 0) {
@@ -183,141 +263,246 @@ export const handleHopHoaGio = (
         gio: arrHours,
         isTruongHop2BonusHoaHop,
         titleCheckGioNgayThang,
-        textStatusDate,
         arrHoursOke,
       });
     }
   }
 };
-// const handleHopHoaGio = async (
-//   item,
-//   arrHours,
-//   isCheckGioNgayThangWhileCanNgayKhacToaNha,
-//   arrHoursOke,
-//   titleCheckGioNgayThang,
-//   toa,
-//   arrPerfectDateStep8,
-//   textStatusDate,
-//   isTruongHop2BonusHoaHop
-// ) => {
-//   await arrHours.map((hour, index) => {
-//     // if (
-//     //   CheckSinhXuat(
-//     //     NGU_HANH[toa],
-//     //     NGU_HANH[item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)]]
-//     //   ) === false
-//     // ) {
 
-//     let combineThienCanGioNgay = CombineThienCan(
-//       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-//       item.ngayCan
-//     );
-//     let combineThienCanGioThang = CombineThienCan(
-//       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-//       item.thangCan
-//     );
-//     let combineThienCanGioNam = CombineThienCan(
-//       item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
-//       item.namCan
-//     );
-//     if (
-//       !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNam) &&
-//       !CheckNguHanhTuongKhacKhauQuyet(
-//         NGU_HANH[item.namChi],
-//         combineThienCanGioNam
-//       ) &&
-//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNam) === false &&
-//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNam) &&
-//       combineThienCanGioNgay === "" &&
-//       combineThienCanGioThang === "" &&
-//       combineThienCanGioNam !== ""
-//     ) {
-//       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
-//       titleCheckGioNgayThang.push("HY");
-//       arrHoursOke.push(hour);
-//     }
+export const handleHopHoaGioKhongKhacToa = async (
+  item,
+  arrHours,
+  isCheckGioNgayThangWhileCanNgayKhacToaNha,
+  arrHoursOke,
+  titleCheckGioNgayThang,
+  toa,
+  arrPerfectDateStep5,
+  arrPerfectDateStep8,
+  isTruongHop2BonusHoaHop
+) => {
+  await arrHours.map((hour, index) => {
+    // if (
+    //   CheckSinhXuat(
+    //     NGU_HANH[toa],
+    //     NGU_HANH[item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)]]
+    //   ) === false
+    // ) {
 
-//     if (
-//       !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNgay) &&
-//       !CheckNguHanhTuongKhacKhauQuyet(
-//         NGU_HANH[item.ngayChi],
-//         combineThienCanGioNgay
-//       ) &&
-//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) === false &&
-//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
-//       combineThienCanGioNgay !== "" &&
-//       combineThienCanGioThang === "" &&
-//       combineThienCanGioNam === ""
-//     ) {
-//       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
-//       titleCheckGioNgayThang.push("HD");
-//       arrHoursOke.push(hour);
-//     }
+    const combineThienCanGioNgay = CombineThienCan(
+      item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+      item.ngayCan
+    );
+    const combineThienCanGioThang = CombineThienCan(
+      item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+      item.thangCan
+    );
+    const combineThienCanGioNam = CombineThienCan(
+      item.arrGioCan[CHI_NAM_SORTED.indexOf(hour)],
+      item.namCan
+    );
+    if (
+      combineThienCanGioNgay === "" &&
+      combineThienCanGioThang === "" &&
+      combineThienCanGioNam === ""
+    ) {
+      titleCheckGioNgayThang.push("");
 
-//     if (
-//       !CheckNguHanhTuongKhacKhauQuyet(
-//         NGU_HANH[hour],
-//         combineThienCanGioThang
-//       ) &&
-//       !CheckNguHanhTuongKhacKhauQuyet(
-//         NGU_HANH[item.thangChi],
-//         combineThienCanGioThang
-//       ) &&
-//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) === false &&
-//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang) &&
-//       combineThienCanGioNgay === "" &&
-//       combineThienCanGioThang !== "" &&
-//       combineThienCanGioNam === ""
-//     ) {
-//       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
-//       titleCheckGioNgayThang.push("HM");
-//       arrHoursOke.push(hour);
-//     }
-//     if (
-//       !CheckNguHanhTuongKhacKhauQuyet(
-//         NGU_HANH[hour],
-//         combineThienCanGioThang
-//       ) &&
-//       !CheckNguHanhTuongKhacKhauQuyet(
-//         NGU_HANH[item.thangChi],
-//         combineThienCanGioThang
-//       ) &&
-//       !CheckNguHanhTuongKhacKhauQuyet(NGU_HANH[hour], combineThienCanGioNgay) &&
-//       !CheckNguHanhTuongKhacKhauQuyet(
-//         NGU_HANH[item.ngayChi],
-//         combineThienCanGioNgay
-//       ) &&
-//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) === false &&
-//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
-//       CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) === false &&
-//       !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang) &&
-//       combineThienCanGioNgay !== "" &&
-//       combineThienCanGioThang !== "" &&
-//       combineThienCanGioNam === ""
-//     ) {
-//       isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
-//       titleCheckGioNgayThang.push("HDM");
-//       arrHoursOke.push(hour);
-//     }
-//     // }
-//   });
-//   if (isCheckGioNgayThangWhileCanNgayKhacToaNha.length !== 0) {
-//     arrPerfectDateStep5.push({
-//       ...item,
-//       gio: arrHours,
-//       isTruongHop2BonusHoaHop,
-//       titleCheckGioNgayThang,
-//       arrHoursOke,
-//     });
-//     if (arrHours.length !== 0) {
-//       arrPerfectDateStep8.push({
-//         ...item,
-//         gio: arrHours,
-//         textStatusDate,
-//         isTruongHop2BonusHoaHop,
-//         titleCheckGioNgayThang,
-//         arrHoursOke,
-//       });
-//     }
-//   }
-// };
+      arrHoursOke.push(hour);
+      isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+    } else {
+      // HY
+      if (
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioNam
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.namChi],
+          combineThienCanGioNam
+        ) &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNam) === false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNam) &&
+        combineThienCanGioNgay === "" &&
+        combineThienCanGioThang === "" &&
+        combineThienCanGioNam !== ""
+      ) {
+        isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+        titleCheckGioNgayThang.push("HY");
+        arrHoursOke.push(hour);
+      }
+      // HD
+      if (
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioNgay
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.ngayChi],
+          combineThienCanGioNgay
+        ) &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) ===
+          false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
+        combineThienCanGioNgay !== "" &&
+        combineThienCanGioThang === "" &&
+        combineThienCanGioNam === ""
+      ) {
+        isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+        titleCheckGioNgayThang.push("HD");
+        arrHoursOke.push(hour);
+      }
+      // HM
+      if (
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioThang
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.thangChi],
+          combineThienCanGioThang
+        ) &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) ===
+          false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang) &&
+        combineThienCanGioNgay === "" &&
+        combineThienCanGioThang !== "" &&
+        combineThienCanGioNam === ""
+      ) {
+        isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+        titleCheckGioNgayThang.push("HM");
+        arrHoursOke.push(hour);
+      }
+
+      // HDM && HDY
+      if (
+        // HD
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioNgay
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.ngayChi],
+          combineThienCanGioNgay
+        ) &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) ===
+          false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
+        combineThienCanGioNgay !== ""
+      ) {
+        // HM
+        if (
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[hour],
+            combineThienCanGioThang
+          ) &&
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[item.thangChi],
+            combineThienCanGioThang
+          ) &&
+          combineThienCanGioThang !== "" &&
+          combineThienCanGioNam === "" &&
+          CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) ===
+            false &&
+          !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang)
+        ) {
+          isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+          titleCheckGioNgayThang.push("HDM");
+          arrHoursOke.push(hour);
+        }
+        // HY
+        if (
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[hour],
+            combineThienCanGioNam
+          ) &&
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[item.thangChi],
+            combineThienCanGioNam
+          ) &&
+          combineThienCanGioNam !== "" &&
+          combineThienCanGioThang === "" &&
+          CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNam) ===
+            false &&
+          !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNam)
+        ) {
+          isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+          titleCheckGioNgayThang.push("HDY");
+          arrHoursOke.push(hour);
+        }
+      }
+
+      // HMY && HDMY
+      if (
+        // HM
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioThang
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.thangChi],
+          combineThienCanGioThang
+        ) &&
+        combineThienCanGioThang !== "" &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioThang) ===
+          false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioThang) &&
+        // HY
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[hour],
+          combineThienCanGioNam
+        ) &&
+        !CheckNguHanhTuongKhacKhauQuyet(
+          NGU_HANH[item.thangChi],
+          combineThienCanGioNam
+        ) &&
+        combineThienCanGioNam !== "" &&
+        CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNam) === false &&
+        !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNam)
+      ) {
+        // HD => HDMY
+        if (
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[hour],
+            combineThienCanGioNgay
+          ) &&
+          !CheckNguHanhTuongKhacKhauQuyet(
+            NGU_HANH[item.ngayChi],
+            combineThienCanGioNgay
+          ) &&
+          CheckNguHanhTuongKhac(NGU_HANH[toa], combineThienCanGioNgay) ===
+            false &&
+          !CheckSinhXuat(NGU_HANH[toa], combineThienCanGioNgay) &&
+          combineThienCanGioNgay !== ""
+        ) {
+          titleCheckGioNgayThang.push("HDMY");
+          isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+          arrHoursOke.push(hour);
+        } else {
+          //  HMY
+          titleCheckGioNgayThang.push("HMY");
+          isCheckGioNgayThangWhileCanNgayKhacToaNha.push(true);
+          arrHoursOke.push(hour);
+        }
+      }
+    }
+  });
+
+  if (isCheckGioNgayThangWhileCanNgayKhacToaNha.length !== 0) {
+    arrPerfectDateStep5.push({
+      ...item,
+      gio: arrHours,
+      isTruongHop2BonusHoaHop,
+      titleCheckGioNgayThang,
+      arrHoursOke,
+    });
+    if (arrHours.length !== 0) {
+      arrPerfectDateStep8.push({
+        ...item,
+        gio: arrHours,
+        isTruongHop2BonusHoaHop,
+        titleCheckGioNgayThang,
+        arrHoursOke,
+      });
+    }
+  }
+};

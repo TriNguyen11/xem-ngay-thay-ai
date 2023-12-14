@@ -33,8 +33,8 @@ import {
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
-  NGU_HANH_CAN_CHI_60_HOA_GIAP_INT,
   NGU_HANH_60_HOA_GIAP_INT,
+  NGU_HANH_CAN_CHI_60_HOA_GIAP_INT,
   NGU_HANH_TUONG_SINH,
   ObjectTruc,
   ObjectTu,
@@ -45,7 +45,6 @@ import {
   THO_TU,
   TOA_NHA,
   VANG_VONG,
-  CHI_NAM_SORTED,
 } from "@Root/script/Constant";
 import {
   CheckDaiBai,
@@ -55,32 +54,26 @@ import {
   CheckHoangOcRecommend,
   CheckKimLau,
   CheckNguHanhTuongKhac,
-  CheckNguHanhTuongKhacKhauQuyet,
-  CheckNguHanhTuongSinh,
-  CheckSinhXuat,
   CheckTamTai,
   CheckThienTaiDiaHoa,
   CheckTrucXungGio,
   CheckTrucXungGioKhongToa,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTuoiMuon,
   CheckTuongXungTuongHaiTuoi,
   CheckTuongXungTuongHaiTuoiKhongToa,
-  CheckTuongXungTuongHaiTuoiMonth,
-  CombineThienCan,
   ConvertToRangeDayInMonthLunar,
   getCanChi,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import {
   handleHopHoaGio,
+  handleHopHoaGioKhongKhacToa,
   handleHopHoaNgayThang,
 } from "@Root/script/handleHopHoaNgayThang";
-import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TableXayDung from "./component/TableXayDung";
 
 export default function Home() {
@@ -252,7 +245,6 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    console.log(valueSelect, "valueSelect");
     // Tranh Bach ky
     arrPerfectDateStep2.map((item, index) => {
       if (
@@ -306,7 +298,7 @@ export default function Home() {
     );
 
     // Chon gio
-    arrPerfectDateStep6.map((item, ind) => {
+    arrPerfectDateStep6.map(async (item, ind) => {
       const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
       const arrHoursOke = [];
       const titleCheckGioNgayThang = [];
@@ -334,38 +326,62 @@ export default function Home() {
           titleCheckGioNgayThang,
           valueText,
           arrPerfectDateStep5,
-          arrPerfectDateStep9
+          arrPerfectDateStep9,
+          true
         );
       } else {
         // ty hoa
         if (NGU_HANH[valueText] === NGU_HANH[item.ngayCan]) {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: undefined,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep9.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: undefined,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep9,
+            undefined
+          );
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: undefined,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep9.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: undefined,
+          //   });
+          // }
         }
         // tuong sinh
         else {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: false,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep9.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: false,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep9,
+            false
+          );
+
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: false,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep9.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: false,
+          //   });
+          // }
         }
       }
     });
@@ -955,7 +971,7 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    console.log(tuoiChiMuon, "tuoiChiMuon");
+
     // Tranh Bach ky
     arrPerfectDateStep2.map((item, index) => {
       if (
@@ -1352,7 +1368,7 @@ export default function Home() {
             onChange={(e) => {
               setValueSelect(e.target.value);
               setArrMonthInYear();
-              setValueText();
+              // setValueText();
               setStepShow({
                 step1: undefined,
                 step2: undefined,
@@ -1400,12 +1416,13 @@ export default function Home() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Toạ nhà"
+                  value={valueText}
                   onChange={(e) => {
-                    setValueText(TOA_NHA[e.target.value]);
+                    setValueText(e.target.value);
                   }}>
                   {TOA_NHA.map((key, inex) => {
                     return (
-                      <MenuItem key={Math.random()} value={inex}>
+                      <MenuItem key={Math.random()} value={key}>
                         {key}
                       </MenuItem>
                     );

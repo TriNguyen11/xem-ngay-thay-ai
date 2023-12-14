@@ -38,15 +38,15 @@ import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
 const TableShowRecommend = ({ data, bonusConditionBuilding, infoGiaChu }) => {
-  console.log(
-    infoGiaChu,
-    CheckTrucXungNgayThangNam(
-      CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
-      CHI_NAM[Number(2023) % 12]
-    ),
-    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12] === CHI_NAM[Number(2023) % 12],
-    "check"
-  );
+  // console.log(
+  //   infoGiaChu,
+  //   CheckTrucXungNgayThangNam(
+  //     CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12],
+  //     CHI_NAM[Number(2023) % 12]
+  //   ),
+  //   CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12] === CHI_NAM[Number(2023) % 12],
+  //   "check"
+  // );
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (

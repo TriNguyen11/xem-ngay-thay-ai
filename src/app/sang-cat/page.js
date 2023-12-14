@@ -67,6 +67,7 @@ import {
 } from "@Root/script/handleDateChange";
 import {
   handleHopHoaGio,
+  handleHopHoaGioKhongKhacToa,
   handleHopHoaNgayThang,
 } from "@Root/script/handleHopHoaNgayThang";
 import axios from "axios";
@@ -113,7 +114,6 @@ export default function Home() {
 
   const [valueSelect, setValueSelect] = useState("");
 
-  const [stepInit, setDataStepInit] = useState();
   const [rangeDayInMonthLunar, setRangeDayInMonthLunar] = useState();
   const [stepShow, setStepShow] = useState({
     step1: undefined,
@@ -129,9 +129,7 @@ export default function Home() {
   const [infoNguoiMat, setInfoNguoiMat] = useState();
 
   const handleSangCatNu = async () => {
-    console.log(valueAge, "asds");
     let tuoiNguoiMat = Number(valueAge.dead_year) - Number(valueAge.year) + 1;
-    console.log(tuoiNguoiMat, "tuoiNguoiMat");
     let namMat = Number(valueAge.dead_year);
     let namSinh = Number(valueAge.year);
     if (Number(valueAge.month) <= 2) {
@@ -186,7 +184,6 @@ export default function Home() {
       ).date()}`
     );
 
-    console.log(bamCung, "bamCungbamCung");
     let arrPerfectDate = [];
     let arrPerfectDateStep1 = [];
     let arrPerfectDateStep2 = [];
@@ -216,9 +213,6 @@ export default function Home() {
         };
       }
     });
-    // setDataStep1(arrPerfectDateStep1);
-    // console.log(dateArr, "monthInYear");
-    // console.log(valueText, "valueSelect");
 
     // Show bach ky trong thang/nam
     dateArr.map((item, index) => {
@@ -314,11 +308,9 @@ export default function Home() {
       arrPerfectDateStep4,
       valueText
     );
-    console.log(arrPerfectDateStep4.length, "4");
-    console.log(arrPerfectDateStep6.length, "6");
 
     // Chon gio
-    arrPerfectDateStep6.map((item, ind) => {
+    arrPerfectDateStep6.map(async (item, ind) => {
       const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
       const arrHoursOke = [];
       const titleCheckGioNgayThang = [];
@@ -326,8 +318,9 @@ export default function Home() {
       const arrHours = CheckTrucXungGioTangSu({
         ...item,
         cungNguoiMat: CHI_NAM[Number(namSinh) % 12],
-        chiNamSinh: CHI_NAM[namSinh % 12],
+        chiNamSinh: CHI_NAM[Number(namSinh) % 12],
       });
+
       arrPerfectDateStep6[ind] = {
         ...item,
         gio: [
@@ -349,7 +342,7 @@ export default function Home() {
       // if (combineThienCanNgayThang.length !== 0) {
       if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
         // if (combineThienCanNgayThang.length !== 0) {
-        handleHopHoaGio(
+        await handleHopHoaGio(
           item,
           arrHours,
           isCheckGioNgayThangWhileCanNgayKhacToaNha,
@@ -357,38 +350,61 @@ export default function Home() {
           titleCheckGioNgayThang,
           valueText,
           arrPerfectDateStep5,
-          arrPerfectDateStep8
+          arrPerfectDateStep8,
+          true
         );
       } else {
         // ty hoa
         if (NGU_HANH[valueText] === NGU_HANH[item.ngayCan]) {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: undefined,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep8.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: undefined,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep8,
+            undefined
+          );
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: undefined,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep8.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: undefined,
+          //   });
+          // }
         }
         // tuong sinh
         else {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: false,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep8.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: false,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep8,
+            false
+          );
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: false,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep8.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: false,
+          //   });
+          // }
         }
       }
     });
@@ -463,7 +479,7 @@ export default function Home() {
           <div>NHÂN {">"} THÔNG TIN NGƯỜI MẤT</div>
           <div className="my-6">
             <TextField
-              value={infoGiaChu.name}
+              value={infoNguoiMat?.name}
               id="standard-basic"
               label="Họ tên người mất"
               placeholder="Nhập họ tên"
@@ -473,7 +489,7 @@ export default function Home() {
                 marginLeft: 20,
               }}
               onChange={(e) => {
-                setInfoGiaChu({ ...infoGiaChu, name: e.target.value });
+                setInfoNguoiMat({ ...infoNguoiMat, name: e.target.value });
               }}
             />
             {/* <FormControl fullWidth style={{ marginLeft: 20, width: 200 }}>
@@ -752,7 +768,7 @@ export default function Home() {
             {infoNguoiMat && (
               <>
                 <div className="text-black mb-2 font-bold text-lg">
-                  Gia chủ tên: {infoGiaChu.name}
+                  Gia chủ tên: {infoNguoiMat?.name}
                   <div>
                     Tuổi:
                     {/* {infoNguoiMat.namSinh} -{" "} */}
@@ -791,7 +807,7 @@ export default function Home() {
                       <div className="max-h-[500px] overflow-scroll">
                         <TableResult
                           data={item}
-                          infoGiaChu={infoGiaChu}
+                          infoGiaChu={infoNguoiMat}
                           description="sang-cat"
                           valueSelect={valueSelect}
                           toaNha={valueText}></TableResult>
@@ -927,20 +943,20 @@ export default function Home() {
               </div>
             </div>
           )}
-          {stepShow.step7 && (
+          {stepShow.step5 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Kiểm tra thêm hợp hoá giờ{" "}
-                {stepShow.step7 && `(${stepShow.step7?.length})`}
+                {stepShow.step5 && `(${stepShow.step5?.length})`}
               </div>
 
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
                 <TableSangCatNgay
                   valueSelect={valueSelect}
-                  data={stepShow.step7}
-                  infoGiaChu={infoGiaChu}
+                  data={stepShow.step5}
+                  infoNguoiMat={infoNguoiMat}
                   toaNha={valueText}></TableSangCatNgay>
               </div>
             </div>
@@ -957,7 +973,8 @@ export default function Home() {
                 <TableResultStepFinalTangSang
                   valueSelect={valueSelect}
                   data={stepShow.step8}
-                  infoNguoiMat={infoNguoiMat}></TableResultStepFinalTangSang>
+                  infoNguoiMat={infoNguoiMat}
+                  toaNha={valueText}></TableResultStepFinalTangSang>
               </div>
             </div>
           )}

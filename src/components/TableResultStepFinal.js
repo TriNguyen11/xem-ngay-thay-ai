@@ -43,6 +43,10 @@ import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
+import {
+  GetErrorGioHopHoa,
+  GetErrorGioHopHoaKhongKhacToa,
+} from "@Root/script/HandleGetErrorShow";
 
 const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
   return (
@@ -99,6 +103,13 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                     minWidth: 120,
                   }}>
                   Can/Chi Tháng
+                </TableCell>
+                <TableCell
+                  style={{
+                    textAlign: "center",
+                    minWidth: 120,
+                  }}>
+                  Can/Chi Năm
                 </TableCell>
                 <TableCell
                   style={{
@@ -276,6 +287,13 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                     <TableCell
                       style={{
                         textAlign: "center",
+                        color: COLOR_TEXT_NGU_HANH[NGU_HANH[date.namCan]],
+                      }}>
+                      {date.namCan} {date.namChi} ({NGU_HANH[date.namCan]})
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
                         flexDirection: "row",
                         alignItems: "center",
                       }}>
@@ -402,7 +420,44 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                                     CHI_NAM_SORTED.indexOf(itemGio) >= 9) &&
                                   (date?.arrHoursOke?.includes(itemGio) ||
                                     date.arrHoursOke === undefined)
-                                )
+                                ) {
+                                  let timeErr = "";
+                                  if (toaNha) {
+                                    if (
+                                      CheckNguHanhTuongKhac(
+                                        NGU_HANH[toaNha],
+                                        NGU_HANH[date.ngayCan]
+                                      )
+                                    ) {
+                                      timeErr = GetErrorGioHopHoa(
+                                        itemGio,
+                                        date.arrGioCan[
+                                          CHI_NAM_SORTED.indexOf(itemGio)
+                                        ],
+                                        date.ngayCan,
+                                        date.ngayChi,
+                                        date.thangCan,
+                                        date.thangChi,
+                                        date.namCan,
+                                        date.namChi,
+                                        toaNha
+                                      );
+                                    } else {
+                                      timeErr = GetErrorGioHopHoaKhongKhacToa(
+                                        itemGio,
+                                        date.arrGioCan[
+                                          CHI_NAM_SORTED.indexOf(itemGio)
+                                        ],
+                                        date.ngayCan,
+                                        date.ngayChi,
+                                        date.thangCan,
+                                        date.thangChi,
+                                        date.namCan,
+                                        date.namChi,
+                                        toaNha
+                                      );
+                                    }
+                                  }
                                   return (
                                     <span
                                       key={Math.random()}
@@ -445,8 +500,11 @@ const TableResultStepFinal = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                                             )
                                           ? "(Nhị Hợp), "
                                           : "")}
+                                      {timeErr.length !== 0 &&
+                                        "(" + timeErr + ")"}
                                     </span>
                                   );
+                                }
                               })}
                             </div>
                           </div>

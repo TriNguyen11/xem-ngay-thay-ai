@@ -72,6 +72,7 @@ import {
 } from "@Root/script/handleDateChange";
 import {
   handleHopHoaGio,
+  handleHopHoaGioKhongKhacToa,
   handleHopHoaNgayThang,
 } from "@Root/script/handleHopHoaNgayThang";
 import axios from "axios";
@@ -203,7 +204,6 @@ export default function Home() {
     let monthInYear = {};
     let checkLeapMonth = false;
 
-    console.log(toaNha, "toaNha");
     // Xac dinh ngay/thang xung toa nxha
     // if (toaNha?.length !== 0)
     if (
@@ -496,7 +496,7 @@ export default function Home() {
         gio: CheckHoangDao(item.ngayChi),
       };
 
-      const isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
       const arrHoursOke = [];
       const titleCheckGioNgayThang = [];
       // if (combineThienCanNgayThang.length !== 0 && toaNha) {
@@ -510,45 +510,68 @@ export default function Home() {
           titleCheckGioNgayThang,
           toaNha,
           arrPerfectDateStep5,
-          arrPerfectDateStep8
+          arrPerfectDateStep8,
+          true
         );
       } else {
         // ty hoa
         if (NGU_HANH[toaNha] === NGU_HANH[item.ngayCan]) {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: undefined,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep8.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: undefined,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep8,
+            undefined
+          );
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: undefined,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep8.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: undefined,
+          //   });
+          // }
         }
         // tuong sinh
         else {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: false,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep8.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: false,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep8,
+            false
+          );
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: false,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep8.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: false,
+          //   });
+          // }
         }
       }
       // if(toaNha?.length===0 || !toaNha)
     });
     // Xet hop hoa ngay/gio
     // arrPerfectDateStep7 = await handleHopHoaNgayGio(arrPerfectDateStep5);
-    console.log(arrPerfectDateStep5, "arrPerfectDateStep5");
+
     arrPerfectDateStep7 = arrPerfectDateStep5;
     // Xac dinh can Chi  Nam/Nu
     setInfoGiaChu({

@@ -94,17 +94,6 @@ export default function Home() {
   });
 
   const handleGetPerfectDate = async () => {
-    console.log(
-      {
-        dateStart,
-        dateEnd,
-        valueAge,
-        valueAgeBorrow,
-        valueSelect,
-        isMuonTuoi,
-      },
-      "adsas"
-    );
     let tuoiChiGiaChu = CHI_NAM[valueAge.year % 12];
     let tuoiCanGiaChu = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
@@ -195,18 +184,15 @@ export default function Home() {
       }
     });
 
-    let arrHours = [];
-    let gioHoangDaoVar = [];
-
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
-      arrHours = CheckTrucXungGioKhongToa(
+      const arrHours = CheckTrucXungGioKhongToa(
         item.ngayChi,
         item.thangChi,
         CHI_NAM[tuoiGiaChu % 12],
         item.monthLunar
       );
-      gioHoangDaoVar = CheckHoangDao(item.ngayChi);
+      const gioHoangDaoVar = CheckHoangDao(item.ngayChi);
 
       if (arrHours.length !== 0) {
         arrPerfectDateStep8.push({

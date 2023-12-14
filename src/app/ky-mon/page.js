@@ -78,7 +78,6 @@ const Home = () => {
 
   const [valueSelect, setValueSelect] = useState("");
   const handleGetPerfectDate = async () => {
-    // console.log(valueAge, "valueAge");
     let chiNamXem = CHI_NAM[valueAge.year % 12];
     let canNamXem = CAN_NAM[valueAge.year % 10];
     let tuoiGiaChu = Number(valueAge.year);
@@ -116,7 +115,7 @@ const Home = () => {
     );
     // Xac dinh can Chi gia chu
     setLoading(true);
-    console.log(valueDate.time?.$H, "  valueDate.time?.$H,");
+
     let CanChiNgayThangNamGio = await getCanChi(
       Number(valueDate.day),
       Number(valueDate.month),
@@ -133,11 +132,7 @@ const Home = () => {
       valueAge.time?.$m,
       valueAge.time.$s
     );
-    console.log(
-      CanChiNgayThangNamGioGiaChu,
-      CanChiNgayThangNamGio,
-      "CanChiNgayThangNamGioGiaChu"
-    );
+
     // xac dinh bang tran final
     const { arrSort, arrSortClock } = TinhTuyenArr(
       TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]],
@@ -183,7 +178,6 @@ const Home = () => {
           ]
         ]
     );
-    console.log(tuanThu, "bangCo");
 
     // Xac dinh Truc Phu, Truc Su
     let TrucPhu = CUU_TINH[posTuanThu[0].value - 1];
@@ -194,7 +188,6 @@ const Home = () => {
 
     const arrPosBangTran = [4, 9, 2, 7, 6, 1, 8, 3];
     const arrPosBangTranCam = [4, 9, 2, 7, 6, 1, 8, 3, 5];
-    console.log(posTuanThu, titleTrucPhu, "v");
     // Xac dinh Vi Tri Can Gio trong Bang Tran
     let posCanGio = arrSort.filter(
       (item) => item.name === posTuanThu[0].name
@@ -226,12 +219,12 @@ const Home = () => {
       }
       canArrDiTheoSort[item.value - 1] = [item.name];
     });
-    console.log(posAnCanGioInit, "posAnCanGioInit");
+
     let chiGioAn = posTuanThu[0];
 
     let arrTuanThu = TUAN_THU_BANG_ELEMENT[tuanThu];
     let indexGioChiInArrTuanThu;
-    console.log(chiGioAn, "22");
+
     if (TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]] === "+") {
       indexGioChiInArrTuanThu =
         (arrTuanThu.indexOf(convertTimeChi(valueDate.time?.$H)) + posCanGio) %
@@ -287,7 +280,7 @@ const Home = () => {
           if (item.value === 5) breakPoint = true;
 
           value = [arrSortClock[indexPos].name];
-          // console.log(item, value, indexPos, "noww Cầm, inti == 5 ");
+
           if (arrSortClock[indexPos].value === 2) {
             value = [
               arrSortClock[indexPos].name,
@@ -312,7 +305,7 @@ const Home = () => {
             titleTrucPhu !== "Nhuế"
           ) {
             value = [item.name];
-            // console.log(index, titleTrucPhuSpecial, item, "noww Cầm, inti == 5 ");
+
             if (
               arrSortClock[titleTrucPhuSpecial.value % arrSortClock.length]
                 .value === 2
@@ -380,22 +373,9 @@ const Home = () => {
             }
           });
 
-          // console.log(indexGioChiInArrTuanThu, "indexGioChiInArrTuanThu");
-
           if (item.value === indexGioChiInArrTuanThu) {
-            // console.log(
-            //   index,
-            //   item.value,
-            //   item.name,
-            //   titleTrucSu,
-            //   indexGioChiInArrTuanThu,
-            //   arrPosBangTran.indexOf(indexGioChiInArrTuanThu),
-            //   "index"
-            // );
             //Trực sử
             if (titleTrucSu === "Trung" && !Array.isArray(titleTrucSu)) {
-              // console.log(true, titleTrucSu, titleTrucSu);
-              // console.log(index);
               titleTrucSu = "Tử";
             }
             arrSortClock[index]["arrSu"] = [titleTrucSu];
@@ -433,14 +413,11 @@ const Home = () => {
           breakMap = true;
         } else {
           if (item.name === canGioAn && !breakMap) {
-            // console.log(indexPos, index, "check item");
             canGioAn = arrSortClock[(index + 1) % arrSortClock.length].name;
             if (item.value === 5 && posAnCanGioInit.value !== 5)
               breakPoint = true;
-            // console.log(item.name, canGioAn, item, posAnCanGioInit, "1312312");
 
             if (breakPoint) {
-              console.log("check breakpint trueee");
               arrSortClock[(index + 1) % arrSortClock.length]["arrTinh"] =
                 Array.isArray(titleTrucPhu)
                   ? titleTrucPhu.includes("Nhuế") ||
@@ -460,7 +437,6 @@ const Home = () => {
                 return POS_CUNG_CHI[
                   arrSortClock[(index + 1) % arrSortClock.length].value - 1
                 ].map((diaChi) => {
-                  // console.log(thienCan, diaChi, "thienCan, diaChi");
                   return [handleGetStatusCanChi(thienCan, diaChi)];
                 });
               });
@@ -501,13 +477,7 @@ const Home = () => {
                 TRAN_TIET_KHI_EXTENDS[TIETKHI[sunlong]] !== "+"
                   ? BAT_THAN_REVERSE[indexPos]
                   : BAT_THAN[indexPos];
-              // console.log(
-              //   titleTrucPhu,
-              //   index,
-              //   item,
-              //   canArrDiTheoSort[posCanGio - 1],
-              //   posCanGio
-              // );
+
               if (
                 !canArrDiTheoSort[posCanGio - 1] &&
                 !Array.isArray(titleTrucPhu)
@@ -556,12 +526,6 @@ const Home = () => {
             breakMap = true;
           }
           if (item.value === indexGioChiInArrTuanThu && !breakMap2) {
-            // console.log(index, titleTrucSu, chiGioAn, "indexindex");
-            // console.log(
-            //   indexGioChiInArrTuanThu,
-            //   titleTrucSu,
-            //   "indexGioChiInArrTuanThuindexGioChiInArrTuanThu"
-            // );
             if (titleTrucSu === "Trung" && !Array.isArray(titleTrucSu))
               titleTrucSu = "Tử";
 

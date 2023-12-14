@@ -138,20 +138,35 @@ const TableWeddingThang = ({ data, infoGiaChu, valueSelect, toaNha }) => {
                 )
                   backky = "Công cô nữ";
 
+                //  xung, trung nam
                 if (
-                  CheckTrucXungChi(
+                  CHI_NAM[Number(infoGiaChu?.namSinhNam) % 12] === date.thangChi
+                ) {
+                  backky.push("Trùng tuổi nam");
+                }
+                if (
+                  CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(infoGiaChu?.namSinhNam) % 12],
                     date.thangChi
                   )
-                )
-                  backky = "Xung, Trùng tuổi Nam";
+                ) {
+                  backky.push("Xung tuổi nam");
+                }
+
+                // xung, trung nu
                 if (
-                  CheckTrucXungChi(
+                  CHI_NAM[Number(infoGiaChu?.namSinhNu) % 12] === date.thangChi
+                ) {
+                  backky.push("Trùng tuổi nữ");
+                }
+                if (
+                  CheckTrucXungNgayThangNam(
                     CHI_NAM[Number(infoGiaChu?.namSinhNu) % 12],
                     date.thangChi
                   )
-                )
-                  backky = "Xung, Trùng tuổi Nữ";
+                ) {
+                  backky.push("Xung tuổi nữ");
+                }
 
                 if (
                   CheckTheChu(

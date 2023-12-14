@@ -49,7 +49,10 @@ import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
-import { GetErrorGioHopHoa } from "@Root/script/HandleGetErrorShow";
+import {
+  GetErrorGioHopHoa,
+  GetErrorGioHopHoaKhongKhacToa,
+} from "@Root/script/HandleGetErrorShow";
 
 const TableXayDung = ({
   step,
@@ -60,8 +63,6 @@ const TableXayDung = ({
   checkHopHoa,
   KhongCheckThemDongTho = false,
 }) => {
-  console.log(valueSelect, "valueSelect");
-
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -269,13 +270,6 @@ const TableXayDung = ({
                     combineThienCanNgayThang.length !== 0 ||
                     combineThienCanNgayNam.length !== 0
                   ) {
-                    // console.log(
-                    //   NGU_HANH[toaNha],
-                    //   CheckNguHanhTuongKhac(
-                    //     NGU_HANH[toaNha],
-                    //     combineThienCanNgayThang
-                    //   )
-                    // );
                     if (
                       // ngay Thang
                       (CheckNguHanhTuongKhacKhauQuyet(
@@ -460,51 +454,70 @@ const TableXayDung = ({
                                 if (CheckGioSatChu(date.monthLunar, itemGio)) {
                                   timeNormal.push("Sát chủ");
                                 }
-                                // if (
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   ) &&
-                                //   valueSelect !== "dao-gieng" &&
-                                //   valueSelect !== "lap-gieng"
-                                // ) {
-                                //   timeNormal.push("Khắc hành toạ");
-                                // }
+
                                 if (
-                                  CheckTrucXungChi(
+                                  CHI_NAM[
+                                    Number(infoGiaChu?.tuoiGiaChu) % 12
+                                  ] === itemGio
+                                )
+                                  timeNormal.push("Trùng tuổi");
+                                if (
+                                  CheckTrucXungNgayThangNam(
                                     itemGio,
-                                    infoGiaChu?.tuoiGiaChu
+                                    CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12]
                                   )
                                 ) {
-                                  timeNormal.push("Xung, trùng tuổi");
-                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                  timeNormal.push("Xung tuổi");
                                 }
 
+                                // if (
+                                //   CheckTrucXungChi(
+                                //     itemGio,
+                                //     infoGiaChu?.tuoiGiaChu
+                                //   )
+                                // ) {
+
+                                //   // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                // }
+                                console.log(timeNormal, itemGio, "timeNormal");
                                 let timeErr = "";
-                                if (
-                                  CheckNguHanhTuongKhac(
-                                    NGU_HANH[toaNha],
-                                    NGU_HANH[date.ngayCan]
-                                  )
-                                ) {
-                                  timeErr = GetErrorGioHopHoa(
-                                    itemGio,
-                                    date.arrGioCan[
-                                      CHI_NAM_SORTED.indexOf(itemGio)
-                                    ],
-                                    date.ngayCan,
-                                    date.ngayChi,
-                                    date.thangCan,
-                                    date.thangChi,
-                                    date.namCan,
-                                    date.namChi,
-                                    toaNha
-                                  );
+                                if (toaNha) {
+                                  if (
+                                    CheckNguHanhTuongKhac(
+                                      NGU_HANH[toaNha],
+                                      NGU_HANH[date.ngayCan]
+                                    )
+                                  ) {
+                                    timeErr = GetErrorGioHopHoa(
+                                      itemGio,
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ],
+                                      date.ngayCan,
+                                      date.ngayChi,
+                                      date.thangCan,
+                                      date.thangChi,
+                                      date.namCan,
+                                      date.namChi,
+                                      toaNha
+                                    );
+                                  } else {
+                                    timeErr = GetErrorGioHopHoaKhongKhacToa(
+                                      itemGio,
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ],
+                                      date.ngayCan,
+                                      date.ngayChi,
+                                      date.thangCan,
+                                      date.thangChi,
+                                      date.namCan,
+                                      date.namChi,
+                                      toaNha
+                                    );
+                                  }
                                 }
+
                                 // if (
                                 //   CheckSinhXuat(
                                 //     NGU_HANH[toaNha],
@@ -636,36 +649,57 @@ const TableXayDung = ({
                                 // )
                                 //   timeNormal.push("Khắc hành toạ");
                                 if (
-                                  CheckTrucXungChi(
+                                  CHI_NAM[
+                                    Number(infoGiaChu?.tuoiGiaChu) % 12
+                                  ] === itemGio
+                                )
+                                  timeNormal.push("Trùng tuổi");
+                                if (
+                                  CheckTrucXungNgayThangNam(
                                     itemGio,
                                     CHI_NAM[Number(infoGiaChu?.tuoiGiaChu) % 12]
                                   )
                                 ) {
-                                  timeNormal.push("Xung, trùng tuổi");
-                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                  timeNormal.push("Xung tuổi");
                                 }
 
                                 //Hop Hoa
                                 let timeErr = "";
-                                if (
-                                  CheckNguHanhTuongKhac(
-                                    NGU_HANH[toaNha],
-                                    NGU_HANH[date.ngayCan]
-                                  )
-                                ) {
-                                  timeErr = GetErrorGioHopHoa(
-                                    itemGio,
-                                    date.arrGioCan[
-                                      CHI_NAM_SORTED.indexOf(itemGio)
-                                    ],
-                                    date.ngayCan,
-                                    date.ngayChi,
-                                    date.thangCan,
-                                    date.thangChi,
-                                    date.namCan,
-                                    date.namChi,
-                                    toaNha
-                                  );
+                                if (toaNha) {
+                                  if (
+                                    CheckNguHanhTuongKhac(
+                                      NGU_HANH[toaNha],
+                                      NGU_HANH[date.ngayCan]
+                                    )
+                                  ) {
+                                    timeErr = GetErrorGioHopHoa(
+                                      itemGio,
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ],
+                                      date.ngayCan,
+                                      date.ngayChi,
+                                      date.thangCan,
+                                      date.thangChi,
+                                      date.namCan,
+                                      date.namChi,
+                                      toaNha
+                                    );
+                                  } else {
+                                    timeErr = GetErrorGioHopHoaKhongKhacToa(
+                                      itemGio,
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ],
+                                      date.ngayCan,
+                                      date.ngayChi,
+                                      date.thangCan,
+                                      date.thangChi,
+                                      date.namCan,
+                                      date.namChi,
+                                      toaNha
+                                    );
+                                  }
                                 }
                                 // if (
                                 //   CheckSinhXuat(

@@ -58,6 +58,7 @@ import {
 } from "@Root/script/handleDateChange";
 import {
   handleHopHoaGio,
+  handleHopHoaGioKhongKhacToa,
   handleHopHoaNgayThang,
 } from "@Root/script/handleHopHoaNgayThang";
 import axios from "axios";
@@ -233,7 +234,6 @@ export default function Home() {
       }
     });
 
-    // console.log(arrPerfectDateStep4, "arrPerfectDateStep4");
     // Tranh Bach ky
     arrPerfectDateStep4.map((item, index) => {
       if (
@@ -274,18 +274,12 @@ export default function Home() {
 
     //Tranh tuong xung tuong hai
 
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let isCheckSinhCanChi = undefined;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
-
     // Chon gio
-    arrPerfectDateStep6.map((item, ind) => {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      arrHoursOke = [];
-      titleCheckGioNgayThang = [];
-      arrHours = CheckTrucXungGio(
+    arrPerfectDateStep6.map(async (item, ind) => {
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
+      const arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
         item.thangChi,
@@ -298,7 +292,6 @@ export default function Home() {
         ...item,
         gio: CheckHoangDao(item.ngayChi),
       };
-      console.log(arrHours, "arrHours");
 
       // if (combineThienCanNgayThang.length !== 0) {
       if (CheckNguHanhTuongKhac(NGU_HANH[valueText], NGU_HANH[item.ngayCan])) {
@@ -311,38 +304,62 @@ export default function Home() {
           titleCheckGioNgayThang,
           valueText,
           arrPerfectDateStep5,
-          arrPerfectDateStep8
+          arrPerfectDateStep8,
+          true
         );
       } else {
         // ty hoa
         if (NGU_HANH[valueText] === NGU_HANH[item.ngayCan]) {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: undefined,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep8.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: undefined,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep8,
+            undefined
+          );
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: undefined,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep8.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: undefined,
+          //   });
+          // }
         }
         // tuong sinh
         else {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: false,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep8.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: false,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep8,
+            false
+          );
+
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: false,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep8.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: false,
+          //   });
+          // }
         }
       }
     });
@@ -789,19 +806,19 @@ export default function Home() {
               </div>
             </div>
           )}
-          {stepShow.step7 && (
+          {stepShow.step5 && (
             <div>
               <div
                 className="font-bold text-[20px]"
                 style={{ color: "black", marginTop: 30 }}>
                 Kiểm tra thêm hợp hoá giờ{" "}
-                {stepShow.step7 && `(${stepShow.step7?.length})`}
+                {stepShow.step5 && `(${stepShow.step5?.length})`}
               </div>
 
               <div className="max-h-[500px] overflow-scroll px-10 border-2 border-black mt-2">
                 <TableXayDung
                   valueSelect={valueSelect}
-                  data={stepShow.step7}
+                  data={stepShow.step5}
                   infoGiaChu={infoGiaChu}
                   toaNha={valueText}></TableXayDung>
               </div>

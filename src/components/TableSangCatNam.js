@@ -7,37 +7,13 @@ import {
   TableRow,
 } from "@mui/material";
 import { isLeapYearLunar } from "@Root/script/AmLich";
+import { CHI_NAM } from "@Root/script/Constant";
 import {
-  CHI,
-  CHI_NAM,
-  CHI_NAM_SORTED,
-  COLOR_TEXT_NGU_HANH,
-  GIO_DIA_CHI,
-  NGU_HANH,
-  ObjectTruc,
-  ObjectTu,
-} from "@Root/script/Constant";
-import {
-  CheckCongCo,
-  CheckDaiLoi,
-  CheckKimLau,
-  CheckNhacThan,
-  CheckNhiHop,
-  CheckPhuChu,
-  CheckTamHop,
-  CheckThaiTueHinh,
-  CheckThaiTueTrucXungHinh,
-  CheckTheChu,
-  CheckTieuLoi,
-  CheckTrucXungHinhHaiChi,
-  CheckTrucXungNgayThangNam,
-  CheckTrucXungChi,
-  CheckHinhChi,
   CheckHaiChi,
+  CheckHinhChi,
+  CheckTrucXungNgayThangNam,
 } from "@Root/script/handleDateChange";
-import moment from "moment";
 import { memo } from "react";
-import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 
 const TableSangCatNam = ({
   data,
@@ -46,6 +22,7 @@ const TableSangCatNam = ({
   toaNha,
   yearArr,
 }) => {
+  console.log(infoNguoiMat, "infoNguoiMat");
   return (
     <Box sx={{ overflow: "auto" }}>
       {typeof window !== "undefined" && (
@@ -83,13 +60,6 @@ const TableSangCatNam = ({
             <TableBody>
               {yearArr.lunar?.map((year, index) => {
                 let xungNam = [];
-                // if (
-                //   CheckTrucXungHinhHaiChi(
-                //     CHI_NAM[Number(year) % 12],
-                //     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
-                //   )
-                // )
-                //   xungNam = "Xung, Trùng, Hình, Hại";
 
                 if (
                   CHI_NAM[Number(infoNguoiMat?.namSinh) % 12] ===

@@ -12,36 +12,24 @@ import {
 } from "@mui/material";
 import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import Notify from "@Root/components/Notify";
-import TableShow from "@Root/components/Table";
 import TableResult from "@Root/components/TableResult";
-import TableResultStepFinal from "@Root/components/TableResultStepFinal";
 import TableSangCatNgay from "@Root/components/TableSangCatNgay";
 import TableSangCatTrucTu from "@Root/components/TableSangCatTrucTu";
-import TableTangSu from "@Root/components/TableTangSu";
 import { getSunLongitude, jdn, monthDays } from "@Root/script/AmLich";
 import {
   CAN_NAM,
   CHI_NAM,
-  COLOR_TEXT_NGU_HANH,
-  DIA_CHI_HINH,
-  HOANG_OC,
   MONTHS,
   NGUYET_KY,
   NGUYET_PHA,
-  NGU_HANH,
-  NGU_HANH_TUONG_SINH,
   NHAP_MO,
   ObjectTruc,
   ObjectTu,
   SAT_CHU_AM,
   SAT_CHU_DUONG,
   SERVICE_TANGSU,
-  SERVICE_XAYDUNG,
-  TAM_NUONG,
   THO_TU,
-  TRUC_XUNG_HAI,
   TRUNG_TANG,
-  VANG_VONG,
 } from "@Root/script/Constant";
 import {
   CalcuBamCungNam,
@@ -54,17 +42,14 @@ import {
   CheckNgayGioHaKhoi,
   CheckNgayGioThienTac,
   CheckNgayTrungNhat,
-  CheckTrucXungGio,
   CheckTrucXungGioTangSu,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungHinhHaiChiTangSu,
-  CheckTrucXungNgayThangNam,
   CheckTrungTang,
   ConvertToRangeDayInMonthLunar,
   CountStatusTrungTang,
   getCanChi,
 } from "@Root/script/handleDateChange";
-import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
@@ -284,7 +269,6 @@ export default function Home() {
       Number(lichAm.dayLunar),
       valueAge.dead_time?.$H
     );
-    console.log(namMat, "namMat");
 
     let countCase1 = CountStatusTrungTang({
       ...bamCung,
@@ -459,16 +443,13 @@ export default function Home() {
       }
     });
 
-    let arrHours = [];
-
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
-      arrHours = CheckTrucXungGioTangSu({
+      const arrHours = CheckTrucXungGioTangSu({
         ...item,
         cungNguoiMat: CHI_NAM[Number(namSinh) % 12],
         chiNamSinh: CHI_NAM[namSinh % 12],
       });
-      console.log(arrHours, "arrHours");
       arrPerfectDateStep3[ind] = {
         ...item,
         gio: [
@@ -575,7 +556,6 @@ export default function Home() {
       ).date()}`
     );
 
-    console.log(bamCung, "bamCungbamCung");
     let arrPerfectDate = [];
     let arrPerfectDateStep1 = [];
     let arrPerfectDateStep2 = [];
@@ -632,24 +612,15 @@ export default function Home() {
         //
         Object.keys(ObjectTruc[item.truc].KhongLam).includes(valueSelect) &&
         Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect)
-        // Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
       ) {
       } else {
         arrPerfectDateStep3.push(item);
-
-        // if (
-        //   Object.keys(ObjectTu[item.tu].KhongLam).includes(valueSelect) &&
-        //   !Object.keys(ObjectTruc[item.truc].CanLam).includes(valueSelect)
-        // ) {
-        // } else {
-        // }
       }
     });
-    let arrHours = [];
 
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
-      arrHours = CheckTrucXungGioTangSu({
+      const arrHours = CheckTrucXungGioTangSu({
         ...item,
         cungNguoiMat: bamCung.bamCungTuoi,
         chiNamSinh: CHI_NAM[namSinh % 12],
@@ -678,7 +649,6 @@ export default function Home() {
       step8: arrPerfectDateStep8,
     });
   };
-  console.log(infoNguoiMat, "infoNguoiMat");
   return (
     <div className="flex min-h-screen flex-col items-center  pt-24 bg-white">
       <div
@@ -1011,102 +981,107 @@ export default function Home() {
                     {CAN_NAM[infoNguoiMat.namSinh % 10]}{" "}
                     {CHI_NAM[infoNguoiMat.namSinh % 12]}
                   </div>{" "}
-                  <div>
-                    Thời gian mất: {infoNguoiMat?.duongLich?.day}/
-                    {infoNguoiMat?.duongLich?.month}/
-                    {infoNguoiMat?.duongLich?.year} - ÂL:{" "}
-                    {infoNguoiMat?.amLich?.day}/{infoNguoiMat?.amLich?.month}/
-                    {infoNguoiMat?.amLich?.year}
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(infoNguoiMat.bamCungTuoi)
-                        ? "red"
-                        : NHAP_MO.includes(infoNguoiMat.bamCungTuoi)
-                        ? "green"
-                        : "black",
-                    }}>
-                    Tuổi mất: {infoNguoiMat.bamCungTuoi} - (
-                    {TRUNG_TANG.includes(infoNguoiMat.bamCungTuoi)
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(infoNguoiMat.bamCungTuoi)
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(infoNguoiMat.bamCungThang)
-                        ? "red"
-                        : NHAP_MO.includes(infoNguoiMat.bamCungThang)
-                        ? "green"
-                        : "black",
-                    }}>
-                    Tháng mất: {infoNguoiMat.bamCungThang}- (
-                    {TRUNG_TANG.includes(infoNguoiMat.bamCungThang)
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(infoNguoiMat.bamCungThang)
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(infoNguoiMat.bamCungNgay)
-                        ? "red"
-                        : NHAP_MO.includes(infoNguoiMat.bamCungNgay)
-                        ? "green"
-                        : "black",
-                    }}>
-                    Ngày mất: {infoNguoiMat.bamCungNgay} - (
-                    {TRUNG_TANG.includes(infoNguoiMat.bamCungNgay)
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(infoNguoiMat.bamCungNgay)
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(infoNguoiMat.bamCungGio)
-                        ? "red"
-                        : NHAP_MO.includes(infoNguoiMat.bamCungGio)
-                        ? "green"
-                        : "black",
-                    }}>
-                    Giờ mất: {infoNguoiMat.bamCungGio}- (
-                    {TRUNG_TANG.includes(infoNguoiMat.bamCungGio)
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(infoNguoiMat.bamCungGio)
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
-                  <div
-                    style={{
-                      color: TRUNG_TANG.includes(
-                        CHI_NAM[Number(infoNguoiMat.namMat) % 12]
-                      )
-                        ? "red"
-                        : NHAP_MO.includes(
+                  {valueSelect === "tinh-trung-tang" && (
+                    <>
+                      <div>
+                        Thời gian mất: {infoNguoiMat?.duongLich?.day}/
+                        {infoNguoiMat?.duongLich?.month}/
+                        {infoNguoiMat?.duongLich?.year} - ÂL:{" "}
+                        {infoNguoiMat?.amLich?.day}/
+                        {infoNguoiMat?.amLich?.month}/
+                        {infoNguoiMat?.amLich?.year}
+                      </div>{" "}
+                      <div
+                        style={{
+                          color: TRUNG_TANG.includes(infoNguoiMat.bamCungTuoi)
+                            ? "red"
+                            : NHAP_MO.includes(infoNguoiMat.bamCungTuoi)
+                            ? "green"
+                            : "black",
+                        }}>
+                        Tuổi mất: {infoNguoiMat.bamCungTuoi} - (
+                        {TRUNG_TANG.includes(infoNguoiMat.bamCungTuoi)
+                          ? "Trùng tang"
+                          : NHAP_MO.includes(infoNguoiMat.bamCungTuoi)
+                          ? "Nhập mộ"
+                          : "Thiên di"}
+                        )
+                      </div>{" "}
+                      <div
+                        style={{
+                          color: TRUNG_TANG.includes(infoNguoiMat.bamCungThang)
+                            ? "red"
+                            : NHAP_MO.includes(infoNguoiMat.bamCungThang)
+                            ? "green"
+                            : "black",
+                        }}>
+                        Tháng mất: {infoNguoiMat.bamCungThang}- (
+                        {TRUNG_TANG.includes(infoNguoiMat.bamCungThang)
+                          ? "Trùng tang"
+                          : NHAP_MO.includes(infoNguoiMat.bamCungThang)
+                          ? "Nhập mộ"
+                          : "Thiên di"}
+                        )
+                      </div>{" "}
+                      <div
+                        style={{
+                          color: TRUNG_TANG.includes(infoNguoiMat.bamCungNgay)
+                            ? "red"
+                            : NHAP_MO.includes(infoNguoiMat.bamCungNgay)
+                            ? "green"
+                            : "black",
+                        }}>
+                        Ngày mất: {infoNguoiMat.bamCungNgay} - (
+                        {TRUNG_TANG.includes(infoNguoiMat.bamCungNgay)
+                          ? "Trùng tang"
+                          : NHAP_MO.includes(infoNguoiMat.bamCungNgay)
+                          ? "Nhập mộ"
+                          : "Thiên di"}
+                        )
+                      </div>{" "}
+                      <div
+                        style={{
+                          color: TRUNG_TANG.includes(infoNguoiMat.bamCungGio)
+                            ? "red"
+                            : NHAP_MO.includes(infoNguoiMat.bamCungGio)
+                            ? "green"
+                            : "black",
+                        }}>
+                        Giờ mất: {infoNguoiMat.bamCungGio}- (
+                        {TRUNG_TANG.includes(infoNguoiMat.bamCungGio)
+                          ? "Trùng tang"
+                          : NHAP_MO.includes(infoNguoiMat.bamCungGio)
+                          ? "Nhập mộ"
+                          : "Thiên di"}
+                        )
+                      </div>{" "}
+                      <div
+                        style={{
+                          color: TRUNG_TANG.includes(
                             CHI_NAM[Number(infoNguoiMat.namMat) % 12]
                           )
-                        ? "green"
-                        : "black",
-                    }}>
-                    Năm mất: {CAN_NAM[Number(infoNguoiMat.namMat) % 10]}{" "}
-                    {CHI_NAM[Number(infoNguoiMat.namMat) % 12]}- (
-                    {TRUNG_TANG.includes(
-                      CHI_NAM[Number(infoNguoiMat.namMat) % 12]
-                    )
-                      ? "Trùng tang"
-                      : NHAP_MO.includes(
+                            ? "red"
+                            : NHAP_MO.includes(
+                                CHI_NAM[Number(infoNguoiMat.namMat) % 12]
+                              )
+                            ? "green"
+                            : "black",
+                        }}>
+                        Năm mất: {CAN_NAM[Number(infoNguoiMat.namMat) % 10]}{" "}
+                        {CHI_NAM[Number(infoNguoiMat.namMat) % 12]}- (
+                        {TRUNG_TANG.includes(
                           CHI_NAM[Number(infoNguoiMat.namMat) % 12]
                         )
-                      ? "Nhập mộ"
-                      : "Thiên di"}
-                    )
-                  </div>{" "}
+                          ? "Trùng tang"
+                          : NHAP_MO.includes(
+                              CHI_NAM[Number(infoNguoiMat.namMat) % 12]
+                            )
+                          ? "Nhập mộ"
+                          : "Thiên di"}
+                        )
+                      </div>{" "}
+                    </>
+                  )}
                 </div>
               </>
             )}

@@ -79,15 +79,6 @@ const TableSangCatThang = ({
                       )
                         xungThang.push("Tháng nhuận");
 
-                      // if (
-                      //   CheckTrucXungHinhHaiChiTangSu(
-                      //     data[year][month].chiMonth,
-                      //     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12]
-                      //   )
-                      // )
-                      //   xungThang = "Xung, Trực, Hình, Hại";
-                      // // xungThang = "Xung, Trùng";
-
                       if (
                         CHI_NAM[Number(infoNguoiMat?.namSinh) % 12] ===
                         data[year][month].chiMonth

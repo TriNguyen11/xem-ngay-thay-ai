@@ -57,6 +57,7 @@ import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 import {
   GetErrorGioHopHoa,
+  GetErrorGioHopHoaKhongKhacToa,
   GetErrorTimeNormalSangCat,
 } from "@Root/script/HandleGetErrorShow";
 
@@ -167,22 +168,6 @@ const TableSangCatNgay = ({
                 if (CheckTrucXungNgayThangNam(toaNha, date.ngayChi))
                   backky.push("Xung Toạ");
 
-                // if (
-                //   !CheckNguHanhTuongSinh(
-                //     NGU_HANH[toaNha],
-                //     NGU_HANH[date.ngayCan]
-                //   )
-                // )
-                //   backky.push( "Ngũ hành tương khắc Toạ")
-                // 2.
-                // if (
-                //   CheckTrucXungHinhHaiChiTangSu(
-                //     CHI_NAM[Number(infoNguoiMat?.namSinh) % 12],
-                //     date.ngayChi
-                //   )
-                // )
-                //   backky.push("Trùng, Xung, Hình, Hại tuổi mất");
-
                 if (
                   CHI_NAM[Number(infoNguoiMat?.namSinh) % 12] === date.ngayChi
                 )
@@ -278,13 +263,6 @@ const TableSangCatNgay = ({
                     combineThienCanNgayThang.length !== 0 ||
                     combineThienCanNgayNam.length !== 0
                   ) {
-                    // console.log(
-                    //   NGU_HANH[toaNha],
-                    //   CheckNguHanhTuongKhac(
-                    //     NGU_HANH[toaNha],
-                    //     combineThienCanNgayThang
-                    //   )
-                    // );
                     if (
                       // ngay Thang
                       CheckNguHanhTuongKhacKhauQuyet(
@@ -451,25 +429,41 @@ const TableSangCatNgay = ({
                                 );
 
                                 let timeErr = "";
-                                if (
-                                  CheckNguHanhTuongKhac(
-                                    NGU_HANH[toaNha],
-                                    NGU_HANH[date.ngayCan]
-                                  )
-                                ) {
-                                  timeErr = GetErrorGioHopHoa(
-                                    itemGio,
-                                    date.arrGioCan[
-                                      CHI_NAM_SORTED.indexOf(itemGio)
-                                    ],
-                                    date.ngayCan,
-                                    date.ngayChi,
-                                    date.thangCan,
-                                    date.thangChi,
-                                    date.namCan,
-                                    date.namChi,
-                                    toaNha
-                                  );
+                                if (toaNha) {
+                                  if (
+                                    CheckNguHanhTuongKhac(
+                                      NGU_HANH[toaNha],
+                                      NGU_HANH[date.ngayCan]
+                                    )
+                                  ) {
+                                    timeErr = GetErrorGioHopHoa(
+                                      itemGio,
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ],
+                                      date.ngayCan,
+                                      date.ngayChi,
+                                      date.thangCan,
+                                      date.thangChi,
+                                      date.namCan,
+                                      date.namChi,
+                                      toaNha
+                                    );
+                                  } else {
+                                    timeErr = GetErrorGioHopHoaKhongKhacToa(
+                                      itemGio,
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ],
+                                      date.ngayCan,
+                                      date.ngayChi,
+                                      date.thangCan,
+                                      date.thangChi,
+                                      date.namCan,
+                                      date.namChi,
+                                      toaNha
+                                    );
+                                  }
                                 }
                                 if (
                                   CHI_NAM_SORTED.indexOf(itemGio) > 2 &&
@@ -548,7 +542,6 @@ const TableSangCatNgay = ({
                             Trong thời gian mặt trời lặn:
                             <div className="flex flex-col  my-1">
                               {date.gio?.map((itemGio, index) => {
-                                console.log(itemGio, "itemGioitemGio");
                                 let timeNormal = GetErrorTimeNormalSangCat(
                                   itemGio,
                                   {
@@ -564,25 +557,41 @@ const TableSangCatNgay = ({
                                 );
 
                                 let timeErr = "";
-                                if (
-                                  CheckNguHanhTuongKhac(
-                                    NGU_HANH[toaNha],
-                                    NGU_HANH[date.ngayCan]
-                                  )
-                                ) {
-                                  timeErr = GetErrorGioHopHoa(
-                                    itemGio,
-                                    date.arrGioCan[
-                                      CHI_NAM_SORTED.indexOf(itemGio)
-                                    ],
-                                    date.ngayCan,
-                                    date.ngayChi,
-                                    date.thangCan,
-                                    date.thangChi,
-                                    date.namCan,
-                                    date.namChi,
-                                    toaNha
-                                  );
+                                if (toaNha) {
+                                  if (
+                                    CheckNguHanhTuongKhac(
+                                      NGU_HANH[toaNha],
+                                      NGU_HANH[date.ngayCan]
+                                    )
+                                  ) {
+                                    timeErr = GetErrorGioHopHoa(
+                                      itemGio,
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ],
+                                      date.ngayCan,
+                                      date.ngayChi,
+                                      date.thangCan,
+                                      date.thangChi,
+                                      date.namCan,
+                                      date.namChi,
+                                      toaNha
+                                    );
+                                  } else {
+                                    timeErr = GetErrorGioHopHoaKhongKhacToa(
+                                      itemGio,
+                                      date.arrGioCan[
+                                        CHI_NAM_SORTED.indexOf(itemGio)
+                                      ],
+                                      date.ngayCan,
+                                      date.ngayChi,
+                                      date.thangCan,
+                                      date.thangChi,
+                                      date.namCan,
+                                      date.namChi,
+                                      toaNha
+                                    );
+                                  }
                                 }
 
                                 if (

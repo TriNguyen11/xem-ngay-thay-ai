@@ -33,8 +33,8 @@ import {
   NGUYET_KY,
   NGUYET_PHA,
   NGU_HANH,
-  NGU_HANH_CAN_CHI_60_HOA_GIAP_INT,
   NGU_HANH_60_HOA_GIAP_INT,
+  NGU_HANH_CAN_CHI_60_HOA_GIAP_INT,
   NGU_HANH_TUONG_SINH,
   ObjectTruc,
   ObjectTu,
@@ -45,7 +45,6 @@ import {
   THO_TU,
   TOA_NHA,
   VANG_VONG,
-  CHI_NAM_SORTED,
 } from "@Root/script/Constant";
 import {
   CheckDaiBai,
@@ -55,32 +54,26 @@ import {
   CheckHoangOcRecommend,
   CheckKimLau,
   CheckNguHanhTuongKhac,
-  CheckNguHanhTuongKhacKhauQuyet,
-  CheckNguHanhTuongSinh,
-  CheckSinhXuat,
   CheckTamTai,
   CheckThienTaiDiaHoa,
   CheckTrucXungGio,
   CheckTrucXungGioKhongToa,
   CheckTrucXungHinhHaiChi,
   CheckTrucXungNgayThangNam,
-  CheckTrucXungTuoiMuon,
   CheckTuongXungTuongHaiTuoi,
   CheckTuongXungTuongHaiTuoiKhongToa,
-  CheckTuongXungTuongHaiTuoiMonth,
-  CombineThienCan,
   ConvertToRangeDayInMonthLunar,
   getCanChi,
   GetHoangVuTuQuy,
 } from "@Root/script/handleDateChange";
 import {
   handleHopHoaGio,
+  handleHopHoaGioKhongKhacToa,
   handleHopHoaNgayThang,
 } from "@Root/script/handleHopHoaNgayThang";
-import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TableXayDung from "./xay-dung/component/TableXayDung";
 
 export default function Home() {
@@ -252,7 +245,6 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-
     // Tranh Bach ky
     arrPerfectDateStep2.map((item, index) => {
       if (
@@ -305,22 +297,12 @@ export default function Home() {
       valueText
     );
 
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
-
     // Chon gio
-    arrPerfectDateStep6.map((item, ind) => {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      arrHoursOke = [];
-      titleCheckGioNgayThang = [];
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
-
-      arrHours = CheckTrucXungGio(
+    arrPerfectDateStep6.map(async (item, ind) => {
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
+      const arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
         item.thangChi,
@@ -344,38 +326,62 @@ export default function Home() {
           titleCheckGioNgayThang,
           valueText,
           arrPerfectDateStep5,
-          arrPerfectDateStep9
+          arrPerfectDateStep9,
+          true
         );
       } else {
         // ty hoa
         if (NGU_HANH[valueText] === NGU_HANH[item.ngayCan]) {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: undefined,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep9.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: undefined,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep9,
+            undefined
+          );
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: undefined,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep9.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: undefined,
+          //   });
+          // }
         }
         // tuong sinh
         else {
-          arrPerfectDateStep5.push({
-            ...item,
-            gio: arrHours,
-            isTruongHop2BonusHoaHop: false,
-          });
-          if (arrHours.length !== 0) {
-            arrPerfectDateStep9.push({
-              ...item,
-              gio: arrHours,
-              isTruongHop2BonusHoaHop: false,
-            });
-          }
+          await handleHopHoaGioKhongKhacToa(
+            item,
+            arrHours,
+            isCheckGioNgayThangWhileCanNgayKhacToaNha,
+            arrHoursOke,
+            titleCheckGioNgayThang,
+            valueText,
+            arrPerfectDateStep5,
+            arrPerfectDateStep9,
+            false
+          );
+
+          // arrPerfectDateStep5.push({
+          //   ...item,
+          //   gio: arrHours,
+          //   isTruongHop2BonusHoaHop: false,
+          // });
+          // if (arrHours.length !== 0) {
+          //   arrPerfectDateStep9.push({
+          //     ...item,
+          //     gio: arrHours,
+          //     isTruongHop2BonusHoaHop: false,
+          //   });
+          // }
         }
       }
     });
@@ -660,21 +666,13 @@ export default function Home() {
       valueText
     );
     // Chon gio
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
 
     // Chon gio
     arrPerfectDateStep6.map((item, ind) => {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      arrHoursOke = [];
-      titleCheckGioNgayThang = [];
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
-      arrHours = CheckTrucXungGio(
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
+      const arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
         item.thangChi,
@@ -973,7 +971,7 @@ export default function Home() {
         arrPerfectDateStep2.push(item);
       }
     });
-    console.log(tuoiChiMuon, "tuoiChiMuon");
+
     // Tranh Bach ky
     arrPerfectDateStep2.map((item, index) => {
       if (
@@ -1008,7 +1006,6 @@ export default function Home() {
         arrPerfectDateStep4.push(item);
       }
     });
-    console.log(arrPerfectDateStep4.length, "borrorww");
     //xet them dong-tho nhap-trach
     arrPerfectDateStep4.map((item, ind) => {
       if (
@@ -1057,21 +1054,12 @@ export default function Home() {
       valueText
     );
     // Chon gio
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
-
     arrPerfectDateStep6.map((item, ind) => {
-      isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-      arrHoursOke = [];
-      titleCheckGioNgayThang = [];
-      let combineThienCanNgayThang = CombineThienCan(
-        item.ngayCan,
-        item.thangCan
-      );
+      const isCheckGioNgayThangWhileCanNgayKhacToaNha = [];
+      const arrHoursOke = [];
+      const titleCheckGioNgayThang = [];
 
-      arrHours = CheckTrucXungGio(
+      const arrHours = CheckTrucXungGio(
         valueText,
         item.ngayChi,
         item.thangChi,
@@ -1271,13 +1259,9 @@ export default function Home() {
       }
     });
 
-    let arrHours = [];
-    let isCheckGioNgayThangWhileCanNgayKhacToaNha = false;
-    let arrHoursOke = [];
-    let titleCheckGioNgayThang = [];
     // Chon gio
     arrPerfectDateStep3.map((item, ind) => {
-      arrHours = CheckTrucXungGioKhongToa(
+      const arrHours = CheckTrucXungGioKhongToa(
         item.ngayChi,
         item.thangChi,
         CHI_NAM[tuoiGiaChu % 12],
@@ -1365,13 +1349,13 @@ export default function Home() {
         Xem ngày Xây dựng
       </div>
       {/* <Button
-      variant="contained"
-      style={{ backgroundColr: "green" }}
-      onClick={() => {
-        handleInit();
-      }}>
-      asdsa
-    </Button> */}
+        variant="contained"
+        style={{ backgroundColr: "green" }}
+        onClick={() => {
+          handleInit();
+        }}>
+        asdsa
+      </Button> */}
       <div>
         <FormControl fullWidth style={{ marginBottom: 20 }}>
           <InputLabel id="demo-simple-select-label">
@@ -1384,7 +1368,7 @@ export default function Home() {
             onChange={(e) => {
               setValueSelect(e.target.value);
               setArrMonthInYear();
-              setValueText();
+              // setValueText();
               setStepShow({
                 step1: undefined,
                 step2: undefined,
@@ -1432,12 +1416,13 @@ export default function Home() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Toạ nhà"
+                  value={valueText}
                   onChange={(e) => {
-                    setValueText(TOA_NHA[e.target.value]);
+                    setValueText(e.target.value);
                   }}>
                   {TOA_NHA.map((key, inex) => {
                     return (
-                      <MenuItem key={Math.random()} value={inex}>
+                      <MenuItem key={Math.random()} value={key}>
                         {key}
                       </MenuItem>
                     );
@@ -1691,37 +1676,37 @@ export default function Home() {
               width: window.innerWidth * 0.9,
             }}>
             {/* {rangeDayInMonthLunar &&
-            Object.keys(rangeDayInMonthLunar).map((year) => {
-              return (
-                <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
-                  Năm {year}:{" "}
-                  {Object.keys(rangeDayInMonthLunar[year]).map((month) => {
-                    return (
-                      <li style={{ fontWeight: 400 }}>
-                        - Tháng {month} (
-                        {rangeDayInMonthLunar[year][month][0].thangCan}{" "}
-                        {rangeDayInMonthLunar[year][month][0].thangChi}): từ{" "}
-                        {rangeDayInMonthLunar[year][month][0].daySolar}/
-                        {rangeDayInMonthLunar[year][month][0].monthSolar}/
-                        {rangeDayInMonthLunar[year][month][0].yearSolar} đến
-                        ngày{" "}
-                        {rangeDayInMonthLunar[year][month][1]
-                          ? rangeDayInMonthLunar[year][month][1].daySolar
-                          : rangeDayInMonthLunar[year][month][0].daySolar}
-                        /
-                        {rangeDayInMonthLunar[year][month][1]
-                          ? rangeDayInMonthLunar[year][month][1].monthSolar
-                          : rangeDayInMonthLunar[year][month][0].monthSolar}
-                        /
-                        {rangeDayInMonthLunar[year][month][1]
-                          ? rangeDayInMonthLunar[year][month][1].yearSolar
-                          : rangeDayInMonthLunar[year][month][0].yearSolar}
-                      </li>
-                    );
-                  })}
-                </ul>
-              );
-            })} */}
+              Object.keys(rangeDayInMonthLunar).map((year) => {
+                return (
+                  <ul style={{ marginBottom: 20, fontWeight: "bold" }}>
+                    Năm {year}:{" "}
+                    {Object.keys(rangeDayInMonthLunar[year]).map((month) => {
+                      return (
+                        <li style={{ fontWeight: 400 }}>
+                          - Tháng {month} (
+                          {rangeDayInMonthLunar[year][month][0].thangCan}{" "}
+                          {rangeDayInMonthLunar[year][month][0].thangChi}): từ{" "}
+                          {rangeDayInMonthLunar[year][month][0].daySolar}/
+                          {rangeDayInMonthLunar[year][month][0].monthSolar}/
+                          {rangeDayInMonthLunar[year][month][0].yearSolar} đến
+                          ngày{" "}
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].daySolar
+                            : rangeDayInMonthLunar[year][month][0].daySolar}
+                          /
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].monthSolar
+                            : rangeDayInMonthLunar[year][month][0].monthSolar}
+                          /
+                          {rangeDayInMonthLunar[year][month][1]
+                            ? rangeDayInMonthLunar[year][month][1].yearSolar
+                            : rangeDayInMonthLunar[year][month][0].yearSolar}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                );
+              })} */}
           </div>
           {/* Nhan */}
           <div style={{ marginTop: 30, width: window.innerWidth * 0.9 }}>

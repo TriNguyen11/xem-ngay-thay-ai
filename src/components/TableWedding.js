@@ -55,7 +55,10 @@ import moment from "moment";
 import { memo } from "react";
 import { getSunriseDateTimeUtc, getSunsetDateTimeUtc } from "suntimes";
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
-import { GetErrorGioHopHoa } from "@Root/script/HandleGetErrorShow";
+import {
+  GetErrorGioHopHoa,
+  GetErrorGioHopHoaKhongKhacToa,
+} from "@Root/script/HandleGetErrorShow";
 
 const TableWedding = ({
   data,
@@ -268,25 +271,36 @@ const TableWedding = ({
                   ].includes(date.ngayChi)
                 )
                   backky.push("Không phòng");
-                // xung,trung,hai tuoi nam
 
+                // xung,trung,hai tuoi nam
                 if (
-                  CheckTuongXungTuongHaiTuoiMonth(
-                    CHI_NAM[infoGiaChu?.namSinhNam % 12],
+                  CHI_NAM[Number(infoGiaChu?.namSinhNam) % 12] === date.ngayChi
+                ) {
+                  backky.push("Trùng tuổi nam");
+                }
+                if (
+                  CheckTrucXungNgayThangNam(
+                    CHI_NAM[Number(infoGiaChu?.namSinhNam) % 12],
                     date.ngayChi
                   )
-                )
-                  backky.push("Xung, trùng tuổi nam");
+                ) {
+                  backky.push("Xung tuổi nam");
+                }
 
                 // xung,trung,hai tuoi nu
-
                 if (
-                  CheckTuongXungTuongHaiTuoiMonth(
-                    CHI_NAM[infoGiaChu?.namSinhNu % 12],
+                  CHI_NAM[Number(infoGiaChu?.namSinhNu) % 12] === date.ngayChi
+                )
+                  backky.push("Trùng tuổi nữ");
+                if (
+                  CheckTrucXungNgayThangNam(
+                    CHI_NAM[Number(infoGiaChu?.namSinhNu) % 12],
                     date.ngayChi
                   )
-                )
-                  backky.push("Xung, trùng tuổi nữ");
+                ) {
+                  backky.push("Xung tuổi nữ");
+                }
+
                 if (CheckHongXaKyNhat(date.monthLunar, date.ngayChi))
                   backky.push("Hồng Xá kỵ nhật");
                 if (CheckNghenhHonKyNhat(date.ngayCan + " " + date.ngayChi))
@@ -514,37 +528,41 @@ const TableWedding = ({
                                   timeNormal.push("Sát chủ");
                                 }
 
-                                // if (
-                                //   CheckNguHanhTuongKhac(
-                                //     NGU_HANH[toaNha],
-                                //     NGU_HANH[
-                                //       date.arrGioCan[
-                                //         CHI_NAM_SORTED.indexOf(itemGio)
-                                //       ]
-                                //     ]
-                                //   ) &&
-                                //   valueSelect !== "ngay-dang-ki-ket-hon" &&
-                                //   valueSelect !== "ngay-mai-moi"
-                                // ) {
-                                //   timeNormal.push("Khắc hành toạ");
-                                // }
+                                // xung, trung nam
                                 if (
-                                  CheckTrucXungChi(
-                                    itemGio,
-                                    CHI_NAM[infoGiaChu?.namSinhNam % 12]
+                                  CHI_NAM[
+                                    Number(infoGiaChu?.namSinhNam) % 12
+                                  ] === itemGio
+                                ) {
+                                  timeNormal.push("Trùng tuổi nam");
+                                }
+
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    CHI_NAM[
+                                      Number(infoGiaChu?.namSinhNam) % 12
+                                    ],
+                                    itemGio
                                   )
                                 ) {
-                                  timeNormal.push("Xung, trùng tuổi Nam");
-                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                  timeNormal.push("Xung tuổi nam");
+                                }
+
+                                // xung, trung nu
+                                if (
+                                  CHI_NAM[
+                                    Number(infoGiaChu?.namSinhNu) % 12
+                                  ] === itemGio
+                                ) {
+                                  timeNormal.push("Trùng tuổi nữ");
                                 }
                                 if (
-                                  CheckTrucXungChi(
-                                    itemGio,
-                                    CHI_NAM[infoGiaChu?.namSinhNu % 12]
+                                  CheckTrucXungNgayThangNam(
+                                    CHI_NAM[Number(infoGiaChu?.namSinhNu) % 12],
+                                    itemGio
                                   )
                                 ) {
-                                  timeNormal.push("Xung, trùng tuổi Nữ");
-                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                  timeNormal.push("Xung tuổi nữ");
                                 }
                                 // if (
                                 //   CheckNguHanhTuongKhac(
@@ -566,6 +584,20 @@ const TableWedding = ({
                                   )
                                 ) {
                                   timeErr = GetErrorGioHopHoa(
+                                    itemGio,
+                                    date.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ],
+                                    date.ngayCan,
+                                    date.ngayChi,
+                                    date.thangCan,
+                                    date.thangChi,
+                                    date.namCan,
+                                    date.namChi,
+                                    toaNha
+                                  );
+                                } else {
+                                  timeErr = GetErrorGioHopHoaKhongKhacToa(
                                     itemGio,
                                     date.arrGioCan[
                                       CHI_NAM_SORTED.indexOf(itemGio)
@@ -702,24 +734,43 @@ const TableWedding = ({
                                 // ) {
                                 //   timeNormal.push("Khắc hành toạ");
                                 // }
+
+                                // xung, trung nam
                                 if (
-                                  CheckTrucXungChi(
-                                    itemGio,
-                                    CHI_NAM[infoGiaChu?.namSinhNam % 12]
-                                  )
+                                  CHI_NAM[
+                                    Number(infoGiaChu?.namSinhNam) % 12
+                                  ] === itemGio
                                 ) {
-                                  timeNormal.push("Xung, trùng tuổi Nam");
-                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                  timeNormal.push("Trùng tuổi nam");
                                 }
                                 if (
-                                  CheckTrucXungChi(
-                                    itemGio,
-                                    CHI_NAM[infoGiaChu?.namSinhNu % 12]
+                                  CheckTrucXungNgayThangNam(
+                                    CHI_NAM[
+                                      Number(infoGiaChu?.namSinhNam) % 12
+                                    ],
+                                    itemGio
                                   )
                                 ) {
-                                  timeNormal.push("Xung, trùng tuổi Nữ");
-                                  // console.log({ item, toaChi: toaChi, ngayChi, thangChi, tuoiGiaChu });
+                                  timeNormal.push("Xung tuổi nam");
                                 }
+
+                                // xung, trung nu
+                                if (
+                                  CHI_NAM[
+                                    Number(infoGiaChu?.namSinhNu) % 12
+                                  ] === itemGio
+                                ) {
+                                  timeNormal.push("Trùng tuổi nữ");
+                                }
+                                if (
+                                  CheckTrucXungNgayThangNam(
+                                    CHI_NAM[Number(infoGiaChu?.namSinhNu) % 12],
+                                    itemGio
+                                  )
+                                ) {
+                                  timeNormal.push("Xung tuổi nữ");
+                                }
+
                                 // if (
                                 //   CheckNguHanhTuongKhac(
                                 //     NGU_HANH[toaNha],
@@ -739,6 +790,20 @@ const TableWedding = ({
                                   )
                                 ) {
                                   timeErr = GetErrorGioHopHoa(
+                                    itemGio,
+                                    date.arrGioCan[
+                                      CHI_NAM_SORTED.indexOf(itemGio)
+                                    ],
+                                    date.ngayCan,
+                                    date.ngayChi,
+                                    date.thangCan,
+                                    date.thangChi,
+                                    date.namCan,
+                                    date.namChi,
+                                    toaNha
+                                  );
+                                } else {
+                                  timeErr = GetErrorGioHopHoaKhongKhacToa(
                                     itemGio,
                                     date.arrGioCan[
                                       CHI_NAM_SORTED.indexOf(itemGio)
